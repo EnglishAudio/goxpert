@@ -14,6 +14,19 @@
     
     <item turbo="true">
       <turbo:extendedHtml>true</turbo:extendedHtml>
+      <turbo:source>https://goxpert.ru/2024/06/01/common/package/</turbo:source>
+      <turbo:topic>Пакеты</turbo:topic>
+      <title>Пакеты</title>
+      <link>https://goxpert.ru/2024/06/01/common/package/</link>
+      <pubDate>Sat, 01 Jun 2024 07:03:00 GMT</pubDate>
+      
+      
+      <turbo:content><![CDATA[<h2 id="Что-такое-пакет"><a href="#Что-такое-пакет" class="headerlink" title="Что такое пакет?"></a>Что такое пакет?</h2><p>В языке программирования Go, пакет (package) - это коллекция исходных файлов Go, которые находятся в одной и той же директории. Все файлы в одном пакете должны иметь одно и то же имя пакета в начале файла.</p><p>Пакеты в Go используются для организации и повторного использования кода. Они представляют собой удобный способ разделения кода на отдельные модули. Это позволяет определить пакет с нужной функциональностью один раз и затем использовать его многократно в различных программах.</p><p>В Go есть два типа пакетов: исполняемые (executable) и библиотеки (reusable). Исполняемые пакеты должны иметь имя <strong><code>main</code></strong> и содержать функцию <strong><code>main</code></strong>, которая является входной точкой в приложение. Все остальные пакеты являются библиотеками и не могут быть напрямую выполнены.</p><h2 id="Расскажи-про-папку-internal"><a href="#Расскажи-про-папку-internal" class="headerlink" title="Расскажи про папку internal"></a>Расскажи про папку internal</h2><p>В Go, папка <strong><code>internal</code></strong> используется для хранения кода, который не должен быть доступен за пределами текущего модуля. Это означает, что любой код, который находится в папке <strong><code>internal</code></strong> (или в подпапках этой папки), может быть импортирован и использован только внутри того же модуля. Это полезно, когда вы хотите скрыть определенные части вашего кода от внешнего мира, чтобы предотвратить его неправильное использование.</p><figure class="highlight plaintext"><figcaption><span>title</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">test</span><br><span class="line">├─ go.mod</span><br><span class="line">├─ internal</span><br><span class="line">│ └─ handler</span><br><span class="line">│   └─ opkg.go</span><br><span class="line">├─ main.go</span><br></pre></td></tr></table></figure><p><img src="/images/golang_packege.jpg" alt="Вот вам и пакет!"></p> ]]></turbo:content>
+      
+     </item>
+    
+    <item turbo="true">
+      <turbo:extendedHtml>true</turbo:extendedHtml>
       <turbo:source>https://goxpert.ru/2024/06/01/overall-questions/</turbo:source>
       <turbo:topic>Общие вопросы</turbo:topic>
       <title>Общие вопросы</title>
