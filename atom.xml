@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>GoXpert.ru</title>
+  
+  <subtitle>GoXpert.ru для тех, кто хочет стать экспертом в GO разработке</subtitle>
+  <link href="https://lessons.engaud.com/atom.xml" rel="self"/>
+  
+  <link href="https://lessons.engaud.com/"/>
+  <updated>2024-06-01T08:55:15.393Z</updated>
+  <id>https://lessons.engaud.com/</id>
+  
+  <author>
+    <name>авторы проекта GoXpert</name>
+    
+  </author>
+  
+  
+  <entry>
+    <title>С 1 Июня 2024!</title>
+    <link href="https://lessons.engaud.com/2024/06/01/helloworld/"/>
+    <id>https://lessons.engaud.com/2024/06/01/helloworld/</id>
+    <published>2024-06-01T07:00:00.000Z</published>
+    <updated>2024-06-01T08:55:15.393Z</updated>
+    
+    <content type="html"><![CDATA[<p>Добрый день! Сегодня родился сайт GoXpert. </p><p>Для чего нужен этот сайт:</p><ul><li>Во-первых, для меня. Да, меня зовут Дмитрий Сигаев. Это сайт, на мой взгляд, поможет мне структурировать свои знания в разных областях, но в основном в экосистеме GO. Я много, что умею, но не могу в нужный для меня момент вынуть из своей головы нужной информации. Данный сайт — это так называемое хранилище моего опыта и якорей для быстрой настройки кратковременной памяти :) </li><li>Во-вторых, если это полезно для меня, то, на мой взгляд, найдется тот, кому это сайт тоже поможет в чем-то разобраться…</li><li>В-третьих, хочу выразить благодарность Сергею Артамонову. Спасибо за второй шанс и последствие в виде данного сайта. Надеюсь, быть его падаваном и соавтором публикаций на данном сайта.</li></ul><p>Ладно, не будем терять времени… поехали…</p><p>Let’s GO!</p><p><img src="/images/lets_go_with_goxpert.jpg" alt="С первым полетом!"></p>]]></content>
+    
+    
+      
+      
+      
+    <summary type="html">&lt;p&gt;Добрый день! Сегодня родился сайт GoXpert. &lt;/p&gt;
+&lt;p&gt;Для чего нужен этот сайт:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Во-первых, для меня. Да, меня зовут Дмитрий Сигаев. Это сайт, на мой взгляд, поможет мне структурировать св</summary>
+      
+    
+    
+    
+    <category term="Golang" scheme="https://lessons.engaud.com/categories/Golang/"/>
+    
+    <category term="Старт" scheme="https://lessons.engaud.com/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/"/>
+    
+    
+    <category term="Golang" scheme="https://lessons.engaud.com/tags/Golang/"/>
+    
+  </entry>
+  
+</feed>

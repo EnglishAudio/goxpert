@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:yandex="http://news.yandex.ru"
+     xmlns:media="http://search.yahoo.com/mrss/"
+     xmlns:turbo="http://turbo.yandex.ru"
+     version="2.0">
+  <channel>
+    <title>GoXpert.ru</title>
+    <link>https://lessons.engaud.com/</link>
+    <description>Секреты Golang. Архитектура и дизайн приложений на GO. Все GO изнутри</description>
+    <turbo:analytics type="Yandex"
+                 id="86613025">    <!-- https://yandex.ru/dev/turbo/doc/settings/analytics.html#analytics__rss-1 -->
+    </turbo:analytics>    
+    
+    
+    <item turbo="true">
+      <turbo:extendedHtml>true</turbo:extendedHtml>
+      <turbo:source>https://lessons.engaud.com/2024/06/01/helloworld/</turbo:source>
+      <turbo:topic>С 1 Июня 2024!</turbo:topic>
+      <title>С 1 Июня 2024!</title>
+      <link>https://lessons.engaud.com/2024/06/01/helloworld/</link>
+      <pubDate>Sat, 01 Jun 2024 07:00:00 GMT</pubDate>
+      
+      
+      <turbo:content><![CDATA[<p>Добрый день! Сегодня родился сайт GoXpert. </p><p>Для чего нужен этот сайт:</p><ul><li>Во-первых, для меня. Да, меня зовут Дмитрий Сигаев. Это сайт, на мой взгляд, поможет мне структурировать свои знания в разных областях, но в основном в экосистеме GO. Я много, что умею, но не могу в нужный для меня момент вынуть из своей головы нужной информации. Данный сайт — это так называемое хранилище моего опыта и якорей для быстрой настройки кратковременной памяти :) </li><li>Во-вторых, если это полезно для меня, то, на мой взгляд, найдется тот, кому это сайт тоже поможет в чем-то разобраться…</li><li>В-третьих, хочу выразить благодарность Сергею Артамонову. Спасибо за второй шанс и последствие в виде данного сайта. Надеюсь, быть его падаваном и соавтором публикаций на данном сайта.</li></ul><p>Ладно, не будем терять времени… поехали…</p><p>Let’s GO!</p><p><img src="/images/lets_go_with_goxpert.jpg" alt="С первым полетом!"></p> ]]></turbo:content>
+      
+     </item>
+    
+  </channel>
+</rss>
