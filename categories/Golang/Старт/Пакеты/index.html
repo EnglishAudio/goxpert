@@ -6,26 +6,19 @@
     
 
     
-    <title>Defer | GoXpert.ru</title>
+    <title>категории : : Пакеты | GoXpert.ru</title>
     
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
-    <meta name="keywords" content="Golang, Q&amp;A" />
-    
-    <meta name="description" content="Вопросы по работе с defer в Golang">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Defer">
-<meta property="og:url" content="https://goxpert.ru/2024/06/01/common/defer/index.html">
+    <meta name="description" content="Секреты Golang. Архитектура и дизайн приложений на GO. Всё о GO изнутри">
+<meta property="og:type" content="website">
+<meta property="og:title" content="GoXpert.ru">
+<meta property="og:url" content="https://goxpert.ru/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%9F%D0%B0%D0%BA%D0%B5%D1%82%D1%8B/index.html">
 <meta property="og:site_name" content="GoXpert.ru">
-<meta property="og:description" content="Вопросы по работе с defer в Golang">
+<meta property="og:description" content="Секреты Golang. Архитектура и дизайн приложений на GO. Всё о GO изнутри">
 <meta property="og:locale" content="ru_RU">
-<meta property="og:image" content="https://goxpert.ru/images/golang_defer.jpg">
-<meta property="article:published_time" content="2024-06-01T07:04:00.000Z">
-<meta property="article:modified_time" content="2024-06-01T17:07:32.113Z">
 <meta property="article:author" content="авторы проекта GoXpert">
-<meta property="article:tag" content="Golang, Q&amp;A">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://goxpert.ru/images/golang_defer.jpg">
     
 
     
@@ -34,8 +27,6 @@
         <link rel="alternate" type="application/rss+xml" title="GoXpert.ru" href="https://goxpert.ru/rss-feed.xml" />
      
 
-     
-        <link rel="amphtml" href="https://goxpert.ru/amp2024/06/01/common/defer/">
      
 
 
@@ -191,195 +182,74 @@ Ya.Site.Form.init()
                         <div class="main-body-header">
     <h1 class="header">
     
-    <a class="page-title-link" href="/categories/Golang/">Golang</a><i class="icon fa fa-angle-right"></i><a class="page-title-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/">Старт</a><i class="icon fa fa-angle-right"></i><a class="page-title-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/Defer/">Defer</a><i class="icon fa fa-angle-right"></i><a class="page-title-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/">Вопрос-Ответ</a><i class="icon fa fa-angle-right"></i><a class="page-title-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/Defer/">Defer</a>
+    <i class="icon fa fa-folder-open"></i>категории : : <em class="page-title-link">Пакеты</em>
     </h1>
 </div>
 
                         <div class="main-body-content">
-                            <article id="post-common/defer" class="article article-single article-type-post" itemscope itemprop="blogPost">
-    <div class="article-inner">
+                            
+
+    
+    
         
-            <header class="article-header">
-                
+        
+        <section class="archives-wrap">
+            <div class="archive-year-wrap">
+                <a href="/archives/2024" class="archive-year"><i class="icon fa fa-calendar-o"></i>2024</a>
+            </div>
+            <div class="archives">
+    
+    
+    
+        <div class="article-row">
+    
+        <article class="article article-summary">
+    <div class="article-summary-inner">
+        
+        <a href="/2024/06/01/common/package/" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/golang_packege.jpg)" alt="Пакеты" class="thumbnail-image"></span>
+    
+    
+        
+<span class="comment-counter">
+    <i class="fa fa-comments-o"></i>
+    
+        <span><a href="https://goxpert.ru/2024/06/01/common/package/#isso-thread"></a></span>
+    
+</span>
+
+
+    
+</a>
+
+        
+        <div class="article-meta">
+            <div class="category">
+            <a class="article-category-link" href="/categories/Golang/">Golang</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/">Старт</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/">Вопрос-Ответ</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9F%D0%B0%D0%BA%D0%B5%D1%82%D1%8B/">Пакеты</a>
+            </div>
+            <div class="date"><time datetime="2024-06-01T07:03:00.000Z" itemprop="datePublished">2024-06-01</time></div>
+        </div>
+        
     
         <h1 class="article-title" itemprop="name">
-        Defer
+        <a href="/2024/06/01/common/package/">Пакеты</a>
         </h1>
     
 
-            </header>
-        
-        
-            <div class="article-meta">
-                
-  <div class="article-date">
-    <i class="fa fa-calendar"></i>
-    <a href="/2024/06/01/common/defer/" class="article-date">
-       <time datetime="2024-06-01T07:04:00.000Z" itemprop="datePublished">2024-06-01</time>
-    </a>
-  </div>
-
-
-<div class="article-date">
-  <i class="fa fa-calendar-plus-o"></i>
-  <a href="/2024/06/01/common/defer/" class="article-date">
-     <time datetime="2024-06-01T17:07:32.113Z" itemprop="dateModified">2024-06-01</time>
-  </a>
-</div>
-
-
-                
-
-                
-    <div class="article-tag">
-        <i class="fa fa-tag"></i>
-        <a class="tag-link-link" href="/tags/Golang-Q-A/" rel="tag">Golang, Q&A</a>
+        <p class="article-excerpt">
+            Что такое пакет?В языке программирования Go, пакет (package) - это коллекция исходных файлов Go, которые находятся в одной и той же директории. Все файлы в одном пакете должны иметь одно и то же имя п
+        </p>
     </div>
-
-                
-
-                
-
-            </div>
-        
-        
-        <div class="article-entry" itemprop="articleBody">
-            
-
-            
-
-            
-
-            <!-- feed_rem_st --><!-- feed_rem_end --><h2 id="Что-такое-defer-как-работает-зачем-нужен"><a href="#Что-такое-defer-как-работает-зачем-нужен" class="headerlink" title="Что такое defer, как работает, зачем нужен?"></a>Что такое defer, как работает, зачем нужен?</h2><p>defer - это ключевое слово в языке программирования Go, которое используется для определения функции, которая должна быть выполнена после возвращения текущей функции, но до возвращения вызвавшей ее функции. Это позволяет очистить ресурсы или выполнить другие задачи, которые необходимо выполнить после завершения основной работы функции.</p>
-<p>Когда вызывается функция с ключевым словом defer, она не выполняется немедленно. Вместо этого она добавляется в список функций, которые будут выполняться в обратном порядке после возвращения текущей функции. Это означает, что последняя функция, вызванная с ключевым словом defer, будет выполнена первой после возврата текущей функции.</p>
-<p>Ключевое слово defer полезно для обеспечения правильной очистки ресурсов, например, для закрытия файлов или сетевых соединений. Его также можно использовать для упрощения обработки ошибок, позволяя функции возвращать значение ошибки, а затем обрабатывать эту ошибку в одном месте после возврата функции.</p>
-<p>Источники: </p>
-<ul>
-<li><a target="_blank" rel="noopener" href="https://habr.com/ru/articles/492948/">Habr</a></li>
-<li><a target="_blank" rel="noopener" href="https://www.digitalocean.com/community/tutorials/understanding-defer-in-go-ru">DigitalOcean</a></li>
-</ul>
-<h2 id="Код-в-defer-выполняется-до-return-или-после"><a href="#Код-в-defer-выполняется-до-return-или-после" class="headerlink" title="Код в defer выполняется до return или после?"></a>Код в defer выполняется до return или после?</h2><p>Оператор defer в Go выполняется перед оператором return. Это позволяет удобно управлять ресурсами, такими как закрытие файлов или освобождение памяти, перед тем как функция завершится. </p>
-<p>defer выполняется после того, как оператор return вычислит возвращаемые значения, но перед фактическим возвращением управления из функции.</p>
-<p>Пример:</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">defer</span> fmt.Println(changePointer())</span><br><span class="line">    fmt.Println(<span class="string">&quot;Third&quot;</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">changePointer</span><span class="params">()</span> <span class="title">string</span></span> &#123;</span><br><span class="line">    <span class="keyword">defer</span> fmt.Println(<span class="string">&quot;Second&quot;</span>)</span><br><span class="line">    fmt.Println(<span class="string">&quot;First&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;Fourth&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="Где-инициализируется-defer-в-стеке-или-куче"><a href="#Где-инициализируется-defer-в-стеке-или-куче" class="headerlink" title="Где инициализируется defer, в стеке или куче?"></a>Где инициализируется defer, в стеке или куче?</h2><p>Дефер-вызовы в Go инициализируются в стеке, а не в куче. Когда функция, содержащая дефер-вызовы, начинает выполняться, эти вызовы помещаются в стек. Затем, когда функция завершается, стек разворачивается, и дефер-вызовы выполняются в обратном порядке, в котором они были помещены в стек. Это позволяет гарантировать, что ресурсы, такие как файлы или соединения, будут освобождены в правильном порядке, даже если в функции произойдет ошибка.</p>
-<h2 id="Задача-1"><a href="#Задача-1" class="headerlink" title="Задача #1"></a>Задача #1</h2><figure class="highlight go"><figcaption><span>title</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	tmp := <span class="number">101</span></span><br><span class="line">	fmt.Println(tmp)</span><br><span class="line">	<span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		fmt.Println(tmp)</span><br><span class="line">	&#125;()</span><br><span class="line">	tmp = <span class="number">202</span></span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>Этот код использует концепцию “замыкания”. Замыкание - это функция, которая имеет доступ к переменным из своего внешнего контекста.<br>В данном случае, анонимная функция, которая откладывается с помощью defer, имеет доступ к переменной tmp из внешнего контекста.</p>
-<p>Когда вы вызываете <code>defer func() &#123; fmt.Println(tmp) &#125;()</code>, функция “захватывает” текущее значение tmp на момент вызова. </p>
-<p>Однако в этом случае tmp является ссылкой на переменную во внешнем контексте. Это значит, что если tmp изменяется после вызова defer, то измененное значение будет использоваться в отложенной функции.</p>
-<p>tmp сначала устанавливается в 101, затем выводится, затем откладывается функция, которая выводит tmp, и наконец tmp изменяется на 202.<br>Когда функция main завершается, отложенная функция вызывается и выводит текущее значение tmp, которое теперь равно 202.<br>В результате, вывод программы будет 101 и 202.</p>
-<h2 id="Задача-2"><a href="#Задача-2" class="headerlink" title="Задача #2"></a>Задача #2</h2><figure class="highlight go"><figcaption><span>title</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	tmp := <span class="number">101</span></span><br><span class="line">	fmt.Println(tmp)</span><br><span class="line">	<span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">(tmpx <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">		fmt.Println(tmpx)</span><br><span class="line">	&#125;(tmp)</span><br><span class="line">	tmp = <span class="number">202</span></span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>В этом примере мы передаем tmp в отложенную функцию как аргумент. Это означает, что значение tmp будет скопировано в отложенную функцию, а не ссылаться на переменную во внешнем контексте.</p>
-<p>В результате, вывод программы будет 101 и 101.</p>
-<p><img src="/images/golang_defer.jpg" alt="Вот вам и defer"></p>
-
-        </div>
-        <footer class="article-footer">
-            
-
-
-
-    <a data-url="https://goxpert.ru/2024/06/01/common/defer/" data-id="clww5a1ib0000kcwlgcb03k09" class="article-share-link"><i class="fa fa-share"></i>Поделиться</a>
-<script>
-    (function ($) {
-        $('body').on('click', function() {
-            $('.article-share-box.on').removeClass('on');
-        }).on('click', '.article-share-link', function(e) {
-            e.stopPropagation();
-
-            var $this = $(this),
-                url = $this.attr('data-url'),
-                encodedUrl = encodeURIComponent(url),
-                id = 'article-share-box-' + $this.attr('data-id'),
-                offset = $this.offset(),
-                box;
-
-            if ($('#' + id).length) {
-                box = $('#' + id);
-
-                if (box.hasClass('on')){
-                    box.removeClass('on');
-                    return;
-                }
-            } else {
-                var html = [
-                    '<div id="' + id + '" class="article-share-box">',
-                        '<input class="article-share-input" value="' + url + '">',
-                        '<div class="article-share-links">',
-                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
-                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
-                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="article-share-pinterest" target="_blank" title="Pinterest"></a>',
-                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="article-share-google" target="_blank" title="Google+"></a>',
-                        '</div>',
-                    '</div>'
-                ].join('');
-
-              box = $(html);
-
-              $('body').append(box);
-            }
-
-            $('.article-share-box.on').hide();
-
-            box.css({
-                top: offset.top + 25,
-                left: offset.left
-            }).addClass('on');
-
-        }).on('click', '.article-share-box', function (e) {
-            e.stopPropagation();
-        }).on('click', '.article-share-box-input', function () {
-            $(this).select();
-        }).on('click', '.article-share-box-link', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
-        });
-    })(jQuery);
-</script>
-
-        </footer>
-    </div>
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BlogPosting",
-        "author": {
-            "@type": "Person",
-            "name": "авторы проекта GoXpert"
-        },
-        "headline": "Defer",
-        "image": "https://goxpert.ru/images/golang_defer.jpg",
-        "keywords": "Golang, Q&A",
-        "genre": "Golang Старт Вопрос-Ответ Defer Defer",
-        "datePublished": "2024-06-01",
-        "dateCreated": "2024-06-01",
-        "dateModified": "2024-06-01",
-        "url": "https://goxpert.ru/2024/06/01/common/defer/",
-        "description": "Что такое defer, как работает, зачем нужен?defer - это ключевое слово в языке программирования Go, которое используется для определения функции, которая должна быть выполнена после возвращения текущей",
-        "wordCount": 663
-    }
-</script>
-
 </article>
-
-    <section id="comments">
     
-        
-    <div id="vk_comments"></div>
-    <script type="text/javascript">
-      window.onload = function () {
-      VK.init({apiId: 51937371, onlyWidgets: true});
-      VK.Widgets.Comments("vk_comments", {limit: 20, attach: "*", autoPublish: 1, pageUrl: "https://goxpert.ru/2024/06/01/common/defer/"});
-    }
-   </script>
-
+        </div>
     
-    </section>
+
+
+    </div></section>
+
 
 
 
@@ -451,29 +321,6 @@ Ya.Site.Form.init()
             
         </ul>
     </div>
-    
-        
-<nav id="article-nav">
-    
-        <a href="/2024/06/01/common/errors-panics/" id="article-nav-newer" class="article-nav-link-wrap">
-        <strong class="article-nav-caption">новые</strong>
-        <p class="article-nav-title">
-        
-            Ошибки / Panic
-        
-        </p>
-        <i class="icon fa fa-chevron-right" id="icon-chevron-right"></i>
-    </a>
-    
-    
-        <a href="/2024/06/01/common/package/" id="article-nav-older" class="article-nav-link-wrap">
-        <strong class="article-nav-caption">старые</strong>
-        <p class="article-nav-title">Пакеты</p>
-        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
-        </a>
-    
-</nav>
-
     
     <div class="widgets-container">
         
