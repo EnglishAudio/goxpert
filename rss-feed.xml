@@ -14,6 +14,27 @@
     
     <item turbo="true">
       <turbo:extendedHtml>true</turbo:extendedHtml>
+      <turbo:source>https://goxpert.ru/2024/06/01/types/structs/</turbo:source>
+      <turbo:topic>Структуры</turbo:topic>
+      <title>Структуры</title>
+      <link>https://goxpert.ru/2024/06/01/types/structs/</link>
+      <pubDate>Sat, 01 Jun 2024 07:10:00 GMT</pubDate>
+       
+      <yandex:related type="infinity">
+         
+        <link url="https://goxpert.ru/2024/06/01/types/strings/">Следующая статья: Строки</link>
+        
+        
+        
+      </yandex:related>
+      
+      
+      <turbo:content><![CDATA[<h2 id="Имеет-ли-значение-порядок-полей-в-структуре"><a href="#Имеет-ли-значение-порядок-полей-в-структуре" class="headerlink" title="Имеет ли значение порядок полей в структуре?"></a>Имеет ли значение порядок полей в структуре?</h2><p>Да, порядок полей в структуре Go может иметь значение в некоторых случаях.</p><p>Выравнивание памяти: Go размещает поля структур в соответствии с гарантиями выравнивания для типов полей. Это может влиять на общий размер структуры и использование памяти.</p><p>Источники: </p><ul><li><a href="https://ru.stackoverflow.com/questions/1541584/%d0%9f%d0%be%d1%80%d1%8f%d0%b4%d0%be%d0%ba-%d0%bf%d0%b5%d1%80%d0%b5%d0%bc%d0%bd%d0%bd%d1%8b%d1%85-%d0%b2-%d1%81%d1%82%d1%80%d1%83%d0%ba%d1%82%d1%83%d1%80%d0%b5-go-golang">Stackoverflow</a></li></ul><h2 id="От-чего-зависит-размер-выравнивания-в-структуре"><a href="#От-чего-зависит-размер-выравнивания-в-структуре" class="headerlink" title="От чего зависит размер выравнивания в структуре?"></a>От чего зависит размер выравнивания в структуре?</h2><p>Размер выравнивания в структуре в Go зависит от нескольких факторов:</p><ul><li>Тип данных: Размер выравнивания обычно зависит от типа данных. Например, int32 требует выравнивания по 4 байтам.</li><li>Порядок полей: Порядок полей в структуре может влиять на размер выравнивания. Если поля структуры переставить, размер структуры может измениться.</li><li>Архитектура системы: Размер выравнивания также может зависеть от архитектуры системы. Например, на 32-битной архитектуре структуры выравниваются под 4 байта.</li></ul><p>Важно отметить, что выравнивание влияет на производительность и использование памяти, поэтому его следует учитывать при проектировании структур.</p><p><img src="/images/golang_struct.jpg" alt="Вот вам и struct"></p> ]]></turbo:content>
+      
+     </item>
+    
+    <item turbo="true">
+      <turbo:extendedHtml>true</turbo:extendedHtml>
       <turbo:source>https://goxpert.ru/2024/06/01/types/strings/</turbo:source>
       <turbo:topic>Строки</turbo:topic>
       <title>Строки</title>
@@ -21,9 +42,10 @@
       <pubDate>Sat, 01 Jun 2024 07:09:00 GMT</pubDate>
        
       <yandex:related type="infinity">
-         
-        <link url="https://goxpert.ru/2024/06/01/types/array-slice/">Следующая статья: Массивы и слайсы</link>
         
+         
+        <link url="https://goxpert.ru/2024/06/01/types/structs/">Предыдущая статья: Структуры</link>
+        <link url="https://goxpert.ru/2024/06/01/types/array-slice/">Следующая статья: Массивы и слайсы</link>
         
         
       </yandex:related>
