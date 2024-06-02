@@ -6,19 +6,26 @@
     
 
     
-    <title>категории : : Массивы и слайсы | GoXpert.ru</title>
+    <title>Типы данных | GoXpert.ru</title>
     
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
-    <meta name="description" content="Секреты Golang. Архитектура и дизайн приложений на GO. Всё о GO изнутри">
-<meta property="og:type" content="website">
-<meta property="og:title" content="GoXpert.ru">
-<meta property="og:url" content="https://goxpert.ru/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%9C%D0%B0%D1%81%D1%81%D0%B8%D0%B2%D1%8B-%D0%B8-%D1%81%D0%BB%D0%B0%D0%B9%D1%81%D1%8B/index.html">
+    <meta name="keywords" content="Golang, Q&amp;A" />
+    
+    <meta name="description" content="Общие вопросы по типам данных в Golang">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Типы данных">
+<meta property="og:url" content="https://goxpert.ru/2024/06/01/types/types-common/index.html">
 <meta property="og:site_name" content="GoXpert.ru">
-<meta property="og:description" content="Секреты Golang. Архитектура и дизайн приложений на GO. Всё о GO изнутри">
+<meta property="og:description" content="Общие вопросы по типам данных в Golang">
 <meta property="og:locale" content="ru_RU">
+<meta property="og:image" content="https://goxpert.ru/images/golang_types.jpg">
+<meta property="article:published_time" content="2024-06-01T07:14:00.000Z">
+<meta property="article:modified_time" content="2024-06-02T11:10:01.396Z">
 <meta property="article:author" content="авторы проекта GoXpert">
+<meta property="article:tag" content="Golang, Q&amp;A">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://goxpert.ru/images/golang_types.jpg">
     
 
     
@@ -27,6 +34,8 @@
         <link rel="alternate" type="application/rss+xml" title="GoXpert.ru" href="https://goxpert.ru/rss-feed.xml" />
      
 
+     
+        <link rel="amphtml" href="https://goxpert.ru/amp2024/06/01/types/types-common/">
      
 
 
@@ -182,74 +191,196 @@ Ya.Site.Form.init()
                         <div class="main-body-header">
     <h1 class="header">
     
-    <i class="icon fa fa-folder-open"></i>категории : : <em class="page-title-link">Массивы и слайсы</em>
+    <a class="page-title-link" href="/categories/Golang/">Golang</a><i class="icon fa fa-angle-right"></i><a class="page-title-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/">Старт</a><i class="icon fa fa-angle-right"></i><a class="page-title-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%A2%D0%B8%D0%BF%D1%8B/">Типы</a><i class="icon fa fa-angle-right"></i><a class="page-title-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/">Вопрос-Ответ</a><i class="icon fa fa-angle-right"></i><a class="page-title-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%A2%D0%B8%D0%BF%D1%8B/">Типы</a>
     </h1>
 </div>
 
                         <div class="main-body-content">
-                            
-
-    
-    
+                            <article id="post-types/types-common" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
         
-        
-        <section class="archives-wrap">
-            <div class="archive-year-wrap">
-                <a href="/archives/2024" class="archive-year"><i class="icon fa fa-calendar-o"></i>2024</a>
-            </div>
-            <div class="archives">
-    
-    
-    
-        <div class="article-row">
-    
-        <article class="article article-summary">
-    <div class="article-summary-inner">
-        
-        <a href="/2024/06/01/types/array-slice/" class="thumbnail">
-    
-    
-        <span style="background-image:url(/images/golang_slices.jpg)" alt="Массивы и слайсы" class="thumbnail-image"></span>
-    
-    
-        
-<span class="comment-counter">
-    <i class="fa fa-comments-o"></i>
-    
-        <span><a href="https://goxpert.ru/2024/06/01/types/array-slice/#isso-thread"></a></span>
-    
-</span>
-
-
-    
-</a>
-
-        
-        <div class="article-meta">
-            <div class="category">
-            <a class="article-category-link" href="/categories/Golang/">Golang</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/">Старт</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/">Вопрос-Ответ</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9C%D0%B0%D1%81%D1%81%D0%B8%D0%B2%D1%8B-%D0%B8-%D1%81%D0%BB%D0%B0%D0%B9%D1%81%D1%8B/">Массивы и слайсы</a>
-            </div>
-            <div class="date"><time datetime="2024-06-01T07:08:00.000Z" itemprop="datePublished">2024-06-01</time></div>
-        </div>
-        
+            <header class="article-header">
+                
     
         <h1 class="article-title" itemprop="name">
-        <a href="/2024/06/01/types/array-slice/">Массивы и слайсы</a>
+        Типы данных
         </h1>
     
 
-        <p class="article-excerpt">
-            Что такое слайс?Слайс в golang - это динамический массив, который может хранить элементы одного типа. Слайс имеет нефиксированную длину, которая может изменяться в процессе работы с ним. Слайс также и
-        </p>
+            </header>
+        
+        
+            <div class="article-meta">
+                
+  <div class="article-date">
+    <i class="fa fa-calendar"></i>
+    <a href="/2024/06/01/types/types-common/" class="article-date">
+       <time datetime="2024-06-01T07:14:00.000Z" itemprop="datePublished">2024-06-01</time>
+    </a>
+  </div>
+
+
+<div class="article-date">
+  <i class="fa fa-calendar-plus-o"></i>
+  <a href="/2024/06/01/types/types-common/" class="article-date">
+     <time datetime="2024-06-02T11:10:01.396Z" itemprop="dateModified">2024-06-02</time>
+  </a>
+</div>
+
+
+                
+
+                
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link-link" href="/tags/Golang-Q-A/" rel="tag">Golang, Q&A</a>
     </div>
-</article>
-    
+
+                
+
+                
+
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            
+
+            
+
+            
+
+            <!-- feed_rem_st --><!-- feed_rem_end --><h2 id="Что-такое-type-switch"><a href="#Что-такое-type-switch" class="headerlink" title="Что такое type switch?"></a>Что такое type switch?</h2><blockquote>
+<p><strong><code>Type switch</code></strong> в Go - это способ проверить, какого типа является значение, хранящееся в интерфейсе. Это похоже на обычный <strong><code>switch</code></strong>, но вместо значений в кейсах указываются типы.</p>
+</blockquote>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">do</span><span class="params">(i <span class="keyword">interface</span>&#123;&#125;)</span></span> &#123;</span><br><span class="line">    <span class="keyword">switch</span> v := i.(<span class="keyword">type</span>) &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="keyword">int</span>:</span><br><span class="line">        fmt.Printf(<span class="string">&quot;Twice %v is %v\n&quot;</span>, v, v*<span class="number">2</span>)</span><br><span class="line">    <span class="keyword">case</span> <span class="keyword">string</span>:</span><br><span class="line">        fmt.Printf(<span class="string">&quot;%q is %v bytes long\n&quot;</span>, v, <span class="built_in">len</span>(v))</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">        fmt.Printf(<span class="string">&quot;I don&#x27;t know about type %T!\n&quot;</span>, v)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    do(<span class="number">21</span>)</span><br><span class="line">    do(<span class="string">&quot;hello&quot;</span>)</span><br><span class="line">    do(<span class="literal">true</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Какие-типы-данных-есть-в-Golang"><a href="#Какие-типы-данных-есть-в-Golang" class="headerlink" title="Какие типы данных есть в Golang?"></a>Какие типы данных есть в Golang?</h2><ol>
+<li><strong>Целочисленные типы</strong>: <strong><code>int8</code></strong>, <strong><code>int16</code></strong>, <strong><code>int32</code></strong>, <strong><code>int64</code></strong>, <strong><code>uint8</code></strong>, <strong><code>uint16</code></strong>, <strong><code>uint32</code></strong>, <strong><code>uint64</code></strong>, <strong><code>byte</code></strong> (синоним для <strong><code>uint8</code></strong>), <strong><code>rune</code></strong> (синоним для <strong><code>int32</code></strong>), <strong><code>int</code></strong> и <strong><code>uint</code>.</strong></li>
+<li><strong>Числа с плавающей точкой</strong>: <strong><code>float32</code></strong> и <strong><code>float64</code>.</strong></li>
+<li><strong>Строки</strong>: <strong><code>string</code></strong>.</li>
+<li><strong>Булев тип</strong>: <strong><code>bool</code></strong>.</li>
+<li><strong>Составные типы</strong>: Массивы, срезы, структуры, ассоциативные массивы</li>
+</ol>
+<h2 id="Какой-длины-руна"><a href="#Какой-длины-руна" class="headerlink" title="Какой длины руна?"></a>Какой длины руна?</h2><p><strong><code>rune</code></strong> - это алиас для <strong><code>int32</code></strong>. Это означает, что <strong><code>rune</code></strong> занимает 4 байта или 32 бита. Каждая <strong><code>rune</code></strong> представляет собой один Юникод символ. Например, строка может быть преобразована в срез <strong><code>rune</code></strong> (<strong><code>[]rune</code></strong>), и каждый элемент этого среза будет представлять собой один Юникод символ.</p>
+<h2 id="Как-реализовать-Enum-в-Golang"><a href="#Как-реализовать-Enum-в-Golang" class="headerlink" title="Как реализовать Enum в Golang?"></a>Как реализовать Enum в Golang?</h2><p>В Go нет встроенной поддержки перечислений (enum), но их можно эмулировать с помощью констант. Вот пример реализации enum в Go:</p>
+<figure class="highlight go"><figcaption><span>title</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;fmt&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Season <span class="keyword">int</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> (</span><br><span class="line">    Summer Season = <span class="literal">iota</span></span><br><span class="line">    Autumn</span><br><span class="line">    Winter</span><br><span class="line">    Spring</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(s Season)</span> <span class="title">String</span><span class="params">()</span> <span class="title">string</span></span> &#123;</span><br><span class="line">    <span class="keyword">return</span> [...]<span class="keyword">string</span>&#123;<span class="string">&quot;Лето&quot;</span>, <span class="string">&quot;Осень&quot;</span>, <span class="string">&quot;Зима&quot;</span>, <span class="string">&quot;Весна&quot;</span>&#125;[s]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    s := Winter</span><br><span class="line">    fmt.Println(s)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Что-если-во-время-компиляции-переполним-тип-В-int8-запишем-256"><a href="#Что-если-во-время-компиляции-переполним-тип-В-int8-запишем-256" class="headerlink" title="Что если во время компиляции переполним тип? В int8 запишем 256?"></a>Что если во время компиляции переполним тип? В int8 запишем 256?</h2><p>Если вы попытаетесь записать значение, превышающее максимально допустимое для данного типа, в Go, то произойдет переполнение типа.</p>
+<p>Например, <strong><code>int8</code></strong> может хранить значения от -128 до 127. Если вы попытаетесь записать 256 в переменную типа <strong><code>int8</code></strong>, то произойдет переполнение. В результате, вместо 256 будет записано значение, которое соответствует остатку от деления 256 на 256 (количество возможных значений для <strong><code>int8</code></strong>), то есть 01.</p>
+<p>Важно отметить, что такое поведение может привести к неожиданным результатам, поэтому всегда следует убедиться, что значения, которые вы записываете в переменные, не превышают максимально допустимые для их типа</p>
+<h2 id="Что-происходит-при-переполнении-числа-например-в-uint8-выйдем-за-границу-на-1"><a href="#Что-происходит-при-переполнении-числа-например-в-uint8-выйдем-за-границу-на-1" class="headerlink" title="Что происходит при переполнении числа, например в uint8 выйдем за границу на 1?"></a>Что происходит при переполнении числа, например в uint8 выйдем за границу на 1?</h2><p>Если вы попытаетесь записать значение, превышающее максимально допустимое для данного типа, в Go, то произойдет переполнение типа.</p>
+<p>Например, <strong><code>uint8</code></strong> может хранить значения от 0 до 255. Если вы попытаетесь записать 256 в переменную типа <strong><code>uint8</code></strong>, то произойдет переполнение. В результате, вместо 256 будет записано значение, которое соответствует остатку от деления 256 на 256 (количество возможных значений для <strong><code>uint8</code></strong>), то есть 0.</p>
+<p>Важно отметить, что такое поведение может привести к неожиданным результатам, поэтому всегда следует убедиться, что значения, которые вы записываете в переменные, не превышают максимально допустимые для их типа.</p>
+<p><img src="/images/golang_types.jpg" alt="Вот вам и types"></p>
+
         </div>
+        <footer class="article-footer">
+            
+
+
+
+    <a data-url="https://goxpert.ru/2024/06/01/types/types-common/" data-id="clwxg9m750000o8wlfodsaupb" class="article-share-link"><i class="fa fa-share"></i>Поделиться</a>
+<script>
+    (function ($) {
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+        </footer>
+    </div>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "author": {
+            "@type": "Person",
+            "name": "авторы проекта GoXpert"
+        },
+        "headline": "Типы данных",
+        "image": "https://goxpert.ru/images/golang_types.jpg",
+        "keywords": "Golang, Q&A",
+        "genre": "Golang Старт Вопрос-Ответ Типы Типы",
+        "datePublished": "2024-06-01",
+        "dateCreated": "2024-06-01",
+        "dateModified": "2024-06-02",
+        "url": "https://goxpert.ru/2024/06/01/types/types-common/",
+        "description": "Что такое type switch?
+Type switch в Go - это способ проверить, какого типа является значение, хранящееся в интерфейсе. Это похоже на обычный switch, но вместо значений в кейсах указываются типы.
+
+123",
+        "wordCount": 637
+    }
+</script>
+
+</article>
+
+    <section id="comments">
     
+        
+    <div id="vk_comments"></div>
+    <script type="text/javascript">
+      window.onload = function () {
+      VK.init({apiId: 51937371, onlyWidgets: true});
+      VK.Widgets.Comments("vk_comments", {limit: 20, attach: "*", autoPublish: 1, pageUrl: "https://goxpert.ru/2024/06/01/types/types-common/"});
+    }
+   </script>
 
-
-    </div></section>
-
+    
+    </section>
 
 
 
@@ -321,6 +452,19 @@ Ya.Site.Form.init()
             
         </ul>
     </div>
+    
+        
+<nav id="article-nav">
+    
+    
+        <a href="/2024/06/01/types/map/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">старые</strong>
+        <p class="article-nav-title">Хеш-мапы (map)</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
     
     <div class="widgets-container">
         
