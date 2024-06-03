@@ -63,8 +63,8 @@
   
   <entry>
     <title>Планировщик</title>
-    <link href="https://goxpert.ru/2024/06/01/%D1%81oncurrency/scheduler/"/>
-    <id>https://goxpert.ru/2024/06/01/%D1%81oncurrency/scheduler/</id>
+    <link href="https://goxpert.ru/2024/06/01/concurrency/scheduler/"/>
+    <id>https://goxpert.ru/2024/06/01/concurrency/scheduler/</id>
     <published>2024-06-01T07:19:00.000Z</published>
     <updated>2024-06-02T18:11:35.674Z</updated>
     
@@ -92,8 +92,8 @@
   
   <entry>
     <title>Контекст</title>
-    <link href="https://goxpert.ru/2024/06/01/%D1%81oncurrency/context/"/>
-    <id>https://goxpert.ru/2024/06/01/%D1%81oncurrency/context/</id>
+    <link href="https://goxpert.ru/2024/06/01/concurrency/context/"/>
+    <id>https://goxpert.ru/2024/06/01/concurrency/context/</id>
     <published>2024-06-01T07:18:00.000Z</published>
     <updated>2024-06-02T18:08:23.259Z</updated>
     
@@ -121,8 +121,8 @@
   
   <entry>
     <title>Горутины</title>
-    <link href="https://goxpert.ru/2024/06/01/%D1%81oncurrency/goroutines/"/>
-    <id>https://goxpert.ru/2024/06/01/%D1%81oncurrency/goroutines/</id>
+    <link href="https://goxpert.ru/2024/06/01/concurrency/goroutines/"/>
+    <id>https://goxpert.ru/2024/06/01/concurrency/goroutines/</id>
     <published>2024-06-01T07:17:00.000Z</published>
     <updated>2024-06-02T18:00:11.741Z</updated>
     
@@ -150,8 +150,8 @@
   
   <entry>
     <title>Гонка данных</title>
-    <link href="https://goxpert.ru/2024/06/01/%D1%81oncurrency/race-condition/"/>
-    <id>https://goxpert.ru/2024/06/01/%D1%81oncurrency/race-condition/</id>
+    <link href="https://goxpert.ru/2024/06/01/concurrency/race-condition/"/>
+    <id>https://goxpert.ru/2024/06/01/concurrency/race-condition/</id>
     <published>2024-06-01T07:16:00.000Z</published>
     <updated>2024-06-02T18:00:17.483Z</updated>
     
@@ -179,8 +179,8 @@
   
   <entry>
     <title>Примитивы синхронизации</title>
-    <link href="https://goxpert.ru/2024/06/01/%D1%81oncurrency/sync-primitives/"/>
-    <id>https://goxpert.ru/2024/06/01/%D1%81oncurrency/sync-primitives/</id>
+    <link href="https://goxpert.ru/2024/06/01/concurrency/sync-primitives/"/>
+    <id>https://goxpert.ru/2024/06/01/concurrency/sync-primitives/</id>
     <published>2024-06-01T07:15:00.000Z</published>
     <updated>2024-06-02T18:00:31.397Z</updated>
     
@@ -208,8 +208,8 @@
   
   <entry>
     <title>Пример sync и async worker</title>
-    <link href="https://goxpert.ru/2024/06/01/%D1%81oncurrency/sync-worker/"/>
-    <id>https://goxpert.ru/2024/06/01/%D1%81oncurrency/sync-worker/</id>
+    <link href="https://goxpert.ru/2024/06/01/concurrency/sync-worker/"/>
+    <id>https://goxpert.ru/2024/06/01/concurrency/sync-worker/</id>
     <published>2024-06-01T07:15:00.000Z</published>
     <updated>2024-06-03T07:14:40.271Z</updated>
     

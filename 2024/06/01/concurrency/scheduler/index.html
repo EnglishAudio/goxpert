@@ -6,26 +6,26 @@
     
 
     
-    <title>Пример sync и async worker | GoXpert.ru</title>
+    <title>Планировщик | GoXpert.ru</title>
     
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
     <meta name="keywords" content="Golang, Q&amp;A" />
     
-    <meta name="description" content="Пример синхронного и асинхронного воркера(рабочего процесса) с Golang">
+    <meta name="description" content="Вопросы по планировщику Golang и OS.">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Пример sync и async worker">
-<meta property="og:url" content="https://goxpert.ru/2024/06/01/%D1%81oncurrency/sync-worker/index.html">
+<meta property="og:title" content="Планировщик">
+<meta property="og:url" content="https://goxpert.ru/2024/06/01/concurrency/scheduler/index.html">
 <meta property="og:site_name" content="GoXpert.ru">
-<meta property="og:description" content="Пример синхронного и асинхронного воркера(рабочего процесса) с Golang">
+<meta property="og:description" content="Вопросы по планировщику Golang и OS.">
 <meta property="og:locale" content="ru_RU">
-<meta property="og:image" content="https://goxpert.ru/images/golang_sync.jpg">
-<meta property="article:published_time" content="2024-06-01T07:15:00.000Z">
-<meta property="article:modified_time" content="2024-06-03T07:14:40.271Z">
+<meta property="og:image" content="https://goxpert.ru/images/golang_scheduler.jpg">
+<meta property="article:published_time" content="2024-06-01T07:19:00.000Z">
+<meta property="article:modified_time" content="2024-06-02T18:11:35.674Z">
 <meta property="article:author" content="авторы проекта GoXpert">
 <meta property="article:tag" content="Golang, Q&amp;A">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://goxpert.ru/images/golang_sync.jpg">
+<meta name="twitter:image" content="https://goxpert.ru/images/golang_scheduler.jpg">
     
 
     
@@ -35,7 +35,7 @@
      
 
      
-        <link rel="amphtml" href="https://goxpert.ru/amp2024/06/01/сoncurrency/sync-worker/">
+        <link rel="amphtml" href="https://goxpert.ru/amp2024/06/01/concurrency/scheduler/">
      
 
 
@@ -191,19 +191,19 @@ Ya.Site.Form.init()
                         <div class="main-body-header">
     <h1 class="header">
     
-    <a class="page-title-link" href="/categories/Golang/">Golang</a><i class="icon fa fa-angle-right"></i><a class="page-title-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/">Старт</a><i class="icon fa fa-angle-right"></i><a class="page-title-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%9F%D1%80%D0%B8%D0%BC%D0%B8%D1%82%D0%B8%D0%B2%D1%8B-%D1%81%D0%B8%D0%BD%D1%85%D1%80%D0%BE%D0%BD%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D0%B8/">Примитивы синхронизации</a><i class="icon fa fa-angle-right"></i><a class="page-title-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/">Вопрос-Ответ</a><i class="icon fa fa-angle-right"></i><a class="page-title-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9F%D1%80%D0%B8%D0%BC%D0%B8%D1%82%D0%B8%D0%B2%D1%8B-%D1%81%D0%B8%D0%BD%D1%85%D1%80%D0%BE%D0%BD%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D0%B8/">Примитивы синхронизации</a>
+    <a class="page-title-link" href="/categories/Golang/">Golang</a><i class="icon fa fa-angle-right"></i><a class="page-title-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/">Старт</a><i class="icon fa fa-angle-right"></i><a class="page-title-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%9F%D0%BB%D0%B0%D0%BD%D0%B8%D1%80%D0%BE%D0%B2%D1%89%D0%B8%D0%BA/">Планировщик</a><i class="icon fa fa-angle-right"></i><a class="page-title-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/">Вопрос-Ответ</a><i class="icon fa fa-angle-right"></i><a class="page-title-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9F%D0%BB%D0%B0%D0%BD%D0%B8%D1%80%D0%BE%D0%B2%D1%89%D0%B8%D0%BA/">Планировщик</a>
     </h1>
 </div>
 
                         <div class="main-body-content">
-                            <article id="post-сoncurrency/sync-worker" class="article article-single article-type-post" itemscope itemprop="blogPost">
+                            <article id="post-concurrency/scheduler" class="article article-single article-type-post" itemscope itemprop="blogPost">
     <div class="article-inner">
         
             <header class="article-header">
                 
     
         <h1 class="article-title" itemprop="name">
-        Пример sync и async worker
+        Планировщик
         </h1>
     
 
@@ -214,16 +214,16 @@ Ya.Site.Form.init()
                 
   <div class="article-date">
     <i class="fa fa-calendar"></i>
-    <a href="/2024/06/01/%D1%81oncurrency/sync-worker/" class="article-date">
-       <time datetime="2024-06-01T07:15:00.000Z" itemprop="datePublished">2024-06-01</time>
+    <a href="/2024/06/01/concurrency/scheduler/" class="article-date">
+       <time datetime="2024-06-01T07:19:00.000Z" itemprop="datePublished">2024-06-01</time>
     </a>
   </div>
 
 
 <div class="article-date">
   <i class="fa fa-calendar-plus-o"></i>
-  <a href="/2024/06/01/%D1%81oncurrency/sync-worker/" class="article-date">
-     <time datetime="2024-06-03T07:14:40.271Z" itemprop="dateModified">2024-06-03</time>
+  <a href="/2024/06/01/concurrency/scheduler/" class="article-date">
+     <time datetime="2024-06-02T18:11:35.674Z" itemprop="dateModified">2024-06-02</time>
   </a>
 </div>
 
@@ -250,26 +250,82 @@ Ya.Site.Form.init()
 
             
 
-            <!-- feed_rem_st --><!-- feed_rem_end --><p>В этом примере мы собираемся создать рабочий пакет, который будет использоваться для синхронной и асинхронной обработки заданий.</p>
-<p>Упаковка</p>
-<p>Хотя этот пакет делает то, что обещает, ему нужны еще три бонусные функции.</p>
+            <!-- feed_rem_st --><!-- feed_rem_end --><h2 id="Как-работает-планировщик-в-Golang"><a href="#Как-работает-планировщик-в-Golang" class="headerlink" title="Как работает планировщик в Golang?"></a>Как работает планировщик в Golang?</h2><p>Планировщик в Golang - это механизм, который отвечает за распределение и выполнение горутин (G) на логических процессорах (P), которые в свою очередь работают на физических потоках (M) операционной системы. Планировщик в Golang использует модель M:N, то есть может запускать произвольное количество горутин на произвольном количестве потоков.</p>
+<p>Горутина (G) - это легковесный поток выполнения, который может быть создан, переключен и уничтожен планировщиком Go без взаимодействия с операционной системой. Горутины занимают мало памяти и могут быть заспавнены в большом количестве. Горутины не привязаны к конкретному потоку или процессору, а могут динамически менять свой контекст выполнения.</p>
+<p>Логический процессор (P) - это абстракция, которая представляет собой ресурс, необходимый для выполнения горутин. Каждый P имеет свою локальную очередь (LRQ), в которой хранятся горутины, ожидающие запуска. Количество P обычно равно количеству ядер в системе, чтобы максимально использовать параллелизм. P не может выполнять горутину самостоятельно, а нуждается в M для этого.</p>
+<p>Физический поток (M) - это поток операционной системы, который может быть связан с P и выполнять горутину из LRQ. M может переключаться между разными P в зависимости от ситуации. Например, если M блокируется на системном вызове или операции ввода-вывода, он может быть отсоединен от P и заменен другим M. Также M может участвовать в процессе work stealing, когда он пытается украсть горутину из LRQ или глобальной очереди (GRQ) другого P.</p>
+<p>Планировщик Go использует алгоритм work stealing для балансировки нагрузки между P. Если LRQ одного P пуста, он может попытаться украсть горутину из LRQ или GRQ другого P. Это позволяет эффективно использовать ресурсы и избегать простоя.</p>
+<p>Источники:</p>
 <ul>
-<li>Возможность завершать длительные задания.</li>
-<li>Возможность закрытия каналов.</li>
-<li>Возможность убить всех рабочих.</li>
+<li><a target="_blank" rel="noopener" href="https://habr.com/ru/articles/478168/">Habr</a></li>
+<li><a target="_blank" rel="noopener" href="https://habr.com/ru/articles/489862/">Habr</a></li>
+<li><a target="_blank" rel="noopener" href="https://backendinterview.ru/goLang/scheduler.html">Backend Interview</a></li>
 </ul>
-<p>В этом примере для заданий используются «небуферизованные» каналы. Однако, если вы хотите ограничить количество заданий одновременно, вы можете обновить NewWorker()функцию, чтобы использовать «буферизованные» каналы, как показано ниже.</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewWorker</span><span class="params">(workerTotal, jobTotal <span class="keyword">int</span>)</span> <span class="title">Worker</span></span> &#123;</span><br><span class="line">  <span class="keyword">return</span> Worker&#123;</span><br><span class="line">    total:      workerTotal,</span><br><span class="line">    jobChan:    <span class="built_in">make</span>(<span class="keyword">chan</span> Job, jobTotal),</span><br><span class="line">    resultChan: <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">interface</span>&#123;&#125;, jobTotal),</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>код</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> worker</span><br><span class="line"> </span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">	<span class="string">&quot;math/rand&quot;</span></span><br><span class="line">	<span class="string">&quot;time&quot;</span></span><br><span class="line">)</span><br><span class="line"> </span><br><span class="line"><span class="comment">// -----------------------------------------------------------------------------</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">type</span> Job <span class="keyword">struct</span> &#123;</span><br><span class="line">  <span class="comment">// id represents the job identifier.</span></span><br><span class="line">  <span class="comment">// id представляет идентификатор задания.</span></span><br><span class="line">  id <span class="keyword">interface</span>&#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="comment">// NewJob returns a `Job` instance.</span></span><br><span class="line"><span class="comment">// NewJob возвращает экземпляр Job.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewJob</span><span class="params">(id <span class="keyword">interface</span>&#123;&#125;)</span> <span class="title">Job</span></span> &#123;</span><br><span class="line">  <span class="keyword">return</span> Job&#123;</span><br><span class="line">    id: id,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="comment">// -----------------------------------------------------------------------------</span></span><br><span class="line"> </span><br><span class="line"><span class="keyword">type</span> Worker <span class="keyword">struct</span> &#123;</span><br><span class="line">  <span class="comment">// total represents the amount of workers to be run at startup.</span></span><br><span class="line">  <span class="comment">// total представляет количество воркеров, которые будут запущены при запуске.</span></span><br><span class="line">  total <span class="keyword">int</span></span><br><span class="line">  <span class="comment">// jobChan represents a two-way &quot;unbuffered&quot; channel that has unlimited</span></span><br><span class="line">  <span class="comment">// capacity for the jobs.</span></span><br><span class="line">  <span class="comment">// jobChan представляет собой двусторонний «небуферизованный» канал с неограниченной </span></span><br><span class="line">  <span class="comment">// пропускной способностью для заданий. </span></span><br><span class="line">  jobChan <span class="keyword">chan</span> Job</span><br><span class="line">  <span class="comment">// resultChan represents a two-way &quot;unbuffered&quot; channel that has unlimited</span></span><br><span class="line">  <span class="comment">// capacity for the job results.</span></span><br><span class="line">  <span class="comment">// resultChan представляет собой двусторонний «небуферизованный» канал, который имеет неограниченную </span></span><br><span class="line">  <span class="comment">// емкость для результатов задания.</span></span><br><span class="line">  resultChan <span class="keyword">chan</span> <span class="keyword">interface</span>&#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="comment">// NewWorker returns a `Worker` instance.</span></span><br><span class="line"><span class="comment">// NewWorker возвращает экземпляр Worker.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewWorker</span><span class="params">(workerTotal <span class="keyword">int</span>)</span> <span class="title">Worker</span></span> &#123;</span><br><span class="line">  <span class="keyword">return</span> Worker&#123;</span><br><span class="line">    total:      workerTotal,</span><br><span class="line">    jobChan:    <span class="built_in">make</span>(<span class="keyword">chan</span> Job),</span><br><span class="line">    resultChan: <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">interface</span>&#123;&#125;),</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="comment">// Start brings up certain amount of worker(s) so that they can pick up and work</span></span><br><span class="line"><span class="comment">// on the job(s).</span></span><br><span class="line"><span class="comment">// Start вызывает определенное количество рабочих(воркеров), чтобы они могли взять и работать </span></span><br><span class="line"><span class="comment">// на задании (джобе(ах)).</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(w Worker)</span> <span class="title">Start</span><span class="params">()</span></span> &#123;</span><br><span class="line">  <span class="keyword">for</span> i := <span class="number">1</span>; i &lt;= w.total; i++ &#123;</span><br><span class="line">    <span class="keyword">go</span> w.run(i)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="comment">// Add adds a job to a channel so that it could be picked up and worked on by</span></span><br><span class="line"><span class="comment">// the running worker(s).</span></span><br><span class="line"><span class="comment">// Add добавляет задание(джоб) в канал, чтобы его мог взять и обработать </span></span><br><span class="line"><span class="comment">// работающий работник(и)(воркер(ы)). </span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(w Worker)</span> <span class="title">Add</span><span class="params">(job Job)</span></span> &#123;</span><br><span class="line">  w.jobChan &lt;- job</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="comment">// Result returns a channel so that it could be ranged over in order to fetch</span></span><br><span class="line"><span class="comment">// job results from the running worker(s).</span></span><br><span class="line"><span class="comment">// Result возвращает канал, чтобы его можно было ранжировать для получения </span></span><br><span class="line"><span class="comment">// результатов задания от работающего работника(ов)(воркера).</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(w Worker)</span> <span class="title">Result</span><span class="params">()</span> &lt;-<span class="title">chan</span> <span class="title">interface</span></span>&#123;&#125; &#123;</span><br><span class="line">  <span class="keyword">return</span> w.resultChan</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="comment">// run runs a worker and works on the job(s).</span></span><br><span class="line"><span class="comment">// run запускает работника и работает над заданием(ями) джобами.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(w Worker)</span> <span class="title">run</span><span class="params">(id <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">  fmt.Println(id, <span class="string">&quot;running...&quot;</span>)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> &#123;</span><br><span class="line">    <span class="keyword">select</span> &#123;</span><br><span class="line">    <span class="keyword">case</span> job := &lt;- w.jobChan:</span><br><span class="line">      fmt.Printf(<span class="string">&quot;%d выбрал задание %v @ %s\n&quot;</span>, id, job.id, time.Now().UTC())</span><br><span class="line">      <span class="comment">//fmt.Printf(&quot;%d picked up job %v @ %s\n&quot;, id, job.id, time.Now().UTC())</span></span><br><span class="line"> </span><br><span class="line">      <span class="comment">// Pretend like doing something.</span></span><br><span class="line">      <span class="comment">// Делаем вид, будто что-то делаем.</span></span><br><span class="line">      rand.Seed(time.Now().UnixNano())</span><br><span class="line">      time.Sleep(time.Duration(rand.Intn(<span class="built_in">len</span>([]<span class="keyword">int</span>&#123;<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>&#125;))) * time.Second)</span><br><span class="line">      <span class="comment">// Done. (сделано)</span></span><br><span class="line"> </span><br><span class="line">      fmt.Printf(<span class="string">&quot;%d завершил задание %v @ %s\n&quot;</span>, id, job.id, time.Now().UTC())</span><br><span class="line">      <span class="comment">//fmt.Printf(&quot;%d completed job %v @ %s\n&quot;, id, job.id, time.Now().UTC())</span></span><br><span class="line">      w.resultChan &lt;- job.id</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">      time.Sleep(<span class="number">1</span> * time.Second)</span><br><span class="line">      <span class="comment">//fmt.Println(id, &quot;waiting...&quot;)</span></span><br><span class="line">      fmt.Println(id, <span class="string">&quot;ожидание...&quot;</span>)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="Применение"><a href="#Применение" class="headerlink" title="Применение"></a>Применение</h1><h2 id="Асинхронный"><a href="#Асинхронный" class="headerlink" title="Асинхронный"></a>Асинхронный</h2><p>Это асинхронный (неблокирующий) пример, поэтому задания обрабатываются случайным образом и в произвольном порядке. Программа никогда не выходит. Результаты заданий печатаются независимо друг от друга. Важно иметь несколько работников.</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"> </span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">  <span class="string">&quot;fmt&quot;</span></span><br><span class="line"> </span><br><span class="line">  <span class="string">&quot;internal/worker&quot;</span></span><br><span class="line">)</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">   <span class="comment">// Create new worker(s) and start.</span></span><br><span class="line">   <span class="comment">// Создаем новых рабочих и запускаем.</span></span><br><span class="line">   w := worker.NewWorker(<span class="number">3</span>)</span><br><span class="line">   w.Start()</span><br><span class="line"> </span><br><span class="line">   <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">     <span class="comment">// Add jobs.</span></span><br><span class="line">     <span class="comment">// Добовляем задания</span></span><br><span class="line">     <span class="keyword">for</span> i := <span class="number">1</span>; i &lt;= <span class="number">5</span>; i++ &#123;</span><br><span class="line">	w.Add(worker.NewJob(i))</span><br><span class="line">     &#125;</span><br><span class="line">   &#125;()</span><br><span class="line"> </span><br><span class="line">   <span class="comment">// Print results.</span></span><br><span class="line">   <span class="comment">// Печать результатов.</span></span><br><span class="line">   <span class="keyword">for</span> v := <span class="keyword">range</span> w.Result() &#123;</span><br><span class="line">      fmt.Println(<span class="string">&quot;Result:&quot;</span>, v)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="синхронный"><a href="#синхронный" class="headerlink" title="синхронный"></a>синхронный</h2><p>Это синхронный (блокирующий) пример, поэтому задания обрабатываются одно за другим по порядку. Программа завершает работу после завершения заданий. Результаты заданий печатаются один за другим по порядку. Иметь несколько работников бессмысленно, поскольку одновременно обрабатывается одно задание.</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"> </span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">   <span class="string">&quot;fmt&quot;</span></span><br><span class="line">   <span class="string">&quot;internal/worker&quot;</span></span><br><span class="line">)</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">   <span class="comment">// Create new worker(s) and start.</span></span><br><span class="line">   <span class="comment">// Создаем новых рабочих и запускаем.</span></span><br><span class="line">   w := worker.NewWorker(<span class="number">3</span>)</span><br><span class="line">   w.Start()</span><br><span class="line"> </span><br><span class="line">   <span class="comment">// Add jobs.</span></span><br><span class="line">   <span class="comment">// Добавляем задания.</span></span><br><span class="line">   w.Add(worker.NewJob(<span class="number">1</span>))</span><br><span class="line">   <span class="comment">// Print results.</span></span><br><span class="line">   <span class="comment">// Распечатываем результаты.</span></span><br><span class="line">   v := &lt;- w.Result()</span><br><span class="line">   <span class="comment">//fmt.Println(&quot;Result:&quot;, v)</span></span><br><span class="line">   fmt.Println(<span class="string">&quot;Результат:&quot;</span>, v)</span><br><span class="line"> </span><br><span class="line">   <span class="comment">// Add jobs.</span></span><br><span class="line">   <span class="comment">// Добавляем задания.</span></span><br><span class="line">   w.Add(worker.NewJob(<span class="number">2</span>))</span><br><span class="line">   <span class="comment">// Print results.</span></span><br><span class="line">   v = &lt;- w.Result()</span><br><span class="line">   fmt.Println(<span class="string">&quot;Result:&quot;</span>, v)</span><br><span class="line"> </span><br><span class="line">   <span class="comment">// Add jobs.</span></span><br><span class="line">   w.Add(worker.NewJob(<span class="number">3</span>))</span><br><span class="line">   <span class="comment">// Print results.</span></span><br><span class="line">   v = &lt;- w.Result()</span><br><span class="line">   fmt.Println(<span class="string">&quot;Result:&quot;</span>, v)</span><br><span class="line"> </span><br><span class="line">   <span class="comment">// Add jobs.</span></span><br><span class="line">   w.Add(worker.NewJob(<span class="number">4</span>))</span><br><span class="line">   <span class="comment">// Print results.</span></span><br><span class="line">   v = &lt;- w.Result()</span><br><span class="line">   fmt.Println(<span class="string">&quot;Result:&quot;</span>, v)</span><br><span class="line"> </span><br><span class="line">   <span class="comment">// Add jobs.</span></span><br><span class="line">   w.Add(worker.NewJob(<span class="number">5</span>))</span><br><span class="line">   <span class="comment">// Print results.</span></span><br><span class="line">   v = &lt;- w.Result()</span><br><span class="line">   fmt.Println(<span class="string">&quot;Result:&quot;</span>, v)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><img src="/images/golang_sync.jpg" alt="Вот вам и пример синхронного и асинхронного воркера с Golang"></p>
+<h2 id="В-чем-разница-между-вытесняющим-и-кооперативным-планировщиком"><a href="#В-чем-разница-между-вытесняющим-и-кооперативным-планировщиком" class="headerlink" title="В чем разница между вытесняющим и кооперативным планировщиком?"></a>В чем разница между вытесняющим и кооперативным планировщиком?</h2><p>Вытесняющий планировщик - это такой планировщик, который может прервать выполнение текущей задачи в любой момент и передать управление другой задаче, если он посчитает это необходимым. Вытесняющий планировщик обычно использует таймер или другие прерывания, чтобы определить, когда нужно сменить задачу. Вытесняющий планировщик позволяет более эффективно распределять ресурсы между задачами и обеспечивать более высокую отзывчивость системы.</p>
+<p>Кооперативный планировщик - это такой планировщик, который не может прервать выполнение текущей задачи, пока она сама не отдаст управление. Кооперативный планировщик полагается на то, что задачи будут добровольно освобождать процессор, когда они закончат свою работу или будут ждать ввода-вывода. Кооперативный планировщик проще в реализации и потребляет меньше ресурсов, но он может привести к проблемам с производительностью и справедливостью, если одна из задач будет занимать процессор слишком долго.</p>
+<p>Если вы хотите узнать больше о том, в чем разница между вытесняющим и кооперативным планировщиком, вы можете посмотреть следующие источники:</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://habr.com/ru/articles/489862/">Планирование в Go: Часть II — Планировщик Go</a></li>
+<li><a target="_blank" rel="noopener" href="https://t-fakt.ru/raznica/raznicza-mezhdu-vytesnyayushhim-i-nevytesnyayushhim-planirovaniem-v-operaczionnyh-sistemah/">Разница между вытесняющим и невытесняющим планированием в операционных системах</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.guru99.com/ru/preemptive-vs-non-preemptive-scheduling.html">Упреждающее и невытесняющее планирование</a></li>
+</ul>
+<h2 id="Какой-тип-планировщика-в-Golang"><a href="#Какой-тип-планировщика-в-Golang" class="headerlink" title="Какой тип планировщика в Golang?"></a>Какой тип планировщика в Golang?</h2><p>Планировщик в Golang - это вытесняющий планировщик с кооперативными элементами. </p>
+<p>Это означает, что он может прервать выполнение текущей горутины в любой момент и передать управление другой горутине, если он посчитает это необходимым, но он также полагается на то, что горутины будут добровольно освобождать процессор, когда они будут ждать ввода-вывода или блокироваться на каналах.</p>
+<p>Планировщик в Golang использует таймер или другие прерывания, чтобы определить, когда нужно сменить горутину, а также учитывает приоритеты и аффинность горутин к процессорам.</p>
+<p>Источники:</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://habr.com/ru/articles/489862/">Планирование в Go: Часть II — Планировщик Go</a></li>
+<li><a target="_blank" rel="noopener" href="https://habr.com/ru/articles/478168/">Планирование в Go: Часть I — Планировщик ОС</a></li>
+</ul>
+<h2 id="В-планировщике-до-версии-1-15-какие-операции-приводят-к-переключению-контекста-горутин"><a href="#В-планировщике-до-версии-1-15-какие-операции-приводят-к-переключению-контекста-горутин" class="headerlink" title="В планировщике до версии 1.15 какие операции приводят к переключению контекста горутин?"></a>В планировщике до версии 1.15 какие операции приводят к переключению контекста горутин?</h2><p>В планировщике Golang до версии 1.15 переключение контекста горутин происходило только при выполнении следующих операций:</p>
+<ul>
+<li>Ожидание ввода-вывода (I/O), такого как чтение или запись в файл, сеть, канал или таймер.</li>
+<li>Блокировка на мьютексе (mutex) или другом примитиве синхронизации.</li>
+<li>Вызов функции runtime.Gosched, которая явно передает управление другой горутине.</li>
+<li>Вызов функции runtime.GC, которая запускает сборку мусора и приостанавливает все горутины.</li>
+<li>Вызов функции runtime.LockOSThread, которая привязывает горутину к одному системному потоку и не позволяет ей переключаться на другой.</li>
+</ul>
+<p>В версии 1.15 планировщик Golang стал вытесняющим, то есть он может прервать выполнение любой горутины, которая работает слишком долго, и передать управление другой горутине, если он посчитает это необходимым. Это улучшило отзывчивость и справедливость системы, а также уменьшило вероятность возникновения состояний гонки и взаимных блокировок.</p>
+<h2 id="Можно-ли-руками-переключить-контекст-горутины"><a href="#Можно-ли-руками-переключить-контекст-горутины" class="headerlink" title="Можно ли руками переключить контекст горутины?"></a>Можно ли руками переключить контекст горутины?</h2><p>В общем случае, нет, нельзя руками переключить контекст горутины, так как это делает планировщик Golang автоматически, когда он посчитает это необходимым.</p>
+<p>Однако, в некоторых редких случаях, можно руками переключить контекст горутины, используя низкоуровневые функции из пакета runtime, такие как runtime.Gopark и runtime.Goready, которые позволяют приостановить и возобновить горутину по собственному условию. Эти функции не рекомендуются для обычного использования, так как они могут привести к ошибкам и несовместимостям с планировщиком Golang.</p>
+<p>Источники:</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://habr.com/ru/articles/489862/">Планирование в Go: Часть II — Планировщик Go</a></li>
+<li><a target="_blank" rel="noopener" href="https://habr.com/ru/articles/478168/">Планирование в Go: Часть I — Планировщик ОС</a></li>
+</ul>
+<h2 id="Сколько-потоков-операционной-системы-мы-можем-создать"><a href="#Сколько-потоков-операционной-системы-мы-можем-создать" class="headerlink" title="Сколько потоков операционной системы мы можем создать?"></a>Сколько потоков операционной системы мы можем создать?</h2><p>Количество потоков операционной системы, которые мы можем создать в Golang, зависит от нескольких факторов, таких как:</p>
+<ul>
+<li>Количество горутин (goroutines), которые мы запускаем в нашей программе.</li>
+<li>Количество процессоров или ядер на компьютере. По умолчанию Golang создает столько системных потоков, сколько доступно логических процессоров на компьютере, но это можно изменить с помощью переменной окружения GOMAXPROCS.</li>
+<li>Размер стека для каждого системного потока. Стек - это область памяти, которая используется для хранения локальных переменных, параметров и адресов возврата функций. Размер стека ограничивает количество системных потоков, которые могут быть созданы, так как память не бесконечна.</li>
+</ul>
+<h2 id="Расскажи-про-глобальную-и-локальную-очереди"><a href="#Расскажи-про-глобальную-и-локальную-очереди" class="headerlink" title="Расскажи про глобальную и локальную очереди"></a>Расскажи про глобальную и локальную очереди</h2><p>Глобальная и локальная очереди в Golang - это структуры данных, которые используются планировщиком Go для распределения горутин между логическими процессорами (P). Горутина - это легковесный поток выполнения, который может быть переключен планировщиком без блокировки операционной системы.</p>
+<p>Глобальная очередь выполнения (GRQ) содержит горутины, которые еще не были назначены ни одному логическому процессору. Когда логический процессор создается или освобождается, он может взять горутину из GRQ и поместить ее в свою локальную очередь выполнения (LRQ). LRQ содержит горутины, которые принадлежат конкретному логическому процессору и ожидают своего запуска.</p>
+<p>Планировщик Go использует алгоритм work stealing для балансировки нагрузки между логическими процессорами. Если LRQ одного логического процессора пуста, он может попытаться украсть горутину из LRQ другого логического процессора или из GRQ. Это позволяет эффективно использовать ресурсы и избегать простоя.</p>
+<p>Источники: </p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://habr.com/ru/articles/743266/">Habr</a></li>
+<li><a target="_blank" rel="noopener" href="https://habr.com/ru/articles/489862/">Habr</a></li>
+</ul>
+<h2 id="Может-ли-горутина-начать-работу-на-одном-P-приостановиться-и-продолжить-работу-на-другом-P"><a href="#Может-ли-горутина-начать-работу-на-одном-P-приостановиться-и-продолжить-работу-на-другом-P" class="headerlink" title="Может ли горутина начать работу на одном P, приостановиться и продолжить работу на другом P?"></a>Может ли горутина начать работу на одном P, приостановиться и продолжить работу на другом P?</h2><p>Да, горутина может переключаться между разными логическими процессорами (P) во время своей работы. Это может произойти по нескольким причинам, например:</p>
+<ul>
+<li>Горутина блокируется на операции ввода-вывода или системном вызове, и планировщик Go переназначает ее P другой горутине.</li>
+<li>Горутина добровольно отступает от своего P, вызывая функцию yield или resume, которые позволяют использовать корутины в Go.</li>
+<li>Горутина истекает свой квант времени, и планировщик Go прерывает ее выполнение и переводит ее в конец своей локальной очереди (LRQ).</li>
+<li>Горутина становится жертвой work stealing, когда другой P, у которого пустая LRQ, пытается украсть горутину из LRQ или глобальной очереди (GRQ) другого P.</li>
+</ul>
+<p>Таким образом, горутины в Go не привязаны к конкретному P на всю свою жизнь, а могут динамически менять свой контекст выполнения в зависимости от ситуации. Это повышает эффективность и отзывчивость приложений, написанных на Go.</p>
+<p>Источники: </p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://habr.com/ru/articles/775532/">Habr</a></li>
+<li><a target="_blank" rel="noopener" href="https://habr.com/ru/articles/743266/">Habr</a></li>
+<li><a target="_blank" rel="noopener" href="https://habr.com/ru/articles/489862/">Habr</a></li>
+</ul>
+<h2 id="Может-ли-одна-очередь-украсть-горутины-у-другой"><a href="#Может-ли-одна-очередь-украсть-горутины-у-другой" class="headerlink" title="Может ли одна очередь украсть горутины у другой?"></a>Может ли одна очередь украсть горутины у другой?</h2><p>Да, одна очередь может украсть горутины у другой в процессе work stealing. Это алгоритм, который позволяет планировщику Go балансировать нагрузку между логическими процессорами (P). Когда один P имеет пустую локальную очередь (LRQ), он может попытаться украсть горутину из LRQ или глобальной очереди (GRQ) другого P. Это увеличивает вероятность того, что каждый P будет иметь работу, и избегает простоя.</p>
+<h2 id="В-чем-профит-горутин-если-мы-можем-заспавнить-миллион-потоков-в-процессе-и-почему-упадет-процесс-с-таким-количеством-потоков-или-нет"><a href="#В-чем-профит-горутин-если-мы-можем-заспавнить-миллион-потоков-в-процессе-и-почему-упадет-процесс-с-таким-количеством-потоков-или-нет" class="headerlink" title="В чем профит горутин, если мы можем заспавнить миллион потоков в процессе, и почему упадет процесс с таким количеством потоков, или нет?"></a>В чем профит горутин, если мы можем заспавнить миллион потоков в процессе, и почему упадет процесс с таким количеством потоков, или нет?</h2><p>Профит горутин в том, что они легковеснее и эффективнее обычных потоков. Горутины занимают меньше памяти (порядка килобайтов), чем потоки (порядка мегабайтов), и могут динамически расти и уменьшаться в зависимости от потребностей. Горутины также имеют меньший оверхед на создание, переключение и уничтожение, чем потоки, которые требуют взаимодействия с операционной системой.</p>
+<p>Если мы попытаемся заспавнить миллион потоков в процессе, то скорее всего процесс упадет из-за нехватки памяти или ресурсов. Каждый поток требует выделения стека, регистров, дескрипторов и других ресурсов, которые ограничены операционной системой. Кроме того, большое количество потоков приводит к частому переключению контекста, которое снижает производительность и увеличивает задержки.</p>
+<p>В отличие от потоков, горутины могут быть заспавнены в большом количестве без существенных потерь производительности и памяти. Планировщик Go оптимально распределяет горутины между логическими процессорами (P), используя глобальную и локальные очереди, а также алгоритм work stealing. Таким образом, горутины позволяют писать высокопроизводительные и масштабируемые приложения на Go.</p>
+<p><img src="/images/golang_scheduler.jpg" alt="Вот вам и scheduler"></p>
 
         </div>
         <footer class="article-footer">
@@ -277,7 +333,7 @@ Ya.Site.Form.init()
 
 
 
-    <a data-url="https://goxpert.ru/2024/06/01/%D1%81oncurrency/sync-worker/" data-id="clwylsj9k00007gwl2l52b8zb" class="article-share-link"><i class="fa fa-share"></i>Поделиться</a>
+    <a data-url="https://goxpert.ru/2024/06/01/concurrency/scheduler/" data-id="clwyn5dq00007yowl18mf44bz" class="article-share-link"><i class="fa fa-share"></i>Поделиться</a>
 <script>
     (function ($) {
         $('body').on('click', function() {
@@ -347,18 +403,16 @@ Ya.Site.Form.init()
             "@type": "Person",
             "name": "авторы проекта GoXpert"
         },
-        "headline": "Пример sync и async worker",
-        "image": "https://goxpert.ru/images/golang_sync.jpg",
+        "headline": "Планировщик",
+        "image": "https://goxpert.ru/images/golang_scheduler.jpg",
         "keywords": "Golang, Q&A",
-        "genre": "Golang Старт Вопрос-Ответ Примитивы синхронизации Примитивы синхронизации",
+        "genre": "Golang Старт Вопрос-Ответ Планировщик Планировщик",
         "datePublished": "2024-06-01",
         "dateCreated": "2024-06-01",
-        "dateModified": "2024-06-03",
-        "url": "https://goxpert.ru/2024/06/01/сoncurrency/sync-worker/",
-        "description": "В этом примере мы собираемся создать рабочий пакет, который будет использоваться для синхронной и асинхронной обработки заданий.
-Упаковка
-Хотя этот пакет делает то, что обещает, ему нужны еще три бону",
-        "wordCount": 1589
+        "dateModified": "2024-06-02",
+        "url": "https://goxpert.ru/2024/06/01/concurrency/scheduler/",
+        "description": "Как работает планировщик в Golang?Планировщик в Golang - это механизм, который отвечает за распределение и выполнение горутин (G) на логических процессорах (P), которые в свою очередь работают на физи",
+        "wordCount": 1451
     }
 </script>
 
@@ -371,7 +425,7 @@ Ya.Site.Form.init()
     <script type="text/javascript">
       window.onload = function () {
       VK.init({apiId: 51937371, onlyWidgets: true});
-      VK.Widgets.Comments("vk_comments", {limit: 20, attach: "*", autoPublish: 1, pageUrl: "https://goxpert.ru/2024/06/01/%D1%81oncurrency/sync-worker/"});
+      VK.Widgets.Comments("vk_comments", {limit: 20, attach: "*", autoPublish: 1, pageUrl: "https://goxpert.ru/2024/06/01/concurrency/scheduler/"});
     }
    </script>
 
@@ -452,20 +506,20 @@ Ya.Site.Form.init()
         
 <nav id="article-nav">
     
-        <a href="/2024/06/01/%D1%81oncurrency/sync-primitives/" id="article-nav-newer" class="article-nav-link-wrap">
+        <a href="/2024/06/01/os/network/" id="article-nav-newer" class="article-nav-link-wrap">
         <strong class="article-nav-caption">новые</strong>
         <p class="article-nav-title">
         
-            Примитивы синхронизации
+            Сеть
         
         </p>
         <i class="icon fa fa-chevron-right" id="icon-chevron-right"></i>
     </a>
     
     
-        <a href="/2024/06/01/types/types-common/" id="article-nav-older" class="article-nav-link-wrap">
+        <a href="/2024/06/01/concurrency/context/" id="article-nav-older" class="article-nav-link-wrap">
         <strong class="article-nav-caption">старые</strong>
-        <p class="article-nav-title">Типы данных</p>
+        <p class="article-nav-title">Контекст</p>
         <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
         </a>
     
@@ -527,7 +581,7 @@ Ya.Site.Form.init()
                     <li>
                         
                         <div class="item-thumbnail">
-                            <a href="/2024/06/01/%D1%81oncurrency/scheduler/" class="thumbnail">
+                            <a href="/2024/06/01/concurrency/scheduler/" class="thumbnail">
     
     
         <span style="background-image:url(/images/golang_scheduler.jpg)" alt="Планировщик" class="thumbnail-image"></span>
@@ -539,7 +593,7 @@ Ya.Site.Form.init()
                         
                         <div class="item-inner">
                             <p class="item-category"><a class="article-category-link" href="/categories/Golang/">Golang</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/">Старт</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/">Вопрос-Ответ</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9F%D0%BB%D0%B0%D0%BD%D0%B8%D1%80%D0%BE%D0%B2%D1%89%D0%B8%D0%BA/">Планировщик</a></p>
-                            <p class="item-title"><a href="/2024/06/01/%D1%81oncurrency/scheduler/" class="title">Планировщик</a></p>
+                            <p class="item-title"><a href="/2024/06/01/concurrency/scheduler/" class="title">Планировщик</a></p>
                             <p class="item-date"><time datetime="2024-06-01T07:19:00.000Z" itemprop="datePublished">2024-06-01</time></p>
                         </div>
                     </li>
@@ -547,7 +601,7 @@ Ya.Site.Form.init()
                     <li>
                         
                         <div class="item-thumbnail">
-                            <a href="/2024/06/01/%D1%81oncurrency/context/" class="thumbnail">
+                            <a href="/2024/06/01/concurrency/context/" class="thumbnail">
     
     
         <span style="background-image:url(/images/golang_context.jpg)" alt="Контекст" class="thumbnail-image"></span>
@@ -559,7 +613,7 @@ Ya.Site.Form.init()
                         
                         <div class="item-inner">
                             <p class="item-category"><a class="article-category-link" href="/categories/Golang/">Golang</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/">Старт</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/">Вопрос-Ответ</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9A%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82/">Контекст</a></p>
-                            <p class="item-title"><a href="/2024/06/01/%D1%81oncurrency/context/" class="title">Контекст</a></p>
+                            <p class="item-title"><a href="/2024/06/01/concurrency/context/" class="title">Контекст</a></p>
                             <p class="item-date"><time datetime="2024-06-01T07:18:00.000Z" itemprop="datePublished">2024-06-01</time></p>
                         </div>
                     </li>
@@ -567,7 +621,7 @@ Ya.Site.Form.init()
                     <li>
                         
                         <div class="item-thumbnail">
-                            <a href="/2024/06/01/%D1%81oncurrency/goroutines/" class="thumbnail">
+                            <a href="/2024/06/01/concurrency/goroutines/" class="thumbnail">
     
     
         <span style="background-image:url(/images/golang_goroutine.jpg)" alt="Горутины" class="thumbnail-image"></span>
@@ -579,7 +633,7 @@ Ya.Site.Form.init()
                         
                         <div class="item-inner">
                             <p class="item-category"><a class="article-category-link" href="/categories/Golang/">Golang</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/">Старт</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/">Вопрос-Ответ</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%93%D0%BE%D1%80%D1%83%D1%82%D0%B8%D0%BD%D1%8B/">Горутины</a></p>
-                            <p class="item-title"><a href="/2024/06/01/%D1%81oncurrency/goroutines/" class="title">Горутины</a></p>
+                            <p class="item-title"><a href="/2024/06/01/concurrency/goroutines/" class="title">Горутины</a></p>
                             <p class="item-date"><time datetime="2024-06-01T07:17:00.000Z" itemprop="datePublished">2024-06-01</time></p>
                         </div>
                     </li>

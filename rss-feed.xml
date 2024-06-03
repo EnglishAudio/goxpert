@@ -45,7 +45,7 @@
         
          
         <link url="https://goxpert.ru/2024/06/02/os/os_scheduler/">Предыдущая статья: Планировщик ОS</link>
-        <link url="https://goxpert.ru/2024/06/01/%D1%81oncurrency/scheduler/">Следующая статья: Планировщик</link>
+        <link url="https://goxpert.ru/2024/06/01/concurrency/scheduler/">Следующая статья: Планировщик</link>
         
         
       </yandex:related>
@@ -57,17 +57,17 @@
     
     <item turbo="true">
       <turbo:extendedHtml>true</turbo:extendedHtml>
-      <turbo:source>https://goxpert.ru/2024/06/01/%D1%81oncurrency/scheduler/</turbo:source>
+      <turbo:source>https://goxpert.ru/2024/06/01/concurrency/scheduler/</turbo:source>
       <turbo:topic>Планировщик</turbo:topic>
       <title>Планировщик</title>
-      <link>https://goxpert.ru/2024/06/01/%D1%81oncurrency/scheduler/</link>
+      <link>https://goxpert.ru/2024/06/01/concurrency/scheduler/</link>
       <pubDate>Sat, 01 Jun 2024 07:19:00 GMT</pubDate>
        
       <yandex:related type="infinity">
         
          
         <link url="https://goxpert.ru/2024/06/01/os/network/">Предыдущая статья: Сеть</link>
-        <link url="https://goxpert.ru/2024/06/01/%D1%81oncurrency/context/">Следующая статья: Контекст</link>
+        <link url="https://goxpert.ru/2024/06/01/concurrency/context/">Следующая статья: Контекст</link>
         
         
       </yandex:related>
@@ -79,17 +79,17 @@
     
     <item turbo="true">
       <turbo:extendedHtml>true</turbo:extendedHtml>
-      <turbo:source>https://goxpert.ru/2024/06/01/%D1%81oncurrency/context/</turbo:source>
+      <turbo:source>https://goxpert.ru/2024/06/01/concurrency/context/</turbo:source>
       <turbo:topic>Контекст</turbo:topic>
       <title>Контекст</title>
-      <link>https://goxpert.ru/2024/06/01/%D1%81oncurrency/context/</link>
+      <link>https://goxpert.ru/2024/06/01/concurrency/context/</link>
       <pubDate>Sat, 01 Jun 2024 07:18:00 GMT</pubDate>
        
       <yandex:related type="infinity">
         
          
-        <link url="https://goxpert.ru/2024/06/01/%D1%81oncurrency/scheduler/">Предыдущая статья: Планировщик</link>
-        <link url="https://goxpert.ru/2024/06/01/%D1%81oncurrency/goroutines/">Следующая статья: Горутины</link>
+        <link url="https://goxpert.ru/2024/06/01/concurrency/scheduler/">Предыдущая статья: Планировщик</link>
+        <link url="https://goxpert.ru/2024/06/01/concurrency/goroutines/">Следующая статья: Горутины</link>
         
         
       </yandex:related>
@@ -101,17 +101,17 @@
     
     <item turbo="true">
       <turbo:extendedHtml>true</turbo:extendedHtml>
-      <turbo:source>https://goxpert.ru/2024/06/01/%D1%81oncurrency/goroutines/</turbo:source>
+      <turbo:source>https://goxpert.ru/2024/06/01/concurrency/goroutines/</turbo:source>
       <turbo:topic>Горутины</turbo:topic>
       <title>Горутины</title>
-      <link>https://goxpert.ru/2024/06/01/%D1%81oncurrency/goroutines/</link>
+      <link>https://goxpert.ru/2024/06/01/concurrency/goroutines/</link>
       <pubDate>Sat, 01 Jun 2024 07:17:00 GMT</pubDate>
        
       <yandex:related type="infinity">
         
          
-        <link url="https://goxpert.ru/2024/06/01/%D1%81oncurrency/context/">Предыдущая статья: Контекст</link>
-        <link url="https://goxpert.ru/2024/06/01/%D1%81oncurrency/race-condition/">Следующая статья: Гонка данных</link>
+        <link url="https://goxpert.ru/2024/06/01/concurrency/context/">Предыдущая статья: Контекст</link>
+        <link url="https://goxpert.ru/2024/06/01/concurrency/race-condition/">Следующая статья: Гонка данных</link>
         
         
       </yandex:related>
@@ -123,17 +123,17 @@
     
     <item turbo="true">
       <turbo:extendedHtml>true</turbo:extendedHtml>
-      <turbo:source>https://goxpert.ru/2024/06/01/%D1%81oncurrency/race-condition/</turbo:source>
+      <turbo:source>https://goxpert.ru/2024/06/01/concurrency/race-condition/</turbo:source>
       <turbo:topic>Гонка данных</turbo:topic>
       <title>Гонка данных</title>
-      <link>https://goxpert.ru/2024/06/01/%D1%81oncurrency/race-condition/</link>
+      <link>https://goxpert.ru/2024/06/01/concurrency/race-condition/</link>
       <pubDate>Sat, 01 Jun 2024 07:16:00 GMT</pubDate>
        
       <yandex:related type="infinity">
         
          
-        <link url="https://goxpert.ru/2024/06/01/%D1%81oncurrency/goroutines/">Предыдущая статья: Горутины</link>
-        <link url="https://goxpert.ru/2024/06/01/%D1%81oncurrency/sync-primitives/">Следующая статья: Примитивы синхронизации</link>
+        <link url="https://goxpert.ru/2024/06/01/concurrency/goroutines/">Предыдущая статья: Горутины</link>
+        <link url="https://goxpert.ru/2024/06/01/concurrency/sync-primitives/">Следующая статья: Примитивы синхронизации</link>
         
         
       </yandex:related>
@@ -145,17 +145,17 @@
     
     <item turbo="true">
       <turbo:extendedHtml>true</turbo:extendedHtml>
-      <turbo:source>https://goxpert.ru/2024/06/01/%D1%81oncurrency/sync-primitives/</turbo:source>
+      <turbo:source>https://goxpert.ru/2024/06/01/concurrency/sync-primitives/</turbo:source>
       <turbo:topic>Примитивы синхронизации</turbo:topic>
       <title>Примитивы синхронизации</title>
-      <link>https://goxpert.ru/2024/06/01/%D1%81oncurrency/sync-primitives/</link>
+      <link>https://goxpert.ru/2024/06/01/concurrency/sync-primitives/</link>
       <pubDate>Sat, 01 Jun 2024 07:15:00 GMT</pubDate>
        
       <yandex:related type="infinity">
         
          
-        <link url="https://goxpert.ru/2024/06/01/%D1%81oncurrency/race-condition/">Предыдущая статья: Гонка данных</link>
-        <link url="https://goxpert.ru/2024/06/01/%D1%81oncurrency/sync-worker/">Следующая статья: Пример sync и async worker</link>
+        <link url="https://goxpert.ru/2024/06/01/concurrency/race-condition/">Предыдущая статья: Гонка данных</link>
+        <link url="https://goxpert.ru/2024/06/01/concurrency/sync-worker/">Следующая статья: Пример sync и async worker</link>
         
         
       </yandex:related>
@@ -167,16 +167,16 @@
     
     <item turbo="true">
       <turbo:extendedHtml>true</turbo:extendedHtml>
-      <turbo:source>https://goxpert.ru/2024/06/01/%D1%81oncurrency/sync-worker/</turbo:source>
+      <turbo:source>https://goxpert.ru/2024/06/01/concurrency/sync-worker/</turbo:source>
       <turbo:topic>Пример sync и async worker</turbo:topic>
       <title>Пример sync и async worker</title>
-      <link>https://goxpert.ru/2024/06/01/%D1%81oncurrency/sync-worker/</link>
+      <link>https://goxpert.ru/2024/06/01/concurrency/sync-worker/</link>
       <pubDate>Sat, 01 Jun 2024 07:15:00 GMT</pubDate>
        
       <yandex:related type="infinity">
         
          
-        <link url="https://goxpert.ru/2024/06/01/%D1%81oncurrency/sync-primitives/">Предыдущая статья: Примитивы синхронизации</link>
+        <link url="https://goxpert.ru/2024/06/01/concurrency/sync-primitives/">Предыдущая статья: Примитивы синхронизации</link>
         <link url="https://goxpert.ru/2024/06/01/types/types-common/">Следующая статья: Типы данных</link>
         
         
@@ -198,7 +198,7 @@
       <yandex:related type="infinity">
         
          
-        <link url="https://goxpert.ru/2024/06/01/%D1%81oncurrency/sync-worker/">Предыдущая статья: Пример sync и async worker</link>
+        <link url="https://goxpert.ru/2024/06/01/concurrency/sync-worker/">Предыдущая статья: Пример sync и async worker</link>
         <link url="https://goxpert.ru/2024/06/01/types/map/">Следующая статья: Хеш-мапы (map)</link>
         
         

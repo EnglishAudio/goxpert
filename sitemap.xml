@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://goxpert.ru/2024/06/01/%D1%81oncurrency/sync-worker/</loc>
+    <loc>https://goxpert.ru/2024/06/01/concurrency/sync-worker/</loc>
     
     <lastmod>2024-06-03</lastmod>
     
@@ -20,7 +20,7 @@
   </url>
   
   <url>
-    <loc>https://goxpert.ru/2024/06/01/%D1%81oncurrency/scheduler/</loc>
+    <loc>https://goxpert.ru/2024/06/01/concurrency/scheduler/</loc>
     
     <lastmod>2024-06-02</lastmod>
     
@@ -29,7 +29,7 @@
   </url>
   
   <url>
-    <loc>https://goxpert.ru/2024/06/01/%D1%81oncurrency/context/</loc>
+    <loc>https://goxpert.ru/2024/06/01/concurrency/context/</loc>
     
     <lastmod>2024-06-02</lastmod>
     
@@ -38,7 +38,7 @@
   </url>
   
   <url>
-    <loc>https://goxpert.ru/2024/06/01/%D1%81oncurrency/sync-primitives/</loc>
+    <loc>https://goxpert.ru/2024/06/01/concurrency/sync-primitives/</loc>
     
     <lastmod>2024-06-02</lastmod>
     
@@ -47,7 +47,7 @@
   </url>
   
   <url>
-    <loc>https://goxpert.ru/2024/06/01/%D1%81oncurrency/race-condition/</loc>
+    <loc>https://goxpert.ru/2024/06/01/concurrency/race-condition/</loc>
     
     <lastmod>2024-06-02</lastmod>
     
@@ -56,7 +56,7 @@
   </url>
   
   <url>
-    <loc>https://goxpert.ru/2024/06/01/%D1%81oncurrency/goroutines/</loc>
+    <loc>https://goxpert.ru/2024/06/01/concurrency/goroutines/</loc>
     
     <lastmod>2024-06-02</lastmod>
     
