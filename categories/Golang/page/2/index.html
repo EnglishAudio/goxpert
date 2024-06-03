@@ -6,26 +6,19 @@
     
 
     
-    <title>Интерфейсы | GoXpert.ru</title>
+    <title>категории : : Golang | GoXpert.ru</title>
     
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
-    <meta name="keywords" content="Golang, Q&amp;A" />
-    
-    <meta name="description" content="Вопросы по интерфейсам в Golang.">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Интерфейсы">
-<meta property="og:url" content="https://goxpert.ru/2024/06/01/types/interface/index.html">
+    <meta name="description" content="Секреты Golang. Архитектура и дизайн приложений на GO. Всё о GO изнутри">
+<meta property="og:type" content="website">
+<meta property="og:title" content="GoXpert.ru">
+<meta property="og:url" content="https://goxpert.ru/categories/Golang/page/2/index.html">
 <meta property="og:site_name" content="GoXpert.ru">
-<meta property="og:description" content="Вопросы по интерфейсам в Golang.">
+<meta property="og:description" content="Секреты Golang. Архитектура и дизайн приложений на GO. Всё о GO изнутри">
 <meta property="og:locale" content="ru_RU">
-<meta property="og:image" content="https://goxpert.ru/images/golang_interface.jpg">
-<meta property="article:published_time" content="2024-06-01T07:12:00.000Z">
-<meta property="article:modified_time" content="2024-06-02T09:51:46.105Z">
 <meta property="article:author" content="авторы проекта GoXpert">
-<meta property="article:tag" content="Golang, Q&amp;A">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://goxpert.ru/images/golang_interface.jpg">
     
 
     
@@ -34,8 +27,6 @@
         <link rel="alternate" type="application/rss+xml" title="GoXpert.ru" href="https://goxpert.ru/rss-feed.xml" />
      
 
-     
-        <link rel="amphtml" href="https://goxpert.ru/amp2024/06/01/types/interface/">
      
 
 
@@ -191,203 +182,83 @@ Ya.Site.Form.init()
                         <div class="main-body-header">
     <h1 class="header">
     
-    <a class="page-title-link" href="/categories/Golang/">Golang</a><i class="icon fa fa-angle-right"></i><a class="page-title-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/">Старт</a><i class="icon fa fa-angle-right"></i><a class="page-title-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%98%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81%D1%8B/">Интерфейсы</a><i class="icon fa fa-angle-right"></i><a class="page-title-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/">Вопрос-Ответ</a><i class="icon fa fa-angle-right"></i><a class="page-title-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%98%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81%D1%8B/">Интерфейсы</a>
+    <i class="icon fa fa-folder-open"></i>категории : : <em class="page-title-link">Golang</em>
     </h1>
 </div>
 
                         <div class="main-body-content">
-                            <article id="post-types/interface" class="article article-single article-type-post" itemscope itemprop="blogPost">
-    <div class="article-inner">
+                            
+
+    
+    
         
-            <header class="article-header">
-                
+        
+        <section class="archives-wrap">
+            <div class="archive-year-wrap">
+                <a href="/archives/2024" class="archive-year"><i class="icon fa fa-calendar-o"></i>2024</a>
+            </div>
+            <div class="archives">
+    
+    
+    
+        <div class="article-row">
+    
+        <article class="article article-summary">
+    <div class="article-summary-inner">
+        
+        <a href="/2024/06/01/concurrency/goroutines_old/" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/sched1.png)" alt="Горутины что было" class="thumbnail-image"></span>
+    
+    
+        
+<span class="comment-counter">
+    <i class="fa fa-comments-o"></i>
+    
+        <span><a href="https://goxpert.ru/2024/06/01/concurrency/goroutines_old/#isso-thread"></a></span>
+    
+</span>
+
+
+    
+</a>
+
+        
+        <div class="article-meta">
+            <div class="category">
+            <a class="article-category-link" href="/categories/Golang/">Golang</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/">Старт</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/">Вопрос-Ответ</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%93%D0%BE%D1%80%D1%83%D1%82%D0%B8%D0%BD%D1%8B/">Горутины</a>
+            </div>
+            <div class="date"><time datetime="2024-06-01T06:17:00.000Z" itemprop="datePublished">2024-06-01</time></div>
+        </div>
+        
     
         <h1 class="article-title" itemprop="name">
-        Интерфейсы
+        <a href="/2024/06/01/concurrency/goroutines_old/">Горутины что было</a>
         </h1>
     
 
-            </header>
-        
-        
-            <div class="article-meta">
-                
-  <div class="article-date">
-    <i class="fa fa-calendar"></i>
-    <a href="/2024/06/01/types/interface/" class="article-date">
-       <time datetime="2024-06-01T07:12:00.000Z" itemprop="datePublished">2024-06-01</time>
-    </a>
-  </div>
+        <p class="article-excerpt">
+            Горутины: всё, что вы хотели знать, но боялись спроситьКратко:
 
-
-<div class="article-date">
-  <i class="fa fa-calendar-plus-o"></i>
-  <a href="/2024/06/01/types/interface/" class="article-date">
-     <time datetime="2024-06-02T09:51:46.105Z" itemprop="dateModified">2024-06-02</time>
-  </a>
-</div>
-
-
-                
-
-                
-    <div class="article-tag">
-        <i class="fa fa-tag"></i>
-        <a class="tag-link-link" href="/tags/Golang-Q-A/" rel="tag">Golang, Q&A</a>
+Горутины выполняются в порядке очереди, то есть FIFO (First In, First Out).
+Исполнение горутины прерывается
+уже не может выполняться: то
+        </p>
     </div>
-
-                
-
-                
-
-            </div>
-        
-        
-        <div class="article-entry" itemprop="articleBody">
-            
-
-            
-
-            
-
-            <!-- feed_rem_st --><!-- feed_rem_end --><h2 id="Что-такое-интерфейс-interface"><a href="#Что-такое-интерфейс-interface" class="headerlink" title="Что такое интерфейс (interface)?"></a>Что такое интерфейс (<a target="_blank" rel="noopener" href="https://go.dev/tour/methods/9">interface</a>)?</h2><p>Интерфейс в golang - это тип, который определяет набор сигнатур методов. Интерфейс позволяет абстрагироваться от конкретной реализации и работать с разными типами данных, которые реализуют один и тот же интерфейс. </p>
-<p>Например, интерфейс Printer определяет метод Print(), который может быть реализован разными структурами, такими как User или Document. Для того, чтобы тип реализовывал интерфейс, он должен предоставить определения всех методов интерфейса. </p>
-<p>В Go реализация интерфейса происходит неявно, то есть не требуется указывать, что тип реализует интерфейса.</p>
-<h2 id="Для-чего-используется-интерфейс"><a href="#Для-чего-используется-интерфейс" class="headerlink" title="Для чего используется интерфейс?"></a>Для чего используется интерфейс?</h2><p>Интерфейс в golang используется для определения набора методов, которые должен реализовывать какой-либо тип данных.</p>
-<p>Интерфейсы позволяют абстрагироваться от конкретных реализаций и работать с разными типами, имеющими общее поведение. Интерфейсы также способствуют модульности, гибкости и переиспользованию кода. </p>
-<p>Например, интерфейс fmt.Stringer определяет метод String(), который возвращает строковое представление любого типа, реализующего этот интерфейс. </p>
-<h2 id="Как-в-строго-типизированным-языке-сделать-функцию-которая-работает-с-разными-типами"><a href="#Как-в-строго-типизированным-языке-сделать-функцию-которая-работает-с-разными-типами" class="headerlink" title="Как в строго типизированным языке сделать функцию, которая работает с разными типами?"></a>Как в строго типизированным языке сделать функцию, которая работает с разными типами?</h2><p>Один из способов сделать это - использовать обобщения (generics), которые появились в Go 1.18. Обобщения позволяют объявлять и использовать функции или типы, которые написаны для работы с любым из набора типов, предоставляемых вызывающим кодом. Для этого в Go введены три новых элемента языка:</p>
-<ul>
-<li>Параметры типов для функций и типов. Это означает, что вы можете задать переменную типа T, которая может принимать разные конкретные типы при вызове функции или создании типа.</li>
-<li>Определение интерфейсных типов как множеств типов, включая типы, не имеющие методов. Это означает, что вы можете задать ограничение (constraint) на параметр типа, указав, какие свойства должен иметь тип, чтобы его можно было использовать в обобщенной функции или типе.</li>
-<li>Вывод типов, который позволяет опускать аргументы типов во многих случаях при вызове функции. Это означает, что вы можете не указывать конкретный тип при вызове обобщенной функции, если компилятор может сам его определить из контекста.</li>
-</ul>
-<h2 id="Есть-интерфейс-а-есть-указатель-на-структуру-который-nil-Кладем-указатель-в-интерфейс-Что-если-сравнить-интерфейс-с-nil"><a href="#Есть-интерфейс-а-есть-указатель-на-структуру-который-nil-Кладем-указатель-в-интерфейс-Что-если-сравнить-интерфейс-с-nil" class="headerlink" title="Есть интерфейс, а есть указатель на структуру, который nil. Кладем указатель в интерфейс. Что если сравнить интерфейс с nil?"></a>Есть интерфейс, а есть указатель на структуру, который nil. Кладем указатель в интерфейс. Что если сравнить интерфейс с nil?</h2><p>Интерфейс в Go является типом, который может хранить любые типы, удовлетворяющие ему.</p>
-<p>Интерфейс, в котором лежит указатель на структуру, и nil интерфейс сравнимы между собой. Если вы сравните интерфейс, в котором лежит указатель на структуру, с nil, результат будет “false”, потому что интерфейс не пустой.</p>
-<p>Однако, если вы сравните интерфейс с интерфейсом, содержащим nil указатель, результат будет “false”.</p>
-<figure class="highlight go"><figcaption><span>title</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> SomeInterface <span class="keyword">interface</span> &#123;</span><br><span class="line">    SomeMethod()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> SomeStruct <span class="keyword">struct</span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(s *SomeStruct)</span> <span class="title">SomeMethod</span><span class="params">()</span></span> &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> s SomeStruct</span><br><span class="line">    <span class="keyword">var</span> i1 SomeInterface = &amp;s</span><br><span class="line">    <span class="keyword">var</span> i2 SomeInterface</span><br><span class="line"></span><br><span class="line">    fmt.Println(i1 == <span class="literal">nil</span>) <span class="comment">// false</span></span><br><span class="line">    fmt.Println(i2 == <span class="literal">nil</span>) <span class="comment">// true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>В примере выше мы создаем интерфейс SomeInterface с методом SomeMethod. Внутри интерфейса i1 лежит указатель на структуру SomeStruct, а интерфейс i2 является пустым интерфейсом. Сравнивая i1 с nil, мы получаем “false”, так как интерфейс i1 не пустой. Сравнивая i2 с nil, мы получаем “true”, так как интерфейс i2 является пустым интерфейсом.</p>
-<h2 id="Чем-any-отличается-от-пустого-интерфейса"><a href="#Чем-any-отличается-от-пустого-интерфейса" class="headerlink" title="Чем any отличается от пустого интерфейса?"></a>Чем <code>any</code> отличается от пустого интерфейса?</h2><p>Пустой интерфейс в Go (nil интерфейс) не хранит значение. Если интерфейс пустой, то его сравнение с nil будет всегда возвращать true.</p>
-<p>Тип any (тоже известный как интерфейс <strong><code>interface&#123;&#125;</code></strong>) в Go - это специальный тип интерфейса, который может хранить значение любого типа. Тип any является универсальным типом и может быть использован, когда нужно написать обобщенный код, который будет работать с различными типами.</p>
-<figure class="highlight go"><figcaption><span>title</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> i1 <span class="keyword">interface</span>&#123;&#125;</span><br><span class="line">    <span class="keyword">var</span> i2 <span class="keyword">interface</span>&#123;&#125; = (*SomeStruct)(<span class="literal">nil</span>)</span><br><span class="line"></span><br><span class="line">    fmt.Println(i1 == <span class="literal">nil</span>) <span class="comment">// true</span></span><br><span class="line">    fmt.Println(i2 == <span class="literal">nil</span>) <span class="comment">// false</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="Чем-пустой-интерфейс-отличается-от-пустой-структуры"><a href="#Чем-пустой-интерфейс-отличается-от-пустой-структуры" class="headerlink" title="Чем пустой интерфейс отличается от пустой структуры?"></a>Чем пустой интерфейс отличается от пустой структуры?</h2><p>Пустой интерфейс (interface{}) и пустая структура (struct{}) являются двумя различными понятиями в Go.</p>
-<p>Пустая структура (struct{}) не содержит никаких полей и не реализует никаких методов. Она используется в основном для создания переменных, которые не содержат никаких данных. Например:</p>
-<figure class="highlight go"><figcaption><span>title</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> emptyStruct <span class="keyword">struct</span>&#123;&#125;</span><br></pre></td></tr></table></figure>
-
-<p>Пустой интерфейс (interface{}), с другой стороны, может указывать на любое значение любого типа. Он не имеет никаких методов и не содержит никаких данных. Он используется в основном для передачи значений различных типов в функции или методы. Например:</p>
-<figure class="highlight go"><figcaption><span>title</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> emptyInterface <span class="keyword">interface</span>&#123;&#125;</span><br><span class="line">emptyInterface = <span class="number">10</span></span><br><span class="line">emptyInterface = <span class="string">&quot;hello&quot;</span></span><br><span class="line">emptyInterface = <span class="keyword">struct</span>&#123;&#125;&#123;&#125;</span><br></pre></td></tr></table></figure>
-
-<p>Таким образом, основное отличие заключается в том, что пустая структура не может указывать на значения различных типов, в то время как пустой интерфейс может.</p>
-<figure class="highlight go"><figcaption><span>title</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">  <span class="string">&quot;fmt&quot;</span></span><br><span class="line">  <span class="string">&quot;math&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Abser <span class="keyword">interface</span> &#123;</span><br><span class="line">  Abs() <span class="keyword">float64</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">  <span class="keyword">var</span> a Abser</span><br><span class="line">  f := MyFloat(-math.Sqrt2)</span><br><span class="line">  v := Vertex&#123;<span class="number">3</span>, <span class="number">4</span>&#125;</span><br><span class="line">  </span><br><span class="line">  a = f  <span class="comment">// a MyFloat implements Abser</span></span><br><span class="line">  a = &amp;v <span class="comment">// a *Vertex implements Abser  реализует интерфейс</span></span><br><span class="line"></span><br><span class="line">  a = v  <span class="comment">// Ошибка! v - это Vertex (а не *Vertex) и НЕ реализует интерфейс</span></span><br><span class="line">  fmt.Println(a.Abs())</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> MyFloat <span class="keyword">float64</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(f MyFloat)</span> <span class="title">Abs</span><span class="params">()</span> <span class="title">float64</span></span> &#123;</span><br><span class="line">  <span class="keyword">if</span> f &lt; <span class="number">0</span> &#123;</span><br><span class="line">     <span class="keyword">return</span> <span class="keyword">float64</span>(-f)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">float64</span>(f)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Vertex <span class="keyword">struct</span> &#123;</span><br><span class="line">  X, Y <span class="keyword">float64</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(v *Vertex)</span> <span class="title">Abs</span><span class="params">()</span> <span class="title">float64</span></span> &#123;</span><br><span class="line">  <span class="keyword">return</span> math.Sqrt(v.X*v.X + v.Y*v.Y)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p><img src="/images/golang_interface.jpg" alt="Вот вам и interface"></p>
-
-        </div>
-        <footer class="article-footer">
-            
-
-
-
-    <a data-url="https://goxpert.ru/2024/06/01/types/interface/" data-id="clwxd4fki00092gwlfm21c9al" class="article-share-link"><i class="fa fa-share"></i>Поделиться</a>
-<script>
-    (function ($) {
-        $('body').on('click', function() {
-            $('.article-share-box.on').removeClass('on');
-        }).on('click', '.article-share-link', function(e) {
-            e.stopPropagation();
-
-            var $this = $(this),
-                url = $this.attr('data-url'),
-                encodedUrl = encodeURIComponent(url),
-                id = 'article-share-box-' + $this.attr('data-id'),
-                offset = $this.offset(),
-                box;
-
-            if ($('#' + id).length) {
-                box = $('#' + id);
-
-                if (box.hasClass('on')){
-                    box.removeClass('on');
-                    return;
-                }
-            } else {
-                var html = [
-                    '<div id="' + id + '" class="article-share-box">',
-                        '<input class="article-share-input" value="' + url + '">',
-                        '<div class="article-share-links">',
-                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
-                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
-                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="article-share-pinterest" target="_blank" title="Pinterest"></a>',
-                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="article-share-google" target="_blank" title="Google+"></a>',
-                        '</div>',
-                    '</div>'
-                ].join('');
-
-              box = $(html);
-
-              $('body').append(box);
-            }
-
-            $('.article-share-box.on').hide();
-
-            box.css({
-                top: offset.top + 25,
-                left: offset.left
-            }).addClass('on');
-
-        }).on('click', '.article-share-box', function (e) {
-            e.stopPropagation();
-        }).on('click', '.article-share-box-input', function () {
-            $(this).select();
-        }).on('click', '.article-share-box-link', function (e) {
-            e.preventDefault();
-            e.stopPropagation();
-
-            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
-        });
-    })(jQuery);
-</script>
-
-        </footer>
-    </div>
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "BlogPosting",
-        "author": {
-            "@type": "Person",
-            "name": "авторы проекта GoXpert"
-        },
-        "headline": "Интерфейсы",
-        "image": "https://goxpert.ru/images/golang_interface.jpg",
-        "keywords": "Golang, Q&A",
-        "genre": "Golang Старт Вопрос-Ответ Интерфейсы Интерфейсы",
-        "datePublished": "2024-06-01",
-        "dateCreated": "2024-06-01",
-        "dateModified": "2024-06-02",
-        "url": "https://goxpert.ru/2024/06/01/types/interface/",
-        "description": "Что такое интерфейс (interface)?Интерфейс в golang - это тип, который определяет набор сигнатур методов. Интерфейс позволяет абстрагироваться от конкретной реализации и работать с разными типами данны",
-        "wordCount": 1092
-    }
-</script>
-
 </article>
-
-    <section id="comments">
     
-        
-    <div id="vk_comments"></div>
-    <script type="text/javascript">
-      window.onload = function () {
-      VK.init({apiId: 51937371, onlyWidgets: true});
-      VK.Widgets.Comments("vk_comments", {limit: 20, attach: "*", autoPublish: 1, pageUrl: "https://goxpert.ru/2024/06/01/types/interface/"});
-    }
-   </script>
-
+        </div>
     
-    </section>
+
+
+    </div></section>
+
+
+    <nav id="page-nav">
+        <span class="pages">Страница 2 из 2</span>
+        <a class="extend prev" rel="prev" href="/categories/Golang/">&laquo;</a><a class="page-number" href="/categories/Golang/">1</a><span class="page-number current">2</span>
+    </nav>
 
 
 
@@ -459,29 +330,6 @@ Ya.Site.Form.init()
             
         </ul>
     </div>
-    
-        
-<nav id="article-nav">
-    
-        <a href="/2024/06/01/types/map/" id="article-nav-newer" class="article-nav-link-wrap">
-        <strong class="article-nav-caption">новые</strong>
-        <p class="article-nav-title">
-        
-            Хеш-мапы (map)
-        
-        </p>
-        <i class="icon fa fa-chevron-right" id="icon-chevron-right"></i>
-    </a>
-    
-    
-        <a href="/2024/06/01/types/pointers/" id="article-nav-older" class="article-nav-link-wrap">
-        <strong class="article-nav-caption">старые</strong>
-        <p class="article-nav-title">Указатели</p>
-        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
-        </a>
-    
-</nav>
-
     
     <div class="widgets-container">
         
