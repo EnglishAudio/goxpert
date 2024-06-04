@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+
+    
+
+    
+    <title>SOLID в GO | GoXpert.ru</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="keywords" content="Golang, Q&amp;A" />
+    
+    <meta name="description" content="Принципы SOLID на примерах в GO">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SOLID в GO">
+<meta property="og:url" content="https://goxpert.ru/2024/06/01/common/solid_go/index.html">
+<meta property="og:site_name" content="GoXpert.ru">
+<meta property="og:description" content="Принципы SOLID на примерах в GO">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:image" content="https://goxpert.ru/images/golang_solid_the_best.jpg">
+<meta property="article:published_time" content="2024-06-01T07:22:00.000Z">
+<meta property="article:modified_time" content="2024-06-04T08:39:42.072Z">
+<meta property="article:author" content="авторы проекта GoXpert">
+<meta property="article:tag" content="Golang, Q&amp;A">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://goxpert.ru/images/golang_solid_the_best.jpg">
+    
+
+    
+        <link rel="alternate" href="/atom.xml" title="GoXpert.ru" type="application/atom+xml" />
+        <link rel="alternate" type="application/rss+xml" title="GoXpert.ru" href="https://goxpert.ru/rss.xml" />
+        <link rel="alternate" type="application/rss+xml" title="GoXpert.ru" href="https://goxpert.ru/rss-feed.xml" />
+     
+
+     
+        <link rel="amphtml" href="https://goxpert.ru/amp2024/06/01/common/solid_go/">
+     
+
+
+    
+        <link rel="icon" href="/css/images/favicon.ico" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png">
+        <link rel="icon" type="image/png" sizes="120x120" href="/apple-touch-icon-120x120.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+        <link rel="manifest" href="/site.webmanifest">
+        <meta name="msapplication-TileColor" content="#da532c">
+        <meta name="msapplication-TileImage" content="/mstile-144x144.png">
+        <meta name="theme-color" content="#ffffff">
+    
+
+    
+       <!-- Yandex.RTB -->
+       <script>window.yaContextCb=window.yaContextCb||[]</script>
+       <script src="https://yandex.ru/ads/system/context.js" async></script>
+    
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/libs/titillium-web/styles.css">
+
+    
+<link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+<script src="/libs/jquery/3.5.0/jquery.min.js"></script>
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+
+    
+    
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4PWEJT515P"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-4PWEJT515P');
+</script>
+<!-- End Google Analytics -->
+
+    
+    
+        <!-- Yandex.Metrika counter -->
+<script type="text/javascript" >
+   (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+   m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+   (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+   ym(86613025, "init", {
+        clickmap:true,
+        trackLinks:true,
+        accurateTrackBounce:true,
+        webvisor:true
+   });
+</script>
+<!-- /Yandex.Metrika counter -->
+    
+    
+    
+
+
+</head>
+
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">Главная</a>
+                                </li>
+                            
+                                    <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Golang/">Golang</a><ul class="main-nav-list-child"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/">Старт</a></li></ul></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/">Вопрос-Ответ</a><ul class="main-nav-list-child"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/Defer/">Defer</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/Generics/">Generics</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/Panic/">Panic</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/SOLID/">SOLID</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/Select-case/">Select-case</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%93%D0%BE%D0%BD%D0%BA%D0%B0-%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85/">Гонка данных</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%93%D0%BE%D1%80%D1%83%D1%82%D0%B8%D0%BD%D1%8B/">Горутины</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%98%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81%D1%8B/">Интерфейсы</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9A%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82/">Контекст</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9C%D0%B0%D1%81%D1%81%D0%B8%D0%B2%D1%8B-%D0%B8-%D1%81%D0%BB%D0%B0%D0%B9%D1%81%D1%8B/">Массивы и слайсы</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9E%D0%B1%D1%89%D0%B8%D0%B5/">Общие</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9F%D0%B0%D0%BA%D0%B5%D1%82%D1%8B/">Пакеты</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9F%D0%BB%D0%B0%D0%BD%D0%B8%D1%80%D0%BE%D0%B2%D1%89%D0%B8%D0%BA/">Планировщик</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9F%D1%80%D0%B8%D0%BC%D0%B8%D1%82%D0%B8%D0%B2%D1%8B-%D1%81%D0%B8%D0%BD%D1%85%D1%80%D0%BE%D0%BD%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D0%B8/">Примитивы синхронизации</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%A1%D1%82%D1%80%D0%BE%D0%BA%D0%B8/">Строки</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%A1%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D1%8B/">Структуры</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%A2%D0%B8%D0%BF%D1%8B/">Типы</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%A3%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D0%B5%D0%BB%D0%B8/">Указатели</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%A5%D0%B5%D1%88-%D0%BC%D0%B0%D0%BF%D1%8B/">Хеш-мапы</a></li></ul></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%9E%D0%A1/">ОС</a><ul class="main-nav-list-child"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%9E%D0%A1/C%D0%B5%D1%82%D1%8C/">Cеть</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%9E%D0%A1/%D0%9F%D0%BB%D0%B0%D0%BD%D0%B8%D1%80%D0%BE%D0%B2%D1%89%D0%B8%D0%BA-%D0%9ES/">Планировщик ОS</a></li></ul></li></ul>
+                                
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/2024/06/01/helloworld/index.html">О сайте</a>
+                                </li>
+                            
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
+
+<div class="ya-site-form ya-site-form_inited_no" data-bem="{&quot;action&quot;:&quot;/search.html&quot;,&quot;arrow&quot;:false,&quot;bg&quot;:&quot;transparent&quot;,&quot;fontsize&quot;:12,&quot;fg&quot;:&quot;#000000&quot;,&quot;language&quot;:&quot;ru&quot;,&quot;logo&quot;:&quot;rb&quot;,&quot;publicname&quot;:&quot;����� �� ����� GoXpert&quot;,&quot;suggest&quot;:true,&quot;target&quot;:&quot;_blank&quot;,&quot;tld&quot;:&quot;ru&quot;,&quot;type&quot;:2,&quot;usebigdictionary&quot;:true,&quot;searchid&quot;:2519671,&quot;input_fg&quot;:&quot;#000000&quot;,&quot;input_bg&quot;:&quot;#ffffff&quot;,&quot;input_fontStyle&quot;:&quot;normal&quot;,&quot;input_fontWeight&quot;:&quot;normal&quot;,&quot;input_placeholder&quot;:&quot;&quot;,&quot;input_placeholderColor&quot;:&quot;#000000&quot;,&quot;input_borderColor&quot;:&quot;#7f9db9&quot;}">
+<form action="https://yandex.ru/search/site/" method="get" target="_blank" accept-charset="utf-8">
+<input type="hidden" name="searchid" value="2519671"/>
+<input type="hidden" name="l10n" value="ru"/>
+<input type="hidden" name="reqenc" value=""/>
+<input type="search" name="text" value=""/>
+<input type="submit" value="�����"/>
+</form>
+</div>
+    <style type="text/css">.ya-page_js_yes .ya-site-form_inited_no { display: none; }
+</style>
+<script type="text/javascript">
+(function(w,d,c){var s=d.createElement('script'),h=d.getElementsByTagName('script')[0],e=d.documentElement;
+if((' '+e.className+' ').indexOf(' ya-page_js_yes ')===-1)
+{e.className+=' ya-page_js_yes';}s.type='text/javascript';
+s.async=true;s.charset='utf-8';
+s.src=(d.location.protocol==='https:'?'https:':'http:')+'//site.yandex.net/v2.0/js/all.js';
+h.parentNode.insertBefore(s,h);(w[c]||(w[c]=[])).push(function(){
+
+Ya.Site.Form.init()
+
+})})(window,document,'yandex_site_callbacks');</script>
+
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <a class="page-title-link" href="/categories/Golang/">Golang</a><i class="icon fa fa-angle-right"></i><a class="page-title-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/">Старт</a><i class="icon fa fa-angle-right"></i><a class="page-title-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/SOLID/">SOLID</a><i class="icon fa fa-angle-right"></i><a class="page-title-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/">Вопрос-Ответ</a><i class="icon fa fa-angle-right"></i><a class="page-title-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/SOLID/">SOLID</a>
+    </h1>
+</div>
+
+                        <div class="main-body-content">
+                            <article id="post-common/solid_go" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        SOLID в GO
+        </h1>
+    
+
+            </header>
+        
+        
+            <div class="article-meta">
+                
+  <div class="article-date">
+    <i class="fa fa-calendar"></i>
+    <a href="/2024/06/01/common/solid_go/" class="article-date">
+       <time datetime="2024-06-01T07:22:00.000Z" itemprop="datePublished">2024-06-01</time>
+    </a>
+  </div>
+
+
+<div class="article-date">
+  <i class="fa fa-calendar-plus-o"></i>
+  <a href="/2024/06/01/common/solid_go/" class="article-date">
+     <time datetime="2024-06-04T08:39:42.072Z" itemprop="dateModified">2024-06-04</time>
+  </a>
+</div>
+
+
+                
+
+                
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link-link" href="/tags/Golang-Q-A/" rel="tag">Golang, Q&A</a>
+    </div>
+
+                
+
+                
+
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            
+
+            
+
+            
+
+            <!-- feed_rem_st --><!-- feed_rem_end --><h1 id="SOLID-дизайн-Go"><a href="#SOLID-дизайн-Go" class="headerlink" title="SOLID дизайн Go"></a>SOLID дизайн Go</h1><p>Этот пост на основе текста из основного доклада GolangUK прошедшего 18-ого Августа 2016.<br>Запись выступления <a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=zzAdEt3xZ1M">доступна в YouTube</a>.</p>
+<h2 id="Как-много-программистов-на-Go-в-мире"><a href="#Как-много-программистов-на-Go-в-мире" class="headerlink" title="Как много программистов на Go в мире?"></a>Как много программистов на Go в мире?</h2><p>Как много программистов на Go в мире? Подумайте о числе и держите его в своей голове,<br>мы вернемся к этому вопросу в конце разговора.</p>
+<h2 id="Рецензирование-кода"><a href="#Рецензирование-кода" class="headerlink" title="Рецензирование кода"></a>Рецензирование кода</h2><p>Кто здесь проводит рецензирование кода, как часть своей работы? (большая часть аудитории поднимает свои руки, что обнадеживает). Хорошо, почему вы делаете рецензирование кода? (кто то выкрикивает “чтобы сделать код лучше”)</p>
+<p>Если рецензирование кода нужно для того, чтобы отловить плохой код, тогда как вы узнаете, что код, который вы рецензируете, хороший или плохой?</p>
+<p>Сейчас это нормально сказать “этот код ужасен” или “ого, этот код прекрасен”, точно так же, как если бы вы сказали “эта живопись прекрасна” или “эта комната прекрасна”, но это субъективные понятия, а я ищу объективные пути, чтобы говорить о свойствах хорошего или плохого кода.</p>
+<h2 id="Плохой-код"><a href="#Плохой-код" class="headerlink" title="Плохой код"></a>Плохой код</h2><p>Какими могут быть свойства плохого кода, которые вы можете использовать при рецензировании?</p>
+<ul>
+<li>Негибкий. Является ли код негибким? Содержит ли он жесткий набор типов и параметров, что затрудняет модификацию.</li>
+<li>Хрупкий. Является ли код хрупким? Вызывает ли хаос малейшее изменение кодовой базы?</li>
+<li>Неподвижный. Сложно ли код поддается рефакторингу? Находится ли он в одном нажатии клавиши от цикличного импорта?</li>
+<li>Cложный. Существует ли этот код только ради кода и не является ли он переусложненным?</li>
+<li>Многословный. Использование кода изнурительно? Можете ли вы глядя на код сказать, что он пытается сделать?</li>
+</ul>
+<p>Относятся ли эти слова к позитивным? Доставило бы вам удовольствие слышать эти слова при рецензировании вашего кода?</p>
+<p>Возможно, что нет.</p>
+<h2 id="Хороший-дизайн"><a href="#Хороший-дизайн" class="headerlink" title="Хороший дизайн"></a>Хороший дизайн</h2><p>Но это улучшение, теперь мы можем сказать что то вроде “мне не нравится это потому, что слишком сложно модифицировать”, или “мне не нравится это потому, что я не могу сказать, что этот код пытается сделать”, но что насчет того, чтобы вести обсуждение позитивно?</p>
+<p>Разве это не было бы здорово, если бы существовал способ описать свойства хорошего дизайна, а не только плохого и иметь возможность рассуждать объективными терминами?</p>
+<h1 id="SOLID"><a href="#SOLID" class="headerlink" title="SOLID"></a>SOLID</h1><p>В 2002 году Роберт Мартин опубликовал свою книгу <a target="_blank" rel="noopener" href="https://www.amazon.co.uk/dp/0135974445/ref=pd_lpo_sbs_dp_ss_2/253-1946330-6751666?pf_rd_m=A3P5ROKL5A1OLE&pf_rd_s=lpo-top-stripe&pf_rd_r=23C4AHYV7EXGYHKD6G8Q&pf_rd_t=201&pf_rd_p=569136327&pf_rd_i=0132760584">Agile Software Development, Principles, Patterns, and Practices</a>. В ней он описал пять принципов переиспользуемого дизайна програмного обеспечения, которые он назвал SOLID принципами, аббревиатурой их названий.</p>
+<ul>
+<li>Принцип единственной ответственности (SRP) Single Responsibility Principle</li>
+<li>Принцип открытости/закрытости (OCP) Open / Closed Principle</li>
+<li>Принцип подстановки Барбары Лисков  (LSP) Liskov Substitution Principle</li>
+<li>Принцип разделения интерфейса (ISP) Interface Segregation Principle</li>
+<li>Принцип инверсии зависимостей (DIP) Dependency Inversion Principle</li>
+</ul>
+<p>Эта книга слегка устарела, языки о которых ведется разговор использовались порядка 10 лет назад. Но, возможно, существуют некоторые аспекты SOLID принципа, которые могут предоставить нам ключ к разгадке того, как говорить о хорошо разработанных программах на Go.</p>
+<p>Это именно то, что я хотел бы обсудить с вами этим утром.</p>
+<h2 id="1-Принцип-единственной-ответственности"><a href="#1-Принцип-единственной-ответственности" class="headerlink" title="1. Принцип единственной ответственности"></a>1. Принцип единственной ответственности</h2><h3 id="Первый-принцип-SOLID-это-S-—-принцип-единой-ответственности"><a href="#Первый-принцип-SOLID-это-S-—-принцип-единой-ответственности" class="headerlink" title="Первый принцип SOLID, это S — принцип единой ответственности."></a>Первый принцип SOLID, это S — принцип единой ответственности.</h3><ul>
+<li>Класс должен иметь одну и только одну причину для изменений. -Роберт С. Мартин</li>
+</ul>
+<p>Go совершенно не содержит классов, вместо них мы имеем гораздо более мощную концепцию композиции, но если вы посмотрите на историю использования понятия класс, я думаю здесь есть определенный смысл.</p>
+<p>Почему это так важно, чтобы один участок кода имел только одну причину для изменений? Чтож, идея того, что ваш код может изменяться мучительна, но она гораздо менее тягостная, чем то, что код от которого зависит ваш код, тоже может изменяться. И когда ваш код должен изменяться, он должен делать это в соответствии с конкретным требованием, а не быть жертвой сопутствуюещго ущерба.</p>
+<p>Итак код, который отвечает за единственную задачу, будет иметь меньше причин для внесения изменений.</p>
+<h3 id="Связанность-amp-Единство"><a href="#Связанность-amp-Единство" class="headerlink" title="Связанность &amp; Единство"></a>Связанность &amp; Единство</h3><p>Два слова, которые описывают на сколько просто вносить изменения в вашу программу, это связанность и единство.<br>Связанность - это просто понятие которое описывает одновременное изменение в двух участках кода, когда изменения в одном месте означает обязательное изменение в другом.</p>
+<p>Смежное, но отдельное понятие, это единство — сила взаимного притяжения.</p>
+<p>В контексте программного обеспечения единство - это свойство описывающее то, что участки кода естественно связанны между собой.</p>
+<p>Чтобы описать реализацию принципов связанности и единство в программе на Go, мы могли бы поговорить о функциях и методах, как это часто бывает при обсуждении SRP(принципа единой ответственности), но я верю, что все начинается с системы пакетов в Go.</p>
+<h3 id="Имена-пакетов"><a href="#Имена-пакетов" class="headerlink" title="Имена пакетов"></a>Имена пакетов</h3><p>В Go весь код существует внутри пакетов, и хороший дизайн пакета начинается с его имени. Имя пакета-это и описание его назначения и префикс пространства имен. В качестве примера хороших имен пакетов из стандартной библиотеки Go, можно привести:</p>
+<ul>
+<li>net/http, который предоставляет http клиент и сервер.</li>
+<li>os/exec, который запускает внешние команды.</li>
+<li>encoding/json, который реализует кодирование и декодирование документов JSON.</li>
+</ul>
+<p>Когда вы используете символы другого пакета внутри своего собственного, это выполняется с помощью ключевого слова import, которое устанавливает связанность на уровне исходного кода между двумя пакетами. Теперь они знают о существовании друг друга.</p>
+<h3 id="Плохие-имена-пакетов"><a href="#Плохие-имена-пакетов" class="headerlink" title="Плохие имена пакетов"></a>Плохие имена пакетов</h3><p>Подобное фокусирование на именовании не просто педантичность. Плохо именованные пакеты упускают возможность описать свою задачу, даже если бы она у них была.</p>
+<p>Какую возможность предоставляет package server?.. возможно это сервер, но с какой протокол он реализует?</p>
+<p>Какую возможность предоставляет package private? Штуки, которые я не должен увидеть? Должен ли он вообще иметь какие -то публичные символы?</p>
+<p>И package common, ровно как и его соучастник package utils часто находятся рядом с другими злостными нарушителями.</p>
+<p>Привлечение подобных пакетов, превращает код в свалку потому, что они имеют много обязанностей и часто изменяются без причины.</p>
+<h3 id="Филисофия-UNIX-в-Go"><a href="#Филисофия-UNIX-в-Go" class="headerlink" title="Филисофия UNIX в Go"></a>Филисофия UNIX в Go</h3><p>В моем представлении, никакое обсуждение раздельного дизайна не будет полным без упоминания труда Дугласа Маклроя “Филисофия UNIX”; мелкие, острые инструменты, которые сочетаются для решения более крупных задач, часто таких, которые не были предусмотренны оригинальными авторами. Я думаю что пакеты Go воплощают дух философии UNIX. В действительности каждый пакет Go сам по себе -это маленькая Go программа, единственная точка изменений с единственной ответственностью.</p>
+<h2 id="2-Принцип-открытости-закрытости"><a href="#2-Принцип-открытости-закрытости" class="headerlink" title="2. Принцип открытости/закрытости"></a>2. Принцип открытости/закрытости</h2><p>Второй принцип O — принцип открытости / закрытости Бертрана Мейера, который в 1988 году писал:</p>
+<ul>
+<li>Програмные объекты должны быть открыты для расширения и закрыты для модификации.</li>
+<li>Бертран Мейер, Построение Объектно-Ориентированного Программного Обеспечения<br>Как этот совет применялся для языков созданных 21 год назад?</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> A <span class="keyword">struct</span> &#123;</span><br><span class="line">  year <span class="keyword">int</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(a A)</span> <span class="title">Greet</span><span class="params">()</span></span> &#123; fmt.Println(<span class="string">&quot;Hello GolangUK&quot;</span>, a.year) &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> B <span class="keyword">struct</span> &#123;</span><br><span class="line">   A</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(b B)</span> <span class="title">Greet</span><span class="params">()</span></span> &#123; fmt.Println(<span class="string">&quot;Welcome to GolangUK&quot;</span>, b.year) &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">  <span class="keyword">var</span> a A</span><br><span class="line">  a.year = <span class="number">2016</span></span><br><span class="line">  <span class="keyword">var</span> b B</span><br><span class="line">  b.year = <span class="number">2016</span></span><br><span class="line">  a.Greet() <span class="comment">// Hello GolangUK 2016</span></span><br><span class="line">  b.Greet() <span class="comment">// Welcome to GolangUK 2016</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>У нас есть тип A, с полем year и методом Greet. Мы имеем второй тип B в который встроен A, вызовы методов B перекрывают вызовы методов A поскольку A встроен, как поле в B и B предлогает свой собственный метод Greet скрывая аналогичный в A.</p>
+<p>Но встраивание существует не только для методов, оно также предоставляет доступ к встроенным полям типа. Как вы можете увидеть, поскольку оба A и B определены в одном пакете, B может получить доступ к приватному полю year в A, как будто оно было определенно внутри B.</p>
+<p>Итак встраивание-это мощный инструмент, который позволяет типам в Go быть открытыми для расширения.</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Cat <span class="keyword">struct</span> &#123;</span><br><span class="line">  Name <span class="keyword">string</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c Cat)</span> <span class="title">Legs</span><span class="params">()</span> <span class="title">int</span></span> &#123; <span class="keyword">return</span> <span class="number">4</span> &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c Cat)</span> <span class="title">PrintLegs</span><span class="params">()</span></span> &#123;</span><br><span class="line">   fmt.Printf(<span class="string">&quot;I have %d legs\n&quot;</span>, c.Legs())</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> OctoCat <span class="keyword">struct</span> &#123;</span><br><span class="line">  Cat</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(o OctoCat)</span> <span class="title">Legs</span><span class="params">()</span> <span class="title">int</span></span> &#123; <span class="keyword">return</span> <span class="number">5</span> &#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">  <span class="keyword">var</span> octo OctoCat</span><br><span class="line">  fmt.Println(octo.Legs()) <span class="comment">// 5</span></span><br><span class="line">  octo.PrintLegs()         <span class="comment">// I have 4 legs</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>В этом примере у нас есть тип Cat, который может посчитать колличество ног с помощью своего метода Legs. Мы встраиваем этот тип Cat в новый тип OctoCat и декларируем то, что OctocatS имеет пять ног. При этом OctoCat определяет свой собственный метод Legs, который возвращается 5, когда вызывается метод PrintLegs, он возвращает 4.</p>
+<p>Это происходит потому, что PrintLegs определен внутри типа Cat. Он принимает Cat в качестве ресивера и отсылает к методу Legs типа Cat. Cat должен знать о типе в который он был встроен, поэтому его метод не может быть изменен встраиванием.</p>
+<p>Отсюда мы можем сказать, что типы в Go открыты для расширения и закрыты для модификации.</p>
+<p>На самом деле методы в Go это несколько больше, чем просто синтаксический сахар вокруг функции с преобъявленными формальными параметрами, они являются ресиверами.</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c Cat)</span> <span class="title">PrintLegs</span><span class="params">()</span></span> &#123;</span><br><span class="line">  fmt.Printf(<span class="string">&quot;I have %d legs\n&quot;</span>, c.Legs())</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">PrintLegs</span><span class="params">(c Cat)</span></span> &#123;</span><br><span class="line">  fmt.Printf(<span class="string">&quot;I have %d legs\n&quot;</span>, c.Legs())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Ресивер - это в точности то, что вы передаете в него, первый параметр функции и посколько Go не поддерживает перегрузку функций, OctoCat не является взаимозаменяемым с обычным типом Cats. Что подводит меня к следующему принципу.</p>
+<h2 id="3-Принцип-подстановки-Барбары-Лисков"><a href="#3-Принцип-подстановки-Барбары-Лисков" class="headerlink" title="3. Принцип подстановки Барбары Лисков"></a>3. Принцип подстановки Барбары Лисков</h2><p>Придуманный Барбарой Лисков, принцип подстановки Лисков утверждает, что два типа являются взаимозаменяемыми, если они проявляют такое поведение, при котором вызывающий не может определить разницу.</p>
+<p>В языке основанном на классах, принцип подстановки Лисков часто интерпретируется, как спецификация для абстрактного класса с различными конкретными подтипами. Но в Go нет классов или наследования, потому подстановка не может быть реализованна в терминах иерархии абстратного класса.</p>
+<h3 id="Интерфейсы"><a href="#Интерфейсы" class="headerlink" title="Интерфейсы"></a>Интерфейсы</h3><p>Вместо этого подстановка, это компетенция интерфейсов в Go. В Go от типов не требуют имплементации конкретного интерфейса, вместо этого любой тип имплементирующий интерфейс просто содержит метод чья сигнатура соответствует декларации интерфейса.</p>
+<p>Мы говорим, что в Go интерфейсы удовлетворяются неявно вместо явного соответствия и это оказывает глубокое влияние на то, как они используются в языке.</p>
+<p>Хорошо продуманный интерфейс, это скорее всего маленький интерфейс; преобладающая идиома это то, что интерфейс содержит только единственный метод. Вполне логично, что маленький интерфейс содержит простую имплементацию, поскольку сложно сделать иначе. Из чего следует, что пакеты -это компромисное решение простых имплементаций связанных обычным поведением.</p>
+<h3 id="io-Reader"><a href="#io-Reader" class="headerlink" title="io.Reader"></a>io.Reader</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Reader <span class="keyword">interface</span> &#123;</span><br><span class="line">  <span class="comment">// Read reads up to len(buf) bytes into buf.</span></span><br><span class="line">  Read(buf []<span class="keyword">byte</span>) (n <span class="keyword">int</span>, err error)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Что приводит меня к io.Reader моему любимому интерфейсу в Go.</p>
+<p>Интерфейс io.Reader очень прост; Read читает данные в указанный буфер и возвращает вызывающему коду число байт, которые были прочитаны, и любую ошибку, которая может возникнуть в процесе чтения. Это выглядит просто, но это очень мощно.</p>
+<p>Поскольку io.Reader имеет дело с чем угодно, что может быть выраженно как поток байт, мы может конструировать объекты читатели буквально из чего угодно; константной строки, массива байт, стандартного потока входа, сетевого потока, архива gzip tar, стандартного выходного потока или команды выполненной удаленно через ssh.</p>
+<p>И все эти реализации взаимозаменяемы, поскольку они удовлетворяют одному простому контракту.</p>
+<p>Итак, принцип подстановки Лисков применим в Go и сказанное можно суммировать прекрасным афоризмом покойного Джима Вейриха:</p>
+<ul>
+<li>Требуй не больше, обещай не меньше.-Джим Вейрих</li>
+</ul>
+<p>И это отличный переход к четвертому принципу SOLID.</p>
+<h2 id="4-Принцип-разделения-интерфейса"><a href="#4-Принцип-разделения-интерфейса" class="headerlink" title="4. Принцип разделения интерфейса"></a>4. Принцип разделения интерфейса</h2><p>Четвертый принцип, это принцип разделения интерфейса, который читается, как:</p>
+<ul>
+<li>Клиенты не должны быть вынужденны зависеть от методов, которые они не используют. -Роберт С. Мартин</li>
+</ul>
+<p>В Go применение принципа разделения интерфейса может пониматься, как процесс изоляции поведения необходимого функции для выполнения ее работы. В качестве конкретного примера скажем, у меня есть задача написать функцию, которая сохраняет структуру Document на диск.</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Save writes the contents of doc to the file f.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Save</span><span class="params">(f *os.File, doc *Document)</span> <span class="title">error</span></span></span><br></pre></td></tr></table></figure>
+
+<p>Я могу определить такую функцию. давайте назовем ее Save, она принимает *os.File как источник для записи предоставленного Document. Но здесь возникает несколько проблем.</p>
+<p>Сигнатура Save препятствует возможности записи данных по какому ту адресу в сети. Предположим, что сетевое хранилище скорее всего станет требованием в дальнейшем и сигнатура этой функции может измениться, что повлияет на всех, кто ее вызывает.</p>
+<p>Поскольку Save оперирует непосредственно файлами на диске, тестировать ее довольно неприятно. Чтобы верифицировать операции тесты должны считать содержимое файла после записи. Кроме того тесты должны убедиться, что f был записан во временное хранилище и всегда удаляется впоследствии.</p>
+<p>*os.File также определяет много методов, которые не релевантны Save, как чтение дирректорий и проверка того, является ли путь символической ссылкой. Было бы полезно, если бы сигнатура нашей функции Save была описанна только теми частями *os.File, которые релевантны ее задаче.</p>
+<p>Что мы можем сделать с этими проблемами?</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Save writes the contents of doc to the supplied ReadWriterCloser.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Save</span><span class="params">(rwc io.ReadWriteCloser, doc *Document)</span> <span class="title">error</span></span></span><br></pre></td></tr></table></figure>
+
+<p>Используя io.ReadWriteCloser мы можем применить принцип разделения интерфейса для переопределения Save таким образом, чтобы она принимала интерфейс, который описывает более общие задачи операций с файлами.</p>
+<p>С этими изменениями любой тип, который реализует интерфейс io.ReadWriteCloser может быть замещен предыдущим *os.File. Это делает применение Save более широким и поясняет стороне вызывающей Save, какой метод из типа *os.File релевантный требуемой операции.</p>
+<p>Как автор Save я более не должен иметь возможность вызова всех нерелевантных методов из *os.File, поскольку они спрятанны за io.ReadWriteCloser интерфейсом. Но мы можем пойти немного дальше с методом разделения интерфейса.</p>
+<p>Во-первых, вряд ли Save следует принципу единственной ответственности, он будет читать файл, в который только что произошла запись, чтобы проверить содержимое, что должно быть ответственностью другой части кода. Потому мы можем сузить спецификацию интерфейса, который мы передаем в Save исключительно до открытия и закрытия файла.</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Save writes the contents of doc to the supplied WriteCloser.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Save</span><span class="params">(wc io.WriteCloser, doc *Document)</span> <span class="title">error</span></span></span><br></pre></td></tr></table></figure>
+
+<p>Во-вторых, предоставляя Save с механизмом закрытия потока, который мы унаследовали с желанием сделать это похожим на обычный механизм работы с файлом, возникает вопрос, при каких обстоятельствах wc будет закрыт. Возможно Save будет вызывать Close без каки либо условий, или Close будет вызван в случае успеха.</p>
+<p>Все это представляет пороблему для вызывающего Save, поскольку он может пожелать добавить дополнительную информацию в поток, после того, как документ уже записан.</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> NopCloser <span class="keyword">struct</span> &#123;</span><br><span class="line">        io.Writer</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Close has no effect on the underlying writer.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *NopCloser)</span> <span class="title">Close</span><span class="params">()</span> <span class="title">error</span></span> &#123; <span class="keyword">return</span> <span class="literal">nil</span> &#125;</span><br></pre></td></tr></table></figure>
+
+<p>Грубым решением будет определение нового типа, который встраивает io.Writer и переопределяет метод Close, предотвращая вызов Save из закрытого основного потока.</p>
+<p>Но это будет скорее всего нарушением принципа подстановки Барбары Лисков, поскольку NopCloser на самом деле ничего не закрывает.</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Save writes the contents of doc to the supplied Writer.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Save</span><span class="params">(w io.Writer, doc *Document)</span> <span class="title">error</span></span></span><br></pre></td></tr></table></figure>
+
+<p>Куда лучше будет решение переопределить Save, принимая только io.Writer, полностью лишив его возможности делать что -то помимо записи данных в поток.</p>
+<p>Но применяя принцип разделения интерфейса к нашей функции Save, результат одновременно становится функцией, которая наиболее специфична в условиях ее требований, единственное, что ей нужно — это что-то куда можно писать и наиболее важное в этой функции то, что мы можем использовать Save для сохранения наших данных в любое место, где реализован интерфейс io.Writer.</p>
+<ul>
+<li>Важное эмпирическое правило для Go, принимать интерфейсы, а возвращать структуры. -Джек Линдамуд<br>Приведенная выше цитата интересный мем, который просочился в дух Go в течении нескольких последних лет.</li>
+</ul>
+<p>В этой версии в рамках стандартного твита не хватает одного нюанса и это не вина Джека, но я думаю, что она представляет одну из главных причин появления приданий о дизайне языка Go.</p>
+<h2 id="5-Принцип-инверсии-зависимостей"><a href="#5-Принцип-инверсии-зависимостей" class="headerlink" title="5. Принцип инверсии зависимостей"></a>5. Принцип инверсии зависимостей</h2><p>Последний принцип SOLID, это принцип инверсии зависимостей, который утверждает:</p>
+<ul>
+<li>Модули верхнего уровня не должны зависеть от модулей нижнего уровня. Оба уровня должны зависеть от абстракций. Абстракции не должны зависеть от их деталей. Детали должны зависеть от абстракций. -Роберт С. Мартин<br>Но что означает инверсия зависмостей на практике для программиста на Go?</li>
+</ul>
+<p>Если вы применяете все принципы о которых мы говорили до этого момента, тогда ваш код уже должен быть расположен в дискретных пакетах, каждый с единственной и хорошо определенной зависимостью или целью. Ваш код должен описывать свои зависимости в терминах интерфейсов и эти интерфейсы должны быть направленны на описание исключительно того поведения, которое требуется этим функциям. Другими словами, не должно остаться много работы.</p>
+<p>Итак, как я представляю себе то, о чем Мартин тут говорит, в основном в контексте Go-это структура вашего графа импортов.</p>
+<p>В Go ваш граф импортов должен быть ацикличным. Попытка игнорирования ацикличности приведет к ошибке компиляции, но гораздо более серьезная ошибка может быть в архитектуре. При прочих равных условиях граф импорта хорошо разработанной Go программы должен быть широким и относительно плоским вместо того, чтобы быть высоким и узким. Если у вас есть пакет, функции которого не могут исполняться без привлечения помощи другого пакета, возможно это сигнал о том, что не достаточно хорошо определены границы пакета.</p>
+<p>Принцип инверсии зависимостей поощряет вас переносить спецефическую ответственность на столько высоко, на сколько возможно в графе импортов, в ваш пакет main или на верхний уровень обработчика, оставляя нижний уровень кода работать с абстракциями и интерфейсами.</p>
+<h2 id="SOLID-дизайн-Go-1"><a href="#SOLID-дизайн-Go-1" class="headerlink" title="SOLID дизайн Go"></a>SOLID дизайн Go</h2><p>В качестве резюме, когда каждый из принципов SOLID применяется в отношении Go они являются мощным инструментом дизайна, но используемые вместе, они являются главной темой.</p>
+<p>Принцип единой ответственности поощряет вас стуктурировать функции, типы и методы в пакеты, которые естественно связанны между собой; типы и функции вместе служат единственной цели.</p>
+<p>Принцип открытости / закрытости поощряет вас к компромису простых типов и более сложных путем использования встривания.</p>
+<p>Принцип подстановки Барбары Лисков поощряет вас выражать зависимости между вашими пакетами в терминах интерфейсов, а не конкретных типов. Определяя небольшые интерфейсы мы можем быть более уверенны, что реализации будут удовлетворять своим контрактам.</p>
+<p>Принцип разделения интерфейса продолжает эту идею и поощряет вас определять функции и методы которые зависят только на том поведении, которое им нужно. Если ваши функции нуждаются только в параметре типа интерфейса с единственным методом, тогда скорее всего эти функции имеют единственную ответственность.</p>
+<p>Принцип инверсии заисимостей поощряет вас перемещать знания о зависимостях вашего пакета от этапа компиляции, в Go мы наблюдаем это с сокращением числа импортов используемых конкретным пакетом, на этап выполнения кода.</p>
+<p>Если вы хотите подвести итог этого разговора, то скорее всего это будет: интерфейсы позволяют вам применять принципы SOLID в Go программах.</p>
+<p>Поскольку интерфейсы позволяют программистам Go описывать возможности своих пакетов, а не конкретную реализацию. Все это просто еще один способ сказать “разъединение”, что и есть цель, поскольку слабосвязанный код легче поддается изменениям.</p>
+<h3 id="Как-заметил-Санди-Метз"><a href="#Как-заметил-Санди-Метз" class="headerlink" title="Как заметил Санди Метз:"></a>Как заметил Санди Метз:</h3><ul>
+<li>Дизайн - это искусство организации кода, который должен работать сегодня и легко поддаваться изменениям всегда. -Санди Метз</li>
+</ul>
+<p>Потому, что если Go планирует быть языком в который компании инвестируют в долгосрочной перспективе, то ключевым фактором в их решении будет то, на сколько легко поддерживать код на Go и как просто он поддается изменениям.</p>
+<h2 id="Заключение"><a href="#Заключение" class="headerlink" title="Заключение"></a>Заключение</h2><p>В завершении давайте вернемся к вопросу, которым я открыл этот разговор. Как много программистов на Go во всем мире? Вот мое предположение:</p>
+<ul>
+<li>В 2020 году будет 500,000 разработчиков на Go.-Дейв Чейни<br>Что половина миллиона программистов на Go будут делать со своим временем? Чтож, очевидно, они будут писать много кода на Go и если мы будем честны, не весь код будет хорошим, часть кода будет плохим.</li>
+</ul>
+<p>Пожалуйста поймите, что я не пытаюсь быть жестоким, но каждый из вас в этой комнате с опытом разработки на других языках, языках из которых вы пришли в Go знает из собственного опыта, что в этом предсказании есть доля правды.</p>
+<ul>
+<li>В С++ есть гораздо более чистый и эволюционный язык, который пытается выйти. -Бьёрн Страуструп, Дизайн и Эволюция С++<br>Возможность помочь нашему языку добиться успеха для каждого программиста заключается в том, чтобы не создавать такой беспорядок, о котором люди начинают говорить, когда они шутят о C++ сегодня.</li>
+</ul>
+<p>Рассказы высмеивающие другие языки за то, что они раздуты, многословны и перегруженны однажды, могут быть применены в отношении Go и я не хочу, чтобы это случилось и потому у меня есть просьба.</p>
+<p>Go программистам нужно перестать говорить о фреймворках и начать больше говорить о дизайне. Мы должны перестать фокусировать на производительности любой ценой и вместо этого сфокусироваться не переиспользовании любой ценой.</p>
+<p>Я хотел бы увидеть сегодня, как люди говорят о том, как использовать язык, который у нас есть, независимо от их выбора и ограничений, чтобы создавать решения и решать реальные проблемы.</p>
+<p>Я бы хотел услышать сегодня о том, как люди говорят о дизайне программ на Go таким способом, чтобы они были хорошо спроектированны, разъединенные, переиспользуемые и отзывчивые к изменениям.</p>
+<h2 id="…-и-еще-одна-деталь"><a href="#…-и-еще-одна-деталь" class="headerlink" title="… и еще одна деталь"></a>… и еще одна деталь</h2><p>Сейчас это отлично, что так много людей сегодня пришли, чтобы послушать такой отличный состав спикеров, но реальность такова, что не важно на сколько эта конференция вырастет, в сравнении с общим числом людей, которые используют Go в течение всей его жизни, мы лишь малая часть.</p>
+<p>Потому наша задача рассказать оставшейся части мира, как хорошее програмное обеспечение должно быть написанно. Хорошее програмное обеспечение, совместимое, поддающееся изменениям и показать им, как сделать это используя Go. И это начинается с тебя.</p>
+<p>Я хочу, чтобы вы начали говорить о дизайне, возможно используйте часть идей, которые я представил тут, надеюсь вы проведете свое собственное исследование и примените эти идеи для своего проекта. Тогда я хочу чтобы вы:</p>
+<ul>
+<li>Написали пост в блоге об этом.</li>
+<li>Расскажите на семинаре о том, что вы сделали.</li>
+<li>Напишите книгу о том, чему вы научились.<br>И приходите снова на эту конференцию в следующем году и расскажите о том, чего вы добились.</li>
+</ul>
+<p>Делая все это мы сможем сформировать экосистему разработчиков на Go, которые заботятся о своих программах, разработанных для того, чтобы продолжать работать.</p>
+<p>Спасибо.</p>
+<p><img src="/images/golang_solid_the_best.jpg" alt="Вот вам и SOLID"></p>
+
+        </div>
+        <footer class="article-footer">
+            
+
+
+
+    <a data-url="https://goxpert.ru/2024/06/01/common/solid_go/" data-id="clx05fph30000rowl7xaoc8xj" class="article-share-link"><i class="fa fa-share"></i>Поделиться</a>
+<script>
+    (function ($) {
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+        </footer>
+    </div>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "author": {
+            "@type": "Person",
+            "name": "авторы проекта GoXpert"
+        },
+        "headline": "SOLID в GO",
+        "image": "https://goxpert.ru/images/golang_solid_the_best.jpg",
+        "keywords": "Golang, Q&A",
+        "genre": "Golang Старт Вопрос-Ответ SOLID SOLID",
+        "datePublished": "2024-06-01",
+        "dateCreated": "2024-06-01",
+        "dateModified": "2024-06-04",
+        "url": "https://goxpert.ru/2024/06/01/common/solid_go/",
+        "description": "SOLID дизайн GoЭтот пост на основе текста из основного доклада GolangUK прошедшего 18-ого Августа 2016.Запись выступления доступна в YouTube.
+Как много программистов на Go в мире?Как много программист",
+        "wordCount": 3640
+    }
+</script>
+
+</article>
+
+    <section id="comments">
+    
+        
+    <div id="vk_comments"></div>
+    <script type="text/javascript">
+      window.onload = function () {
+      VK.init({apiId: 51937371, onlyWidgets: true});
+      VK.Widgets.Comments("vk_comments", {limit: 20, attach: "*", autoPublish: 1, pageUrl: "https://goxpert.ru/2024/06/01/common/solid_go/"});
+    }
+   </script>
+
+    
+    </section>
+
+
+
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <div class="sidebar-top">
+        <p>Подписаться:</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="vk" href="https://vk.com/goxpert" target="_blank" rel="noopener">
+                        <i class="icon fa fa-vk"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="telegram" href="https://t.me/goxpert_ru" target="_blank" rel="noopener">
+                        <i class="icon fa fa-telegram"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="youtube" href="https://www.youtube.com/c/УчимсянаПять" target="_blank" rel="noopener">
+                        <i class="icon fa fa-youtube"></i>
+                    </a>
+                </li>
+                
+            
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="twitter" href="/" target="_blank" rel="noopener">
+                        <i class="icon fa fa-twitter"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="facebook" href="/" target="_blank" rel="noopener">
+                        <i class="icon fa fa-facebook"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="weibo" href="/" target="_blank" rel="noopener">
+                        <i class="icon fa fa-weibo"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="rss" href="/atom.xml" target="_blank" rel="noopener">
+                        <i class="icon fa fa-rss"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2024/06/01/os/network/" id="article-nav-newer" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">новые</strong>
+        <p class="article-nav-title">
+        
+            Сеть
+        
+        </p>
+        <i class="icon fa fa-chevron-right" id="icon-chevron-right"></i>
+    </a>
+    
+    
+        <a href="/2024/06/01/common/solid/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">старые</strong>
+        <p class="article-nav-title">SOLID</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
+    
+    <div class="widgets-container">
+        
+            
+                
+
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">недавние</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2024/06/02/os/os_scheduler/" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/os_sched_1.jpg)" alt="Планировщик ОS" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%D0%9E%D0%A1/">ОС</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%D0%9E%D0%A1/%D0%9F%D0%BB%D0%B0%D0%BD%D0%B8%D1%80%D0%BE%D0%B2%D1%89%D0%B8%D0%BA-%D0%9ES/">Планировщик ОS</a></p>
+                            <p class="item-title"><a href="/2024/06/02/os/os_scheduler/" class="title">Планировщик ОS</a></p>
+                            <p class="item-date"><time datetime="2024-06-02T15:32:20.263Z" itemprop="datePublished">2024-06-02</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2024/06/01/os/network/" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/tcp1.png)" alt="Сеть" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%D0%9E%D0%A1/">ОС</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%D0%9E%D0%A1/C%D0%B5%D1%82%D1%8C/">Cеть</a></p>
+                            <p class="item-title"><a href="/2024/06/01/os/network/" class="title">Сеть</a></p>
+                            <p class="item-date"><time datetime="2024-06-01T09:16:00.000Z" itemprop="datePublished">2024-06-01</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2024/06/01/common/solid_go/" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/golang_solid_the_best.jpg)" alt="SOLID в GO" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Golang/">Golang</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/">Старт</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/">Вопрос-Ответ</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/SOLID/">SOLID</a></p>
+                            <p class="item-title"><a href="/2024/06/01/common/solid_go/" class="title">SOLID в GO</a></p>
+                            <p class="item-date"><time datetime="2024-06-01T07:22:00.000Z" itemprop="datePublished">2024-06-01</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2024/06/01/common/solid/" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/golang_solid1.png)" alt="SOLID" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Golang/">Golang</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/">Старт</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/">Вопрос-Ответ</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/SOLID/">SOLID</a></p>
+                            <p class="item-title"><a href="/2024/06/01/common/solid/" class="title">SOLID</a></p>
+                            <p class="item-date"><time datetime="2024-06-01T07:21:00.000Z" itemprop="datePublished">2024-06-01</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2024/06/01/concurrency/scheduler/" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/golang_scheduler.jpg)" alt="Планировщик" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Golang/">Golang</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/">Старт</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/">Вопрос-Ответ</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9F%D0%BB%D0%B0%D0%BD%D0%B8%D1%80%D0%BE%D0%B2%D1%89%D0%B8%D0%BA/">Планировщик</a></p>
+                            <p class="item-title"><a href="/2024/06/01/concurrency/scheduler/" class="title">Планировщик</a></p>
+                            <p class="item-date"><time datetime="2024-06-01T07:19:00.000Z" itemprop="datePublished">2024-06-01</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">Категории</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/">Golang</a><span class="category-list-count">24</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/">Старт</a><span class="category-list-count">24</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/Defer/">Defer</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/Generics/">Generics</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/Panic/">Panic</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/SOLID/">SOLID</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/Select-case/">Select-case</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%93%D0%BE%D0%BD%D0%BA%D0%B0-%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85/">Гонка данных</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%93%D0%BE%D1%80%D1%83%D1%82%D0%B8%D0%BD%D1%8B/">Горутины</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%98%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81%D1%8B/">Интерфейсы</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%9A%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82/">Контекст</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%9C%D0%B0%D1%81%D1%81%D0%B8%D0%B2%D1%8B-%D0%B8-%D1%81%D0%BB%D0%B0%D0%B9%D1%81%D1%8B/">Массивы и слайсы</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%9E%D0%B1%D1%89%D0%B8%D0%B5/">Общие</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%9F%D0%B0%D0%BA%D0%B5%D1%82%D1%8B/">Пакеты</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%9F%D0%BB%D0%B0%D0%BD%D0%B8%D1%80%D0%BE%D0%B2%D1%89%D0%B8%D0%BA/">Планировщик</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%9F%D1%80%D0%B8%D0%BC%D0%B8%D1%82%D0%B8%D0%B2%D1%8B-%D1%81%D0%B8%D0%BD%D1%85%D1%80%D0%BE%D0%BD%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D0%B8/">Примитивы синхронизации</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%A1%D1%82%D1%80%D0%BE%D0%BA%D0%B8/">Строки</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%A1%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D1%8B/">Структуры</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%A2%D0%B8%D0%BF%D1%8B/">Типы</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%A3%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D0%B5%D0%BB%D0%B8/">Указатели</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%A5%D0%B5%D1%88-%D0%BC%D0%B0%D0%BF%D1%8B/">Хеш-мапы</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/">Вопрос-Ответ</a><span class="category-list-count">23</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/Defer/">Defer</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/Generics/">Generics</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/Panic/">Panic</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/SOLID/">SOLID</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/Select-case/">Select-case</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%93%D0%BE%D0%BD%D0%BA%D0%B0-%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85/">Гонка данных</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%93%D0%BE%D1%80%D1%83%D1%82%D0%B8%D0%BD%D1%8B/">Горутины</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%98%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81%D1%8B/">Интерфейсы</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9A%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82/">Контекст</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9C%D0%B0%D1%81%D1%81%D0%B8%D0%B2%D1%8B-%D0%B8-%D1%81%D0%BB%D0%B0%D0%B9%D1%81%D1%8B/">Массивы и слайсы</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9E%D0%B1%D1%89%D0%B8%D0%B5/">Общие</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9F%D0%B0%D0%BA%D0%B5%D1%82%D1%8B/">Пакеты</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9F%D0%BB%D0%B0%D0%BD%D0%B8%D1%80%D0%BE%D0%B2%D1%89%D0%B8%D0%BA/">Планировщик</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9F%D1%80%D0%B8%D0%BC%D0%B8%D1%82%D0%B8%D0%B2%D1%8B-%D1%81%D0%B8%D0%BD%D1%85%D1%80%D0%BE%D0%BD%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D0%B8/">Примитивы синхронизации</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%A1%D1%82%D1%80%D0%BE%D0%BA%D0%B8/">Строки</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%A1%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D1%8B/">Структуры</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%A2%D0%B8%D0%BF%D1%8B/">Типы</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%A3%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D0%B5%D0%BB%D0%B8/">Указатели</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%A5%D0%B5%D1%88-%D0%BC%D0%B0%D0%BF%D1%8B/">Хеш-мапы</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%9E%D0%A1/">ОС</a><span class="category-list-count">2</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%9E%D0%A1/C%D0%B5%D1%82%D1%8C/">Cеть</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%9E%D0%A1/%D0%9F%D0%BB%D0%B0%D0%BD%D0%B8%D1%80%D0%BE%D0%B2%D1%89%D0%B8%D0%BA-%D0%9ES/">Планировщик ОS</a><span class="category-list-count">1</span></li></ul></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">архивы</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/06/">июнь 2024</a><span class="archive-list-count">26</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">Тэги</h3>
+        <div class="widget">
+            <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Golang/" rel="tag">Golang</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Golang-Q-A/" rel="tag">Golang, Q&A</a><span class="tag-list-count">25</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-float">
+        <h3 class="widget-title">Облако тэгов</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/Golang/" style="font-size: 10px;">Golang</a> <a href="/tags/Golang-Q-A/" style="font-size: 20px;">Golang, Q&A</a>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">ссылки</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a target="_blank" rel="noopener" href="https://vk.com/goxpert">мы в vk</a>
+                    </li>
+                
+                    <li>
+                        <a target="_blank" rel="noopener" href="https://www.youtube.com/c/УчимсянаПять">мы в youtube</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+            
+        
+    </div>
+</aside>
+
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <p>&copy; 2024 авторы проекта GoXpert</p>
+                
+                <p>Powered by <a href="https://designest.ru/" target="_blank">DESIGNest Studio Ltd</a></p>
+                
+            </div>
+            <div class="footer-plugins">
+                
+			<!-- Yandex.RTB R-A-1394392-1 -->
+			<div id="yandex_rtb_R-A-1394392-1"></div>
+			<script>window.yaContextCb.push(()=>{Ya.Context.AdvManager.render({renderTo: 'yandex_rtb_R-A-1394392-1',  blockId: 'R-A-1394392-1' }) })</script>
+                
+              
+    
+
+
+            </div>
+        </div>
+    </div>
+</footer>                                                                                            
+
+    </div>
+    
+    
+    <script type="text/javascript">
+    var vk_shortname = 'true';
+    (function() {
+    var vk = document.createElement('script');
+    vk.type = 'text/javascript';
+    vk.async = true;
+    vk.src = '//vk.com/js/api/openapi.js?169'; 
+    vk.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0]
+    || document.getElementsByTagName('body')[0]).appendChild(vk);
+    })();
+    </script>
+
+
+
+
+    
+        
+<script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-share.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-video.min.js"></script>
+
+    
+    
+        
+<script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+    
+    
+
+    
+    
+    
+
+
+
+<!-- Custom Scripts -->
+
+<script src="/js/main.js"></script>
+
+
+</body>
+</html>
