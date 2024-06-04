@@ -2,6 +2,24 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://goxpert.ru/2024/06/01/common/ssa/</loc>
+    
+    <lastmod>2024-06-04</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://goxpert.ru/2024/06/01/concurrency/go_scheduler/</loc>
+    
+    <lastmod>2024-06-04</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://goxpert.ru/2024/06/02/os/os_scheduler/</loc>
     
     <lastmod>2024-06-04</lastmod>
@@ -572,6 +590,20 @@
   
   <url>
     <loc>https://goxpert.ru/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/SOLID/</loc>
+    <lastmod>2024-06-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://goxpert.ru/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/SSA/</loc>
+    <lastmod>2024-06-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://goxpert.ru/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/SSA/</loc>
     <lastmod>2024-06-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>

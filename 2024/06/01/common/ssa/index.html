@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+
+    
+
+    
+    <title>SSA правила в GO | GoXpert.ru</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="keywords" content="Golang, Q&amp;A" />
+    
+    <meta name="description" content="Статическая форма с одним заданием в GO">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SSA правила в GO">
+<meta property="og:url" content="https://goxpert.ru/2024/06/01/common/ssa/index.html">
+<meta property="og:site_name" content="GoXpert.ru">
+<meta property="og:description" content="Статическая форма с одним заданием в GO">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:image" content="https://goxpert.ru/images/golang_ssa.png">
+<meta property="article:published_time" content="2024-06-01T07:23:00.000Z">
+<meta property="article:modified_time" content="2024-06-04T16:12:04.505Z">
+<meta property="article:author" content="авторы проекта GoXpert">
+<meta property="article:tag" content="Golang, Q&amp;A">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://goxpert.ru/images/golang_ssa.png">
+    
+
+    
+        <link rel="alternate" href="/atom.xml" title="GoXpert.ru" type="application/atom+xml" />
+        <link rel="alternate" type="application/rss+xml" title="GoXpert.ru" href="https://goxpert.ru/rss.xml" />
+        <link rel="alternate" type="application/rss+xml" title="GoXpert.ru" href="https://goxpert.ru/rss-feed.xml" />
+     
+
+     
+        <link rel="amphtml" href="https://goxpert.ru/amp2024/06/01/common/ssa/">
+     
+
+
+    
+        <link rel="icon" href="/css/images/favicon.ico" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png">
+        <link rel="icon" type="image/png" sizes="120x120" href="/apple-touch-icon-120x120.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+        <link rel="manifest" href="/site.webmanifest">
+        <meta name="msapplication-TileColor" content="#da532c">
+        <meta name="msapplication-TileImage" content="/mstile-144x144.png">
+        <meta name="theme-color" content="#ffffff">
+    
+
+    
+       <!-- Yandex.RTB -->
+       <script>window.yaContextCb=window.yaContextCb||[]</script>
+       <script src="https://yandex.ru/ads/system/context.js" async></script>
+    
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/libs/titillium-web/styles.css">
+
+    
+<link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+<script src="/libs/jquery/3.5.0/jquery.min.js"></script>
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+
+    
+    
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4PWEJT515P"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-4PWEJT515P');
+</script>
+<!-- End Google Analytics -->
+
+    
+    
+        <!-- Yandex.Metrika counter -->
+<script type="text/javascript" >
+   (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+   m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+   (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+   ym(86613025, "init", {
+        clickmap:true,
+        trackLinks:true,
+        accurateTrackBounce:true,
+        webvisor:true
+   });
+</script>
+<!-- /Yandex.Metrika counter -->
+    
+    
+    
+
+
+</head>
+
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">Главная</a>
+                                </li>
+                            
+                                    <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Golang/">Golang</a><ul class="main-nav-list-child"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/">Старт</a></li></ul></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/">Вопрос-Ответ</a><ul class="main-nav-list-child"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/Defer/">Defer</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/Generics/">Generics</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/Panic/">Panic</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/SOLID/">SOLID</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/SSA/">SSA</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/Select-case/">Select-case</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%93%D0%BE%D0%BD%D0%BA%D0%B0-%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85/">Гонка данных</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%93%D0%BE%D1%80%D1%83%D1%82%D0%B8%D0%BD%D1%8B/">Горутины</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%98%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81%D1%8B/">Интерфейсы</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9A%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82/">Контекст</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9C%D0%B0%D1%81%D1%81%D0%B8%D0%B2%D1%8B-%D0%B8-%D1%81%D0%BB%D0%B0%D0%B9%D1%81%D1%8B/">Массивы и слайсы</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9E%D0%B1%D1%89%D0%B8%D0%B5/">Общие</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9F%D0%B0%D0%BA%D0%B5%D1%82%D1%8B/">Пакеты</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9F%D0%BB%D0%B0%D0%BD%D0%B8%D1%80%D0%BE%D0%B2%D1%89%D0%B8%D0%BA/">Планировщик</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9F%D1%80%D0%B8%D0%BC%D0%B8%D1%82%D0%B8%D0%B2%D1%8B-%D1%81%D0%B8%D0%BD%D1%85%D1%80%D0%BE%D0%BD%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D0%B8/">Примитивы синхронизации</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%A1%D1%82%D1%80%D0%BE%D0%BA%D0%B8/">Строки</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%A1%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D1%8B/">Структуры</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%A2%D0%B8%D0%BF%D1%8B/">Типы</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%A3%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D0%B5%D0%BB%D0%B8/">Указатели</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%A5%D0%B5%D1%88-%D0%BC%D0%B0%D0%BF%D1%8B/">Хеш-мапы</a></li></ul></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%9E%D0%A1/">ОС</a><ul class="main-nav-list-child"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%9E%D0%A1/C%D0%B5%D1%82%D1%8C/">Cеть</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%9E%D0%A1/%D0%9F%D0%BB%D0%B0%D0%BD%D0%B8%D1%80%D0%BE%D0%B2%D1%89%D0%B8%D0%BA-%D0%9ES/">Планировщик ОS</a></li></ul></li></ul>
+                                
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/2024/06/01/helloworld/index.html">О сайте</a>
+                                </li>
+                            
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
+
+<div class="ya-site-form ya-site-form_inited_no" data-bem="{&quot;action&quot;:&quot;/search.html&quot;,&quot;arrow&quot;:false,&quot;bg&quot;:&quot;transparent&quot;,&quot;fontsize&quot;:12,&quot;fg&quot;:&quot;#000000&quot;,&quot;language&quot;:&quot;ru&quot;,&quot;logo&quot;:&quot;rb&quot;,&quot;publicname&quot;:&quot;����� �� ����� GoXpert&quot;,&quot;suggest&quot;:true,&quot;target&quot;:&quot;_blank&quot;,&quot;tld&quot;:&quot;ru&quot;,&quot;type&quot;:2,&quot;usebigdictionary&quot;:true,&quot;searchid&quot;:2519671,&quot;input_fg&quot;:&quot;#000000&quot;,&quot;input_bg&quot;:&quot;#ffffff&quot;,&quot;input_fontStyle&quot;:&quot;normal&quot;,&quot;input_fontWeight&quot;:&quot;normal&quot;,&quot;input_placeholder&quot;:&quot;&quot;,&quot;input_placeholderColor&quot;:&quot;#000000&quot;,&quot;input_borderColor&quot;:&quot;#7f9db9&quot;}">
+<form action="https://yandex.ru/search/site/" method="get" target="_blank" accept-charset="utf-8">
+<input type="hidden" name="searchid" value="2519671"/>
+<input type="hidden" name="l10n" value="ru"/>
+<input type="hidden" name="reqenc" value=""/>
+<input type="search" name="text" value=""/>
+<input type="submit" value="�����"/>
+</form>
+</div>
+    <style type="text/css">.ya-page_js_yes .ya-site-form_inited_no { display: none; }
+</style>
+<script type="text/javascript">
+(function(w,d,c){var s=d.createElement('script'),h=d.getElementsByTagName('script')[0],e=d.documentElement;
+if((' '+e.className+' ').indexOf(' ya-page_js_yes ')===-1)
+{e.className+=' ya-page_js_yes';}s.type='text/javascript';
+s.async=true;s.charset='utf-8';
+s.src=(d.location.protocol==='https:'?'https:':'http:')+'//site.yandex.net/v2.0/js/all.js';
+h.parentNode.insertBefore(s,h);(w[c]||(w[c]=[])).push(function(){
+
+Ya.Site.Form.init()
+
+})})(window,document,'yandex_site_callbacks');</script>
+
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <a class="page-title-link" href="/categories/Golang/">Golang</a><i class="icon fa fa-angle-right"></i><a class="page-title-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/">Старт</a><i class="icon fa fa-angle-right"></i><a class="page-title-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/SSA/">SSA</a><i class="icon fa fa-angle-right"></i><a class="page-title-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/">Вопрос-Ответ</a><i class="icon fa fa-angle-right"></i><a class="page-title-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/SSA/">SSA</a>
+    </h1>
+</div>
+
+                        <div class="main-body-content">
+                            <article id="post-common/ssa" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        SSA правила в GO
+        </h1>
+    
+
+            </header>
+        
+        
+            <div class="article-meta">
+                
+  <div class="article-date">
+    <i class="fa fa-calendar"></i>
+    <a href="/2024/06/01/common/ssa/" class="article-date">
+       <time datetime="2024-06-01T07:23:00.000Z" itemprop="datePublished">2024-06-01</time>
+    </a>
+  </div>
+
+
+<div class="article-date">
+  <i class="fa fa-calendar-plus-o"></i>
+  <a href="/2024/06/01/common/ssa/" class="article-date">
+     <time datetime="2024-06-04T16:12:04.505Z" itemprop="dateModified">2024-06-04</time>
+  </a>
+</div>
+
+
+                
+
+                
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link-link" href="/tags/Golang-Q-A/" rel="tag">Golang, Q&A</a>
+    </div>
+
+                
+
+                
+
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            
+
+            
+
+            
+
+            <!-- feed_rem_st --><!-- feed_rem_end --><h1 id="Статическая-форма-с-одним-заданием-Static-single-assignment-form"><a href="#Статическая-форма-с-одним-заданием-Static-single-assignment-form" class="headerlink" title="Статическая форма с одним заданием (Static single-assignment form)"></a>Статическая форма с одним заданием (Static single-assignment form)</h1><ul>
+<li>SSA (Static Single Assignment) - форма представления кода, используемая в компиляторах для оптимизации. </li>
+<li>SSA представляет код в виде набора функций, каждая из которых описывает часть исходного кода. </li>
+<li>Форма SSA упрощает анализ и оптимизацию кода, особенно для блочно-локальных переменных. </li>
+<li>Блочные аргументы являются альтернативой Φ-функциям и могут быть более удобными при оптимизации. </li>
+<li>Форма SSA обычно не используется для прямого исполнения, но часто используется поверх другой IR. </li>
+<li>Расширения к форме SSA включают изменения в критерии переименования и функционально-ориентированные расширения. </li>
+<li>Компиляторы, использующие форму SSA, включают Mono, WebKit, Swift, Erlang, LLVM, GCC, и другие</li>
+</ul>
+<p>Подробней можно почитать  <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Static_single-assignment_form">здесь</a>, если необходимо разъяснить, то пишите внизу в комментариях<br>В конструкции компилятора статическая форма одиночного присваивания (часто называемая формой SSA или просто SSA ) — это тип промежуточного представления (IR), где каждой переменной присваивается ровно один раз. SSA используется в большинстве высококачественных оптимизирующих компиляторов для императивных языков, включая LLVM , GNU Compiler Collection и многие коммерческие компиляторы.</p>
+<p><img src="/images/golang_ssa.png" alt="Вот вам и SSA"></p>
+<h1 id="SSA-правила-в-GO"><a href="#SSA-правила-в-GO" class="headerlink" title="SSA правила в GO"></a>SSA правила в GO</h1><p>В компиляторе gc для описания Static Single Assignment (SSA) правил оптимизаций используется специальный Лисп-подобный предметно-ориентированный язык (DSL).</p>
+<p>Предлагаю разобрать основные элементы этого языка, его особенности и ограничения.<br>В качестве упражнения, добавим в Go компилятор генерацию инструкции, которую он раньше не генерировал, оптимизируя выражение a*b+c.</p>
+<p>Это первая статья из серии про внутренности Go SSA compiler backend, поэтому помимо обзора самого DSL описания правил мы рассмотрим связанные компоненты, чтобы создать необходимую базу для нашей следующей сессии.</p>
+<h1 id="Введение"><a href="#Введение" class="headerlink" title="Введение"></a>Введение</h1><p>Frontend Go компилятора заканчивается на моменте генерации SSA представления из аннотированного AST. Функции, ответственные за конвертацию можно найти в <a target="_blank" rel="noopener" href="https://github.com/golang/go/blob/master/src/cmd/compile/internal/gc/ssa.go">cmd/compile/internal/gc/ssa.go</a>. Точкой входа в SSA backend является функция ssa.Compile, определённая в файле <a target="_blank" rel="noopener" href="https://github.com/golang/go/blob/master/src/cmd/compile/internal/ssa/compile.go">cmd/compile/internal/ssa/compile.go</a>.</p>
+<table>
+<thead>
+<tr>
+<th>EN</th>
+<th>RU</th>
+<th>Значение</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Compiler frontend</td>
+<td>Фронтенд компилятора</td>
+<td>Парсинг и лексический анализ, иногда разрешение типов, промежуточное представление близко к исходному коду, обычно какое-нибудь аннотированное AST.</td>
+</tr>
+<tr>
+<td>Compiler backend</td>
+<td>Бэкенд компилятора</td>
+<td>Более низкоуровневые оптимизации и промежуточное представление, кодогенерация.</td>
+</tr>
+<tr>
+<td>Form</td>
+<td>Форма</td>
+<td>Практически синоним слову “выражение” (expression). Обычно в Лиспах form — довольно распространённый способ именовать элемент программы, будь то список или атом.</td>
+</tr>
+<tr>
+<td>Optimization pass</td>
+<td>Фаза оптимизации</td>
+<td>Выполнение определённого алгоритма над программой. Слово “проход” несколько неоднозначно, потому что одна фаза может выполнять несколько проходов, и/или использовать общий с другими фазами код.</td>
+</tr>
+</tbody></table>
+<p>Если по мере прочтения статьи вы нашли совершенно непонятный для вас термин, стоит сообщить об этом, возможно он будет добавлен в эту таблицу.</p>
+<p>SSA оптимизатор Go состоит из нескольких фаз, каждая из которых выполняет проходы по компилируемой функции. Некоторые фазы используют так называемые “rewrite rules”, правила преобразования одних SSA последовательностей в другие, потенциально более оптимальные.</p>
+<p>Правила преобразования описываются с помощью <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/S-expression">S-выражений</a>. Элементы этих выражений — <a target="_blank" rel="noopener" href="https://github.com/golang/go/blob/master/src/cmd/compile/internal/ssa/value.go#L19">ssa.Value</a>. В простейшем случае эти правила позволяют заменить один ssa.Value на другой.</p>
+<p>Например, код ниже сворачивает умножение 8-битных констант:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(Mul8 (Const8 [c]) (Const8 [d])) -&gt; (Const8 [int64(int8(c*d))])</span><br></pre></td></tr></table></figure>
+
+<p>Есть две основные категории SSA значений: высокоуровневые, почти не зависящие от целевой машины и те, что архитектурно-специфичны (обычно отображаются на машинные инструкции 1-в-1).</p>
+<p>Оптимизации описываются в терминах этих двух категорий. Сначала высокоуровневые и общие для всех архитектур, затем платформенно-ориентированные.</p>
+<p>Весь код, связанный с правилами, лежит в <a target="_blank" rel="noopener" href="https://github.com/golang/go/tree/master/src/cmd/compile/internal/ssa/gen">cmd/compile/internal/ssa/gen</a>. Мы будем рассматривать два набора:</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://github.com/golang/go/blob/master/src/cmd/compile/internal/ssa/gen/genericOps.go">genericOps.go</a> — машино-независимые операции.</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/golang/go/blob/master/src/cmd/compile/internal/ssa/gen/AMD64Ops.go">AMD64Ops.go</a> — операции, специфичные для GOARCH=AMD64 (64-bit x86).</li>
+</ol>
+<p>После нескольких первых фаз, которые работают над абстрактной машиной, выполняется так называемый lowering, в результате которого происходит переход из genericOps в набор конкретной архитектуры. В нашем примере это будет AMD64Ops. После этого момента, все последующие фазы оперируют над представлением из второй категории.</p>
+<p>После оптимизатора в игру вступает кодогенератор. Для AMD64 реализацию кодогенерации можно найти в пакете <a target="_blank" rel="noopener" href="https://github.com/golang/go/tree/master/src/cmd/compile/internal/amd64">cmd/compile/internal/amd64</a>. Задача кодогенератора — заменить ssa.Block и ssa.Value в последовательность <a target="_blank" rel="noopener" href="https://github.com/golang/go/blob/0dc814cd7f6a5c01213169be17e823b69e949ada/src/cmd/internal/obj/link.go#L271">obj.Prog</a>, передаваемые <a target="_blank" rel="noopener" href="https://github.com/golang/go/tree/master/src/cmd/internal/obj/x86">ассемблеру</a>. Ассемблер соберёт машинный код, который будет готов к исполнению после <a target="_blank" rel="noopener" href="https://github.com/golang/go/tree/master/src/cmd/link">линковки</a>.</p>
+<h2 id="Правила-оптимизаций"><a href="#Правила-оптимизаций" class="headerlink" title="Правила оптимизаций"></a>Правила оптимизаций</h2><p>Если файлы с определениями операций имеют название вида “${ARCH}Ops.go”, то правила оптимизаций размещаются в “${ARCH}.Rules”.</p>
+<p>Высокоуровневые правила выполняют простейшие преобразования, большую часть <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Constant_folding">сворачивания константных выражений</a>, а также некоторые преобразования, которые упрощают последующую обработку.</p>
+<p>Каждый файл с низкоуровневыми правилами состоит из двух частей:</p>
+<ol>
+<li>Lowering — замена абстрактных операций на машинные эквиваленты.</li>
+<li>Непосредственно сами оптимизации.</li>
+</ol>
+<p>Пример сведения операции к машинной:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(Const32 [val]) -&gt; (MOVLconst [val]) // L - long, 32-бита</span><br><span class="line">(Const64 [val]) -&gt; (MOVQconst [val]) // Q - quad, 64-бита</span><br><span class="line"> |                  |</span><br><span class="line"> generic op         |</span><br><span class="line">                   AMD64 op</span><br></pre></td></tr></table></figure>
+
+<p>Именно в низкоуровневых оптимизациях выполняется основное количество важных оптимизаций, таких как <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Strength_reduction">снижение стоимости операций</a>, частичное встраивание и утилизация возможностей доступных в процессоре <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Addressing_mode">режимов адресации памяти</a>.</p>
+<p>Операции имеют мнемоническое имя, которое обычно называется опкодом (opcode). Опкоды архитектурно-зависимых операций, как правило, отражают названия реальных инструкций.</p>
+<h2 id="Синтаксис-языка-описания-правил"><a href="#Синтаксис-языка-описания-правил" class="headerlink" title="Синтаксис языка описания правил"></a>Синтаксис языка описания правил</h2><p>Базовая грамматика описана в <a target="_blank" rel="noopener" href="https://github.com/golang/go/blob/master/src/cmd/compile/internal/ssa/gen/rulegen.go">rulegen.go</a>:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// rule syntax:</span></span><br><span class="line"><span class="comment">//    sexpr [&amp;&amp; extra conditions] -&gt; [@block] sexpr</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// sexpr are s-expressions (lisp-like parenthesized groupings)</span></span><br><span class="line"><span class="comment">// sexpr ::= [variable:](opcode sexpr*)</span></span><br><span class="line"><span class="comment">//         | variable</span></span><br><span class="line"><span class="comment">//         | &lt;type&gt;</span></span><br><span class="line"><span class="comment">//         | [auxint]</span></span><br><span class="line"><span class="comment">//         | &#123;aux&#125;</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// aux      ::= variable | &#123;code&#125;</span></span><br><span class="line"><span class="comment">// type     ::= variable | &#123;code&#125;</span></span><br><span class="line"><span class="comment">// variable ::= some token</span></span><br><span class="line"><span class="comment">// opcode   ::= one of the opcodes from the *Ops.go files</span></span><br></pre></td></tr></table></figure>
+<p>Перевод сниппера выше</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// синтаксис правил:</span></span><br><span class="line"><span class="comment">//    sexpr [&amp;&amp; дополнительные условия] -&gt; [@block] sexpr</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// sexpr - это S-выражений (группирование в стиле Лиспа)</span></span><br><span class="line"><span class="comment">// sexpr ::= [variable:](opcode sexpr*)</span></span><br><span class="line"><span class="comment">//         | variable</span></span><br><span class="line"><span class="comment">//         | &lt;type&gt;</span></span><br><span class="line"><span class="comment">//         | [auxint]</span></span><br><span class="line"><span class="comment">//         | &#123;aux&#125;</span></span><br><span class="line"><span class="comment">//</span></span><br><span class="line"><span class="comment">// aux      ::= variable | &#123;code&#125;</span></span><br><span class="line"><span class="comment">// type     ::= variable | &#123;code&#125;</span></span><br><span class="line"><span class="comment">// variable ::= Go переменная (любой токен)</span></span><br><span class="line"><span class="comment">// opcode   ::= опкод из *Ops.go файла</span></span><br></pre></td></tr></table></figure>
+
+<p>Стоит также упомянуть, что внутри .Rules файлов разрешены “//“ комментарии.</p>
+<p>Разберём простой пример, который содержит все эти элементы:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">   Opcode=ADDLconst - сложение аргумента с 32-битной константой</span><br><span class="line">     :    AuxInt=c - константа, которая прибавляется к `x`</span><br><span class="line">     :      :</span><br><span class="line">(ADDLconst [c] x) &amp;&amp; int32(c)==0 -&gt; x</span><br><span class="line">|              /  |           /     |</span><br><span class="line">|             /   |          /      |</span><br><span class="line">|            /    |         /       Форма для замены</span><br><span class="line">|           /     Условие замены (через `&amp;&amp;` можно добавить ещё условий)</span><br><span class="line">Форма, которую мы пытаемся заменить</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Все эти пояснительные подписи не являются частью валидной записи правил.</li>
+</ul>
+<p>Данное правило преобразует x+0 в x. Всё внутри секции условий — это обычный Go код,<br>разве что ограниченный до выражений, результатом которых должен быть bool.<br>Можно вызывать предикаты, определённые в <a target="_blank" rel="noopener" href="https://github.com/golang/go/blob/master/src/cmd/compile/internal/ssa/rewrite.go">rewrite.go</a>.</p>
+<p>Кроме обычных опкодов, могут использоваться комбинации, которые порождают несколько правил:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(ADD(Q|L)const [off] x:(SP)) -&gt; (LEA(Q|L) [off] x)</span><br><span class="line">// Уберём Q|L alternation:</span><br><span class="line">(ADDQconst [off] x:(SP)) -&gt; (LEAQ [off] x)</span><br><span class="line">(ADDLconst [off] x:(SP)) -&gt; (LEAL [off] x)</span><br><span class="line">// Уберём привязку к `x`:</span><br><span class="line">(ADDQconst [off] (SP)) -&gt; (LEAQ [off] (SP))</span><br><span class="line">(ADDLconst [off] (SP)) -&gt; (LEAL [off] (SP))</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>(SP) — это одна из операций в genericOps.go и выражает загрузку указателя на аппаратный стек. Для архитектур, где аппаратного SP нет, он эмулируется.</li>
+</ul>
+<p>Особенности переменных в шаблонах (S-выражения слева от -&gt;):</p>
+<ul>
+<li>Переменные, типа x, без выражения через :, захватывают что угодно</li>
+<li>аналогично обычной переменной, _ захватывает любое значение, но результат можно игнорировать</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// Оба правила делают одно и то же: реализуют функцию идентичности ADDQconst,</span><br><span class="line">// то есть они возвращают совпавшую с шаблоном форму без изменений:</span><br><span class="line">(ADDQconst _) -&gt; v</span><br><span class="line">(ADDQconst x) -&gt; (ADDQconst x)</span><br></pre></td></tr></table></figure>
+
+<p>Если AuxInt не указан (выражение в квадратных скобках), то правило будет срабатывать на любом значении AuxInt. Аналогично с {}-параметрами (о них ниже).</p>
+<p>Имя v означает самую внешнюю захваченную форму.<br>Например, для выражения (ADDQconst (SUBQconst x)) внешней формой является ADDQconst.</p>
+<p>Переменные можно использовать несколько раз, это позволяет требовать соответствия нескольких частей S-выражения между собой:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">(ADDQconst [v] (ADDQconst [v] x))</span><br><span class="line">// Сработает, например, для &quot;x+2+2&quot; (x+v+v).</span><br></pre></td></tr></table></figure>
+
+<h2 id="Типы-в-правилах"><a href="#Типы-в-правилах" class="headerlink" title="Типы в правилах"></a>Типы в правилах</h2><p>В некоторых случаях требуется явно указывать тип генерируемой и/или сопостовляемой формы.<br>Указывается тип в “треугольных скобках”, как аргумент-тип в шаблонах C++:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// typ.UInt32 - тип операции BTSLconst.</span><br><span class="line">// BSFL имеет фиксированный тип typ.UInt32, поэтому указывать для</span><br><span class="line">// него тип не требуется.</span><br><span class="line">(Ctz16 x) -&gt; (BSFL (BTSLconst &lt;typ.UInt32&gt; [16] x))</span><br></pre></td></tr></table></figure>
+
+<p>Кроме типов, существуют “символы” (или, более универсально — Aux свойства).</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(StaticCall [argsWidth] &#123;target&#125; mem) -&gt; (CALLstatic [argsWidth] &#123;target&#125; mem)</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>[argsWidth] — Value.AuxInt. Для StaticCall — суммарный размер передаваемых аргументов</li>
+<li>{target} — Value.Aux. Для StaticCall — вызываемая функция</li>
+<li>&lt;typ.UInt32&gt; — Value.Type. Тип значения</li>
+</ul>
+<p>Семантика Aux и AuxInt сильно варьируется от операции к операции. Лучшим источником документации в данном случае являются *Ops.go файлы. У каждого определения опкода opData есть поле aux, которое описывает как именно интерпретировать эти поля.</p>
+<p>Для описания типов используется пакет <a target="_blank" rel="noopener" href="https://github.com/golang/go/tree/master/src/cmd/compile/internal/types">cmd/compile/internal/types</a>. Некоторые типы специфичны для SSA бэкенда, например types.TypeFlags, остальные общие между cmd/compile/internal/gc и cmd/compile/internal/ssa.</p>
+<h2 id="Особые-типы"><a href="#Особые-типы" class="headerlink" title="Особые типы"></a>Особые типы</h2><p>Существует особый тип types.TypeMem, который выполняет сразу несколько функций:</p>
+<ol>
+<li>Позволяет сортировать и группировать ssa.Value по паттернам доступа к памяти. В частности, это гарантирует правильный порядок выполнения в рамках базовых блоков (о них ниже).</li>
+<li>Определяет состояние потока памяти в программе. Если инструкция модифицирует память, новое SSA значение с типом types.TypeMem будет сгенерировано в результате этой операции.</li>
+</ol>
+<p>Подобно особому значению OpPhi, память интерпретируется исключительным образом во многих фазах оптимизатора.</p>
+<ul>
+<li>Phi имеет роль, которая немного меняется от фазы к фазе.<br>В самом начале работы SSA части компилятора, Phi служит своей классической цели и выражает выбор значения в зависимости от пути исполнения, который привёл нас к этому значению.<br>Например, если в блок есть два прыжка, и оба модифицируют память, то блок-назначение получит память равную (Phi mem1 mem2). Циклы также протаскивают Phi значение.</li>
+</ul>
+<p>Другим особым типом является упомянутый выше types.TypeFlags. Этот тип описывает генерацию инструкцией <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/FLAGS_register">CPU флагов</a>.</p>
+<p>При этом инструкции, вроде ADDQ, хоть и генерируют флаги, не имеют тип types.Flags, но отмечены атрибутом clobberFlags.</p>
+<p>types.Flags используется для выделения результата инструкций вроде CMPQ, которые не пишут результат ни в один из своих явных операндов, а только обновляют внутреннее состояние процессора, которое может использоваться следующей инструкцией.</p>
+<p>Инструкции, вроде SETL позволяют “прочитать” флаги и вернуть их в виде ssa.Value, который может быть размещён в регистре.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"> L-less than               G-greater than</span><br><span class="line"> |                         |</span><br><span class="line">(SETL (InvertFlags x)) -&gt; (SETG x)</span><br><span class="line">                   |</span><br><span class="line">                   Форма, генерирующая флаги</span><br></pre></td></tr></table></figure>
+
+<h2 id="Инспекция-SSA-программы"><a href="#Инспекция-SSA-программы" class="headerlink" title="Инспекция SSA программы"></a>Инспекция SSA программы</h2><p>Допустим, у нас есть такая программа (example.go):</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> example</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">fusedMulAdd</span><span class="params">(a, b, c <span class="keyword">float64</span>)</span> <span class="title">float64</span></span> &#123;</span><br><span class="line">    <span class="keyword">return</span> a*c + b</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Мы можем просмотреть SSA код, который сгенерирован для функции fusedMulAdd:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ GOSSAFUNC=fusedMulAdd go tool compile example.go &gt; ssa.txt</span><br></pre></td></tr></table></figure>
+
+<p>Теперь проверьте рабочую (текущую) директорию:</p>
+<ul>
+<li>ssa.txt содержит тектовой дамп.</li>
+<li>ssa.html, который генерируется автоматически, содержит ту же информацию, но в более интерактивном и удобночитабельном формате. Попробуйте открыть в браузере.</li>
+</ul>
+<p>Символ ~r3 переименован в ret для выразительности.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">v7  (4) MOVSD a(SP), X0</span><br><span class="line">v11 (4) MOVSD c+16(SP), X1</span><br><span class="line">v12 (4) MULSD X1, X0</span><br><span class="line">v6  (4) MOVSD b+8(SP), X1</span><br><span class="line">v13 (4) ADDSD X1, X0</span><br><span class="line">v15 (4) MOVSD X0, ret+24(SP)</span><br><span class="line">b1  (4) RET</span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/golang_ssa2.png" alt="Вот вам и ssa.html"></p>
+<p>Если вам почему-то захотелось это скопировать:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">lower [77667 ns]</span><br><span class="line">b1:</span><br><span class="line">    v1 (?) = InitMem &lt;mem&gt;</span><br><span class="line">    v2 (?) = SP &lt;uintptr&gt;</span><br><span class="line">    v7 (?) = LEAQ &lt;*float64&gt; &#123;~r3&#125; v2</span><br><span class="line">    v8 (3) = Arg &lt;float64&gt; &#123;a&#125;</span><br><span class="line">    v9 (3) = Arg &lt;float64&gt; &#123;b&#125;</span><br><span class="line">    v10 (3) = Arg &lt;float64&gt; &#123;c&#125;</span><br><span class="line">    v12 (+4) = MULSD &lt;float64&gt; v8 v10</span><br><span class="line">    v13 (4) = ADDSD &lt;float64&gt; v12 v9</span><br><span class="line">    v14 (4) = VarDef &lt;mem&gt; &#123;~r3&#125; v1</span><br><span class="line">    v15 (4) = MOVSDstore &lt;mem&gt; &#123;~r3&#125; v2 v13 v14</span><br><span class="line">Ret v15 (line +4)</span><br></pre></td></tr></table></figure>
+
+<p>Переводя это в S-выражения:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(MOVQstore &#123;~r3&#125; </span><br><span class="line">           (SP)</span><br><span class="line">           (ADDSD (MULSD (Arg &#123;a&#125;)</span><br><span class="line">                         (Arg &#123;c&#125;))</span><br><span class="line">                  (Arg &#123;b&#125;)))</span><br></pre></td></tr></table></figure>
+
+<p>Так выглядит вывод ssa.html для фазы regalloc.</p>
+<p><img src="/images/golang_ssa2.png" alt="Вот вам и ssa.html"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">regalloc [87237 ns]</span><br><span class="line">b1:</span><br><span class="line">    v1 (?) = InitMem &lt;mem&gt;</span><br><span class="line">    v14 (4) = VarDef &lt;mem&gt; &#123;~r3&#125; v1</span><br><span class="line">    v2 (?) = SP &lt;uintptr&gt; : SP</span><br><span class="line">    v8 (3) = Arg &lt;float64&gt; &#123;a&#125; : a[float64]</span><br><span class="line">    v9 (3) = Arg &lt;float64&gt; &#123;b&#125; : b[float64]</span><br><span class="line">    v10 (3) = Arg &lt;float64&gt; &#123;c&#125; : c[float64]</span><br><span class="line">    v7 (4) = LoadReg &lt;float64&gt; v8 : X0</span><br><span class="line">    v11 (4) = LoadReg &lt;float64&gt; v10 : X1</span><br><span class="line">    v12 (+4) = MULSD &lt;float64&gt; v7 v11 : X0</span><br><span class="line">    v6 (4) = LoadReg &lt;float64&gt; v9 : X1</span><br><span class="line">    v13 (4) = ADDSD &lt;float64&gt; v12 v6 : X0</span><br><span class="line">    v15 (4) = MOVSDstore &lt;mem&gt; &#123;~r3&#125; v2 v13 v14</span><br><span class="line">Ret v15 (line +4)</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="Добавление-новых-правил-оптимизаций"><a href="#Добавление-новых-правил-оптимизаций" class="headerlink" title="Добавление новых правил оптимизаций"></a>Добавление новых правил оптимизаций</h2><p>На процессорах с FMA мы можем вычислять a*c + b за одну инструкцию вместо двух.</p>
+<p>Возьмём за основу <a target="_blank" rel="noopener" href="https://go-review.googlesource.com/c/go/+/117295">CL117295</a> за авторством <a target="_blank" rel="noopener" href="https://github.com/TocarIP">Ильи Токаря</a>.</p>
+<p>Для вашего удобства, я подготовил <a target="_blank" rel="noopener" href="https://gist.github.com/Quasilyte/0d4dbb0f8311f38d00a7b2d25dcec704">минимальный diff патч</a>.</p>
+<h2 id="1-Добавление-новой-операции-—-FMASD"><a href="#1-Добавление-новой-операции-—-FMASD" class="headerlink" title="1. Добавление новой операции — FMASD"></a>1. Добавление новой операции — FMASD</h2><p>В файле compile/internal/ssa/gen/AMD64Ops.go найдите переменную-слайс AMD64ops и добавьте туда новый элемент (в любое место):</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123; // fp64 fma</span><br><span class="line">  name: &quot;FMASD&quot;,      // Опкод для SSA</span><br><span class="line">  argLength: 3,</span><br><span class="line">  reg: fp31,          // Информация для regalloc, спецификатор регистров</span><br><span class="line">  resultInArg0: true, // Первый аргумент является и source, и destination</span><br><span class="line">  asm: &quot;VFMADD231SD&quot;, // Ассемблерный опкод</span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+
+<p>Поскольку ранее (fp,fp,fp -&gt; fp) операций не было, нужно определить новый спецификатор:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">  fp01     = regInfo&#123;inputs: nil, outputs: fponly&#125;</span><br><span class="line">  fp21     = regInfo&#123;inputs: []regMask&#123;fp, fp&#125;, outputs: fponly&#125;</span><br><span class="line">+ fp31     = regInfo&#123;inputs: []regMask&#123;fp, fp, fp&#125;, outputs: fponly&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-Добавление-правила-оптимизации"><a href="#2-Добавление-правила-оптимизации" class="headerlink" title="2. Добавление правила оптимизации"></a>2. Добавление правила оптимизации</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(ADDSD (MULSD x y) z) -&gt; (FMASD z x y)</span><br></pre></td></tr></table></figure>
+
+<p>Более правильная реализация не была бы безусловной и проверяла бы доступность FMA. Мы будем считать, что на нашей целевой машине FMA точно есть.</p>
+<p>В компиляторе для подобных проверок используется config:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// Если config.useFMA=false, оптимизация выполняться не будет.</span><br><span class="line">(ADDSD (MULSD x y) z) &amp;&amp; config.useFMA-&gt; (FMASD z x y)</span><br></pre></td></tr></table></figure>
+
+<p>Как проверить поддержку FMA?<br>Если в системе доступен lscpu, то, например так:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ lscpu | grep fma</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-Реализация-кодогенерации"><a href="#3-Реализация-кодогенерации" class="headerlink" title="3. Реализация кодогенерации"></a>3. Реализация кодогенерации</h2><p>Теперь в функцию ssaGenValue, определённую в файле compile/internal/amd64/ssa.go, нужно добавить кодогенерацию для FMASD:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ssaGenValue</span><span class="params">(s *gc.SSAGenState, v *ssa.Value)</span></span> &#123;</span><br><span class="line">  <span class="keyword">switch</span> v.Op &#123;</span><br><span class="line">  <span class="keyword">case</span> ssa.OpAMD64FMASD:</span><br><span class="line">    p := s.Prog(v.Op.Asm()) <span class="comment">// Создание нового obj.Prog в текущем блоке</span></span><br><span class="line">    <span class="comment">// From: первый source операнд.</span></span><br><span class="line">    p.From = obj.Addr&#123;Type: obj.TYPE_REG, Reg: v.Args[<span class="number">2</span>].Reg()&#125;</span><br><span class="line">    <span class="comment">// To: destination операнд.</span></span><br><span class="line">    <span class="comment">// v.Reg() возвращает регистр, который был выделен для результата FMASD.</span></span><br><span class="line">    p.To = obj.Addr&#123;Type: obj.TYPE_REG, Reg: v.Reg()&#125;</span><br><span class="line">    <span class="comment">// From3: второй source операнд.</span></span><br><span class="line">    <span class="comment">// Название From3 историческое. На самом деле заполняется</span></span><br><span class="line">    <span class="comment">// поле RestArgs, который содержит все source операнды, кроме первого.</span></span><br><span class="line">    p.SetFrom3(obj.Addr&#123;</span><br><span class="line">      Type: obj.TYPE_REG,</span><br><span class="line">      Reg: v.Args[<span class="number">1</span>].Reg(),</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="keyword">if</span> v.Reg() != v.Args[<span class="number">0</span>].Reg() &#123; <span class="comment">// Валидация условия resultInArg0</span></span><br><span class="line">      s := v.LongString()</span><br><span class="line">      v.Fatalf(<span class="string">&quot;input[0] and output not in same register %s&quot;</span>, s)</span><br><span class="line">    &#125;</span><br><span class="line">  <span class="comment">// Остальной код остаётся неизменным, мы только добавляем новый case.</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Теперь всё готово, чтобы проверять работу нашей новой оптимизации. Добавлять новые инструкции приходится очень редко, обычно новые оптимизации делают на основе уже определённых SSA операций.</p>
+<h2 id="Проверка-результатов"><a href="#Проверка-результатов" class="headerlink" title="Проверка результатов"></a>Проверка результатов</h2><p>Первым шагом является генерация Go кода из обновлённых gen/AMD64Ops.go и gen/AMD64.Rules.</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Если GOROOT не задан, перейдите в директорию, которую выводит `go env GOROOT`.</span></span><br><span class="line"><span class="built_in">cd</span> <span class="variable">$GOROOT</span>/src/cmd/compile/internal/ssa/gen &amp;&amp; go run *.go</span><br></pre></td></tr></table></figure>
+
+<p>Далее нужно собрать наш новый компилятор:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">go install cmd/compile</span><br></pre></td></tr></table></figure>
+<p>Теперь при компиляции того же примера, мы получим иной машинный код:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">- v7  (4) MOVSD a(SP), X0</span><br><span class="line">- v11 (4) MOVSD c+16(SP), X1</span><br><span class="line">- v12 (4) MULSD X1, X0</span><br><span class="line">- v6  (4) MOVSD b+8(SP), X1</span><br><span class="line">- v13 (4) ADDSD X1, X0</span><br><span class="line">- v15 (4) MOVSD X0, ret+24(SP)</span><br><span class="line">- b1  (4) RET</span><br><span class="line">+ v12 (4) MOVSD b+8(SP), X0</span><br><span class="line">+ v7  (4) MOVSD a(SP), X1</span><br><span class="line">+ v11 (4) MOVSD c+16(SP), X2</span><br><span class="line">+ v13 (4) VFMADD231SD X2, X1, X0</span><br><span class="line">+ v15 (4) MOVSD  X0, ret+24(SP)</span><br><span class="line">+ b1  (4) RET</span><br></pre></td></tr></table></figure>
+
+<h2 id="Базовые-блоки-basic-blocks"><a href="#Базовые-блоки-basic-blocks" class="headerlink" title="Базовые блоки (basic blocks)"></a>Базовые блоки (basic blocks)</h2><p>Теперь, когда самая сложная работа сделана, поговорим о <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Basic_block">базовых блоках</a>.</p>
+<p>Значения, которые мы оптимизировали выше, находятся в блоках, а блоки находятся в функции.</p>
+<p>Блоки, как и ssa.Value, бывают абстрактными и машино-зависимыми. Все блоки имеют ровно одну точку входа и от 0 до 2 блоков-назначений (зависит от типа блока).</p>
+<p>Самыми простыми блоками являются If, Exit и Plain:</p>
+<ul>
+<li>Exit блок имеет 0 блоков-назначений. Это листовые блоки, которые совершают нелокальный прыжок, например, с помощью panic.</li>
+<li>Plain блок имеет 1 блоков-назначение. Можно рассматривать как безусловный переход после выполнения всех инструкций блока в другой блок.</li>
+<li>If блок имеет 2 блока-назначения. Переход осуществляется в зависимости от условия (Block.Control).</li>
+</ul>
+<p>Вот простые примеры переписывания абстрактных блоков в блоки AMD64:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">                Тело &quot;then&quot; (является блоком)</span><br><span class="line">                |   Тело &quot;else&quot; (является блоком)</span><br><span class="line">                |   |</span><br><span class="line">(If (SETL  cmp) yes no) -&gt; (LT cmp yes no)</span><br><span class="line">(If (SETLE cmp) yes no) -&gt; (LE cmp yes no)</span><br></pre></td></tr></table></figure>
+
+<p>Тему блоков более подробно будем рассматривать в контексте других оптимизирующих фаз в SSA части компилятора.</p>
+<h2 id="Ограничения-правил-оптимизаций"><a href="#Ограничения-правил-оптимизаций" class="headerlink" title="Ограничения правил оптимизаций"></a>Ограничения правил оптимизаций</h2><p>У SSA бэкенда есть свои преимущества. Некоторые оптимизации выполнимы за O(1). Однако есть и недостатки, из-за которых одного лишь SSA оптимизатора будет маловато, по крайней мере пока не изменятся некоторые аспекты его реализации.</p>
+<p>Предположим, вы хотите выполнять слияние вызовов append:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">xs = <span class="built_in">append</span>(xs, <span class="string">&#x27;a&#x27;</span>)</span><br><span class="line">xs = <span class="built_in">append</span>(xs, <span class="string">&#x27;b&#x27;</span>)</span><br><span class="line"><span class="comment">// =&gt;</span></span><br><span class="line">xs = <span class="built_in">append</span>(xs, <span class="string">&#x27;a&#x27;</span>, <span class="string">&#x27;b&#x27;</span>)</span><br></pre></td></tr></table></figure>
+
+<p>На момент, когда SSA сгенерирован, высокоуровневая структура кода утрачена и append, будучи не обычной функцией, уже встроен в тело содержащего блока. Вам придётся писать громоздкое правило, которое захватывает всю сгенерированную для append последовательность операций.</p>
+<p>Если говорить конкретно о .Rules, то в этом DSL довольно слабая работа с блоками (ssa.Block). Любая нетривиальная оптимизация, связанная с блоками, невозможна для выражения на этом языке. Частичное обновление блока невозможно. Выбрасывать блоки тоже невозможно (но есть хак в виде First блока, который используется для удаления мёртвого кода).</p>
+<ul>
+<li>Даже если часть недостатков исправима, большинство компиляторов сходятся во мнении, что нет единой и лучшей промежуточной формы для представления кода.</li>
+</ul>
+<h2 id="Go-that-goes-faster"><a href="#Go-that-goes-faster" class="headerlink" title="Go that goes faster"></a>Go that goes faster</h2><p>Если придумаете какие-то крутые правила оптимизации, смело высылайте на go-review.googlesource.com. Буду рад произвести ревью (добавляйте в CC <a href="mailto:&#105;&#115;&#107;&#97;&#110;&#100;&#x65;&#114;&#46;&#115;&#x68;&#x61;&#x72;&#x69;&#112;&#111;&#118;&#64;&#x69;&#110;&#x74;&#101;&#108;&#x2e;&#x63;&#111;&#109;">&#105;&#115;&#107;&#97;&#110;&#100;&#x65;&#114;&#46;&#115;&#x68;&#x61;&#x72;&#x69;&#112;&#111;&#118;&#64;&#x69;&#110;&#x74;&#101;&#108;&#x2e;&#x63;&#111;&#109;</a>).</p>
+<p>Счастливого хакинга компилятора!</p>
+<p><img src="/images/golang_ssa4.gif" alt="Вот вам и ssa.html"></p>
+<h2 id="Бонусный-материал"><a href="#Бонусный-материал" class="headerlink" title="Бонусный материал"></a>Бонусный материал</h2><p>Примеры хороших патчей в Go, которые добавляли или изменяли SSA rules:</p>
+<p><a target="_blank" rel="noopener" href="https://go-review.googlesource.com/c/go/+/99656">CL99656: cmd/compile/internal/ssa: emit IMUL3{L/Q} for MUL{L/Q}const on x86</a><br>CL102277: cmd/compile/internal/ssa: optimize away double NEG on amd64<br>CL54410: cmd/compile/internal/ssa: use sse to zero on amd64<br>CL58090: cmd/compile/internal/ssa: remove redundant zeroextensions on amd64<br>CL95475: cmd/compile/internal/ssa: combine byte stores on amd64<br>CL97175: cmd/compile/internal/ssa: combine consecutive LittleEndian stores on arm64<br>CL115617: cmd/compile/internal/ssa: remove useless zero extension<br>CL101275: cmd/compile: add amd64 LEAL{1,2,4,8} ops</p>
+<p>Не так давно появился <a target="_blank" rel="noopener" href="https://github.com/golang/go/blob/master/src/cmd/compile/internal/ssa/README.md">README</a> документ для описания SSA части компилятора.<br>Рекомендуется к прочтению.</p>
+
+        </div>
+        <footer class="article-footer">
+            
+
+
+
+    <a data-url="https://goxpert.ru/2024/06/01/common/ssa/" data-id="clx0kl1y7000dn4wl1ud79smi" class="article-share-link"><i class="fa fa-share"></i>Поделиться</a>
+<script>
+    (function ($) {
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+        </footer>
+    </div>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "author": {
+            "@type": "Person",
+            "name": "авторы проекта GoXpert"
+        },
+        "headline": "SSA правила в GO",
+        "image": "https://goxpert.ru/images/golang_ssa.png",
+        "keywords": "Golang, Q&A",
+        "genre": "Golang Старт Вопрос-Ответ SSA SSA",
+        "datePublished": "2024-06-01",
+        "dateCreated": "2024-06-01",
+        "dateModified": "2024-06-04",
+        "url": "https://goxpert.ru/2024/06/01/common/ssa/",
+        "description": "Статическая форма с одним заданием (Static single-assignment form)
+SSA (Static Single Assignment) - форма представления кода, используемая в компиляторах для оптимизации. 
+SSA представляет код в виде ",
+        "wordCount": 3840
+    }
+</script>
+
+</article>
+
+    <section id="comments">
+    
+        
+    <div id="vk_comments"></div>
+    <script type="text/javascript">
+      window.onload = function () {
+      VK.init({apiId: 51937371, onlyWidgets: true});
+      VK.Widgets.Comments("vk_comments", {limit: 20, attach: "*", autoPublish: 1, pageUrl: "https://goxpert.ru/2024/06/01/common/ssa/"});
+    }
+   </script>
+
+    
+    </section>
+
+
+
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <div class="sidebar-top">
+        <p>Подписаться:</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="vk" href="https://vk.com/goxpert" target="_blank" rel="noopener">
+                        <i class="icon fa fa-vk"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="telegram" href="https://t.me/goxpert_ru" target="_blank" rel="noopener">
+                        <i class="icon fa fa-telegram"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="youtube" href="https://www.youtube.com/c/УчимсянаПять" target="_blank" rel="noopener">
+                        <i class="icon fa fa-youtube"></i>
+                    </a>
+                </li>
+                
+            
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="twitter" href="/" target="_blank" rel="noopener">
+                        <i class="icon fa fa-twitter"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="facebook" href="/" target="_blank" rel="noopener">
+                        <i class="icon fa fa-facebook"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="weibo" href="/" target="_blank" rel="noopener">
+                        <i class="icon fa fa-weibo"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="rss" href="/atom.xml" target="_blank" rel="noopener">
+                        <i class="icon fa fa-rss"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2024/06/01/os/network/" id="article-nav-newer" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">новые</strong>
+        <p class="article-nav-title">
+        
+            Сеть
+        
+        </p>
+        <i class="icon fa fa-chevron-right" id="icon-chevron-right"></i>
+    </a>
+    
+    
+        <a href="/2024/06/01/common/solid_go/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">старые</strong>
+        <p class="article-nav-title">SOLID в GO</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
+    
+    <div class="widgets-container">
+        
+            
+                
+
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">недавние</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2024/06/02/os/os_scheduler/" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/os_sched_1.jpg)" alt="Планировщик ОS" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%D0%9E%D0%A1/">ОС</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%D0%9E%D0%A1/%D0%9F%D0%BB%D0%B0%D0%BD%D0%B8%D1%80%D0%BE%D0%B2%D1%89%D0%B8%D0%BA-%D0%9ES/">Планировщик ОS</a></p>
+                            <p class="item-title"><a href="/2024/06/02/os/os_scheduler/" class="title">Планировщик ОS</a></p>
+                            <p class="item-date"><time datetime="2024-06-02T15:32:20.263Z" itemprop="datePublished">2024-06-02</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2024/06/01/concurrency/go_scheduler/" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/go_sched1.png)" alt="Планировщик GO" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%D0%9E%D0%A1/">ОС</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%D0%9E%D0%A1/%D0%9F%D0%BB%D0%B0%D0%BD%D0%B8%D1%80%D0%BE%D0%B2%D1%89%D0%B8%D0%BA-%D0%9ES/">Планировщик ОS</a></p>
+                            <p class="item-title"><a href="/2024/06/01/concurrency/go_scheduler/" class="title">Планировщик GO</a></p>
+                            <p class="item-date"><time datetime="2024-06-01T09:35:00.000Z" itemprop="datePublished">2024-06-01</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2024/06/01/os/network/" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/tcp1.png)" alt="Сеть" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%D0%9E%D0%A1/">ОС</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%D0%9E%D0%A1/C%D0%B5%D1%82%D1%8C/">Cеть</a></p>
+                            <p class="item-title"><a href="/2024/06/01/os/network/" class="title">Сеть</a></p>
+                            <p class="item-date"><time datetime="2024-06-01T09:16:00.000Z" itemprop="datePublished">2024-06-01</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2024/06/01/common/ssa/" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/golang_ssa.png)" alt="SSA правила в GO" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Golang/">Golang</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/">Старт</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/">Вопрос-Ответ</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/SSA/">SSA</a></p>
+                            <p class="item-title"><a href="/2024/06/01/common/ssa/" class="title">SSA правила в GO</a></p>
+                            <p class="item-date"><time datetime="2024-06-01T07:23:00.000Z" itemprop="datePublished">2024-06-01</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2024/06/01/common/solid_go/" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/golang_solid_the_best.jpg)" alt="SOLID в GO" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Golang/">Golang</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/">Старт</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/">Вопрос-Ответ</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/SOLID/">SOLID</a></p>
+                            <p class="item-title"><a href="/2024/06/01/common/solid_go/" class="title">SOLID в GO</a></p>
+                            <p class="item-date"><time datetime="2024-06-01T07:22:00.000Z" itemprop="datePublished">2024-06-01</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">Категории</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/">Golang</a><span class="category-list-count">25</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/">Старт</a><span class="category-list-count">25</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/Defer/">Defer</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/Generics/">Generics</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/Panic/">Panic</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/SOLID/">SOLID</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/SSA/">SSA</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/Select-case/">Select-case</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%93%D0%BE%D0%BD%D0%BA%D0%B0-%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85/">Гонка данных</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%93%D0%BE%D1%80%D1%83%D1%82%D0%B8%D0%BD%D1%8B/">Горутины</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%98%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81%D1%8B/">Интерфейсы</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%9A%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82/">Контекст</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%9C%D0%B0%D1%81%D1%81%D0%B8%D0%B2%D1%8B-%D0%B8-%D1%81%D0%BB%D0%B0%D0%B9%D1%81%D1%8B/">Массивы и слайсы</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%9E%D0%B1%D1%89%D0%B8%D0%B5/">Общие</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%9F%D0%B0%D0%BA%D0%B5%D1%82%D1%8B/">Пакеты</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%9F%D0%BB%D0%B0%D0%BD%D0%B8%D1%80%D0%BE%D0%B2%D1%89%D0%B8%D0%BA/">Планировщик</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%9F%D1%80%D0%B8%D0%BC%D0%B8%D1%82%D0%B8%D0%B2%D1%8B-%D1%81%D0%B8%D0%BD%D1%85%D1%80%D0%BE%D0%BD%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D0%B8/">Примитивы синхронизации</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%A1%D1%82%D1%80%D0%BE%D0%BA%D0%B8/">Строки</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%A1%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D1%8B/">Структуры</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%A2%D0%B8%D0%BF%D1%8B/">Типы</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%A3%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D0%B5%D0%BB%D0%B8/">Указатели</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%A5%D0%B5%D1%88-%D0%BC%D0%B0%D0%BF%D1%8B/">Хеш-мапы</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/">Вопрос-Ответ</a><span class="category-list-count">24</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/Defer/">Defer</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/Generics/">Generics</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/Panic/">Panic</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/SOLID/">SOLID</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/SSA/">SSA</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/Select-case/">Select-case</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%93%D0%BE%D0%BD%D0%BA%D0%B0-%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85/">Гонка данных</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%93%D0%BE%D1%80%D1%83%D1%82%D0%B8%D0%BD%D1%8B/">Горутины</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%98%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81%D1%8B/">Интерфейсы</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9A%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82/">Контекст</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9C%D0%B0%D1%81%D1%81%D0%B8%D0%B2%D1%8B-%D0%B8-%D1%81%D0%BB%D0%B0%D0%B9%D1%81%D1%8B/">Массивы и слайсы</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9E%D0%B1%D1%89%D0%B8%D0%B5/">Общие</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9F%D0%B0%D0%BA%D0%B5%D1%82%D1%8B/">Пакеты</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9F%D0%BB%D0%B0%D0%BD%D0%B8%D1%80%D0%BE%D0%B2%D1%89%D0%B8%D0%BA/">Планировщик</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9F%D1%80%D0%B8%D0%BC%D0%B8%D1%82%D0%B8%D0%B2%D1%8B-%D1%81%D0%B8%D0%BD%D1%85%D1%80%D0%BE%D0%BD%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D0%B8/">Примитивы синхронизации</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%A1%D1%82%D1%80%D0%BE%D0%BA%D0%B8/">Строки</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%A1%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D1%8B/">Структуры</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%A2%D0%B8%D0%BF%D1%8B/">Типы</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%A3%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D0%B5%D0%BB%D0%B8/">Указатели</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%A5%D0%B5%D1%88-%D0%BC%D0%B0%D0%BF%D1%8B/">Хеш-мапы</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%9E%D0%A1/">ОС</a><span class="category-list-count">3</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%9E%D0%A1/C%D0%B5%D1%82%D1%8C/">Cеть</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%9E%D0%A1/%D0%9F%D0%BB%D0%B0%D0%BD%D0%B8%D1%80%D0%BE%D0%B2%D1%89%D0%B8%D0%BA-%D0%9ES/">Планировщик ОS</a><span class="category-list-count">2</span></li></ul></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">архивы</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/06/">июнь 2024</a><span class="archive-list-count">28</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">Тэги</h3>
+        <div class="widget">
+            <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Golang/" rel="tag">Golang</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Golang-Q-A/" rel="tag">Golang, Q&A</a><span class="tag-list-count">27</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-float">
+        <h3 class="widget-title">Облако тэгов</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/Golang/" style="font-size: 10px;">Golang</a> <a href="/tags/Golang-Q-A/" style="font-size: 20px;">Golang, Q&A</a>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">ссылки</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a target="_blank" rel="noopener" href="https://vk.com/goxpert">мы в vk</a>
+                    </li>
+                
+                    <li>
+                        <a target="_blank" rel="noopener" href="https://www.youtube.com/c/УчимсянаПять">мы в youtube</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+            
+        
+    </div>
+</aside>
+
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <p>&copy; 2024 авторы проекта GoXpert</p>
+                
+                <p>Powered by <a href="https://designest.ru/" target="_blank">DESIGNest Studio Ltd</a></p>
+                
+            </div>
+            <div class="footer-plugins">
+                
+			<!-- Yandex.RTB R-A-1394392-1 -->
+			<div id="yandex_rtb_R-A-1394392-1"></div>
+			<script>window.yaContextCb.push(()=>{Ya.Context.AdvManager.render({renderTo: 'yandex_rtb_R-A-1394392-1',  blockId: 'R-A-1394392-1' }) })</script>
+                
+              
+    
+
+
+            </div>
+        </div>
+    </div>
+</footer>                                                                                            
+
+    </div>
+    
+    
+    <script type="text/javascript">
+    var vk_shortname = 'true';
+    (function() {
+    var vk = document.createElement('script');
+    vk.type = 'text/javascript';
+    vk.async = true;
+    vk.src = '//vk.com/js/api/openapi.js?169'; 
+    vk.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0]
+    || document.getElementsByTagName('body')[0]).appendChild(vk);
+    })();
+    </script>
+
+
+
+
+    
+        
+<script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-share.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-video.min.js"></script>
+
+    
+    
+        
+<script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+    
+    
+
+    
+    
+    
+
+
+
+<!-- Custom Scripts -->
+
+<script src="/js/main.js"></script>
+
+
+</body>
+</html>
