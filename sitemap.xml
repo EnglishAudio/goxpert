@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://goxpert.ru/2024/06/01/os/cpu_cache/</loc>
+    <loc>https://goxpert.ru/2024/06/01/concurrency/go_scheduler_more/</loc>
     
     <lastmod>2024-06-05</lastmod>
     
@@ -12,6 +12,15 @@
   
   <url>
     <loc>https://goxpert.ru/2024/06/01/concurrency/go_scheduler/</loc>
+    
+    <lastmod>2024-06-05</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://goxpert.ru/2024/06/01/os/cpu_cache/</loc>
     
     <lastmod>2024-06-05</lastmod>
     
