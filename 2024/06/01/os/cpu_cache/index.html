@@ -6,19 +6,26 @@
     
 
     
-    <title>категории : : Select-case | GoXpert.ru</title>
+    <title>Когерентность кэша | GoXpert.ru</title>
     
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     
-    <meta name="description" content="Секреты Golang. Архитектура и дизайн приложений на GO. Всё о GO изнутри">
-<meta property="og:type" content="website">
-<meta property="og:title" content="GoXpert.ru">
-<meta property="og:url" content="https://goxpert.ru/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/Select-case/index.html">
+    <meta name="keywords" content="Golang, Q&amp;A" />
+    
+    <meta name="description" content="Когерентность кэша (англ. cache coherence) — свойство кэшей, означающее целостность данных, хранящихся в локальных кэшах для разделяемого ресурса">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Когерентность кэша">
+<meta property="og:url" content="https://goxpert.ru/2024/06/01/os/cpu_cache/index.html">
 <meta property="og:site_name" content="GoXpert.ru">
-<meta property="og:description" content="Секреты Golang. Архитектура и дизайн приложений на GO. Всё о GO изнутри">
+<meta property="og:description" content="Когерентность кэша (англ. cache coherence) — свойство кэшей, означающее целостность данных, хранящихся в локальных кэшах для разделяемого ресурса">
 <meta property="og:locale" content="ru_RU">
+<meta property="og:image" content="https://goxpert.ru/images/Non_Coherent.gif">
+<meta property="article:published_time" content="2024-06-01T09:22:00.000Z">
+<meta property="article:modified_time" content="2024-06-05T05:49:28.521Z">
 <meta property="article:author" content="авторы проекта GoXpert">
+<meta property="article:tag" content="Golang, Q&amp;A">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://goxpert.ru/images/Non_Coherent.gif">
     
 
     
@@ -27,6 +34,8 @@
         <link rel="alternate" type="application/rss+xml" title="GoXpert.ru" href="https://goxpert.ru/rss-feed.xml" />
      
 
+     
+        <link rel="amphtml" href="https://goxpert.ru/amp2024/06/01/os/cpu_cache/">
      
 
 
@@ -182,75 +191,187 @@ Ya.Site.Form.init()
                         <div class="main-body-header">
     <h1 class="header">
     
-    <i class="icon fa fa-folder-open"></i>категории : : <em class="page-title-link">Select-case</em>
+    <a class="page-title-link" href="/categories/%D0%9E%D0%A1/">ОС</a><i class="icon fa fa-angle-right"></i><a class="page-title-link" href="/categories/%D0%9E%D0%A1/CPU-cache/">CPU cache</a>
     </h1>
 </div>
 
                         <div class="main-body-content">
-                            
-
-    
-    
+                            <article id="post-os/cpu_cache" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
         
-        
-        <section class="archives-wrap">
-            <div class="archive-year-wrap">
-                <a href="/archives/2024" class="archive-year"><i class="icon fa fa-calendar-o"></i>2024</a>
-            </div>
-            <div class="archives">
-    
-    
-    
-        <div class="article-row">
-    
-        <article class="article article-summary">
-    <div class="article-summary-inner">
-        
-        <a href="/2024/06/01/common/constructions/" class="thumbnail">
-    
-    
-        <span style="background-image:url(/images/golang_constructions.jpg)" alt="Конструкции" class="thumbnail-image"></span>
-    
-    
-        
-<span class="comment-counter">
-    <i class="fa fa-comments-o"></i>
-    
-        <span><a href="https://goxpert.ru/2024/06/01/common/constructions/#isso-thread"></a></span>
-    
-</span>
-
-
-    
-</a>
-
-        
-        <div class="article-meta">
-            <div class="category">
-            <a class="article-category-link" href="/categories/Golang/">Golang</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/">Старт</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/">Вопрос-Ответ</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/Select-case/">Select-case</a>
-            </div>
-            <div class="date"><time datetime="2024-06-01T07:06:00.000Z" itemprop="datePublished">2024-06-01</time></div>
-        </div>
-        
+            <header class="article-header">
+                
     
         <h1 class="article-title" itemprop="name">
-        <a href="/2024/06/01/common/constructions/">Конструкции</a>
+        Когерентность кэша
         </h1>
     
 
-        <p class="article-excerpt">
-            Гарантирует ли порядок выполнения конструкция select-case?В Go, порядок выполнения операторов в конструкции select-case не гарантируется.
-Когда у вас есть несколько операторов case в конструкции selec
-        </p>
+            </header>
+        
+        
+            <div class="article-meta">
+                
+  <div class="article-date">
+    <i class="fa fa-calendar"></i>
+    <a href="/2024/06/01/os/cpu_cache/" class="article-date">
+       <time datetime="2024-06-01T09:22:00.000Z" itemprop="datePublished">2024-06-01</time>
+    </a>
+  </div>
+
+
+<div class="article-date">
+  <i class="fa fa-calendar-plus-o"></i>
+  <a href="/2024/06/01/os/cpu_cache/" class="article-date">
+     <time datetime="2024-06-05T05:49:28.521Z" itemprop="dateModified">2024-06-05</time>
+  </a>
+</div>
+
+
+                
+
+                
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link-link" href="/tags/Golang-Q-A/" rel="tag">Golang, Q&A</a>
     </div>
-</article>
-    
+
+                
+
+                
+
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            
+
+            
+
+            
+
+            <!-- feed_rem_st --><!-- feed_rem_end --><h1 id="Что-такое-когерентность-кэша"><a href="#Что-такое-когерентность-кэша" class="headerlink" title="Что такое когерентность кэша?"></a>Что такое когерентность кэша?</h1><p>Когерентность кэша (англ. cache coherence) — свойство кэшей, означающее целостность данных, хранящихся в локальных кэшах для разделяемого ресурса. Когерентность кэшей — частный случай когерентности памяти.</p>
+<p>Когда процессы в системе используют кэширование общих ресурсов, например, памяти, могут возникнуть проблемы с противоречивостью данных. Это особенно справедливо в отношении процессоров в многопроцессорной системе. Когеренция кэшей предназначена для управления такими конфликтами путём поддержания согласованности данных в разных кэшах.</p>
+<p><img src="/images/Non_Coherent.gif" alt="Некогерентные кэши: значение одной ячейки памяти различно для двух кэшей"></p>
+<p><img src="/images/Coherent.gif" alt="Когерентные кэши"></p>
+<p>Когерентность определяет поведение чтений и записей в одно и то же место памяти. Кэш называется когерентным, если выполняются следующие условия:</p>
+<ul>
+<li>информирование о записи: изменение данных в любом из кэшей должно быть распространено на другие копии этих данных (этой линии кэша) в соседних кэшах;</li>
+<li>сериализация транзакций: операции чтения и записи в одну и ту же ячейку памяти должны быть видимы для всех процессоров в одинаковом порядке.</li>
+</ul>
+<p>В этих условиях предполагается, что операции чтения и записи происходят мгновенно. Однако этого не происходит на практике из-за задержек памяти и других особенностей архитектуры. Изменения, сделанные процессором<br>P1, могут быть не видны процессору P2, если чтение произошло через очень маленький промежуток времени после записи.<br>Модель консистентности памяти определяет, когда записанное значение будет видно при чтении из другого потока.</p>
+<p><img src="/images/Cache_Coherency_Generic.png" alt="Рисунок 1"></p>
+<p>На Рисуноке 1 несколько кэшей для разделяемого ресурса памяти. Если процесс в верхней части имеет копию блока памяти из предыдущего чтения, а нижний клиент изменяет блок памяти, копия данных в кэше верхнего процесса становится устаревшей, если не используются какие-либо уведомления об изменении или проверки изменений.</p>
+<h2 id="Механизмы-когерентности-кэшей"><a href="#Механизмы-когерентности-кэшей" class="headerlink" title="Механизмы когерентности кэшей"></a>Механизмы когерентности кэшей</h2><p>Три основных механизма обеспечения когерентности кэшей — с использованием справочника (directory), отслеживание (snooping) и перехват (snarfing).</p>
+<p>При использовании справочника информация о состоянии блока физической памяти содержится только в одном месте, называемом справочником (при этом физически справочник может быть распределён по узлам системы).</p>
+<p>В механизме отслеживания каждый кэш, который содержит копию данных некоторого блока физической памяти, имеет также соответствующую копию служебной информации о его состоянии. Централизованная система записей отсутствует. Обычно кэши расположены на общей (разделяемой) шине и контроллеры всех кэшей наблюдают за шиной (просматривают её) для определения того, не содержат ли они копию соответствующего блока.</p>
+<p>При применении перехвата, когда из какого-либо одного кэша данные переписываются в оперативную память, контроллеры остальных получают сигнал об этом изменении («перехватывают» информацию об изменении данных) и, если необходимо, изменяют соответствующие данные в своих кэшах.</p>
+<p>Системы распределенной разделяемой памяти[англ.] используют похожие механизмы для поддержания согласованности между блоками памяти в слабосвязанных системах.</p>
+
         </div>
+        <footer class="article-footer">
+            
+
+
+
+    <a data-url="https://goxpert.ru/2024/06/01/os/cpu_cache/" data-id="clx1e4kmn0000hgwlaa8s6squ" class="article-share-link"><i class="fa fa-share"></i>Поделиться</a>
+<script>
+    (function ($) {
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+        </footer>
+    </div>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "author": {
+            "@type": "Person",
+            "name": "авторы проекта GoXpert"
+        },
+        "headline": "Когерентность кэша",
+        "image": "https://goxpert.ru/images/Non_Coherent.gif",
+        "keywords": "Golang, Q&A",
+        "genre": "ОС CPU cache",
+        "datePublished": "2024-06-01",
+        "dateCreated": "2024-06-01",
+        "dateModified": "2024-06-05",
+        "url": "https://goxpert.ru/2024/06/01/os/cpu_cache/",
+        "description": "Что такое когерентность кэша?Когерентность кэша (англ. cache coherence) — свойство кэшей, означающее целостность данных, хранящихся в локальных кэшах для разделяемого ресурса. Когерентность кэшей — ча",
+        "wordCount": 407
+    }
+</script>
+
+</article>
+
+    <section id="comments">
     
+        
+    <div id="vk_comments"></div>
+    <script type="text/javascript">
+      window.onload = function () {
+      VK.init({apiId: 51937371, onlyWidgets: true});
+      VK.Widgets.Comments("vk_comments", {limit: 20, attach: "*", autoPublish: 1, pageUrl: "https://goxpert.ru/2024/06/01/os/cpu_cache/"});
+    }
+   </script>
 
-
-    </div></section>
-
+    
+    </section>
 
 
 
@@ -322,6 +443,29 @@ Ya.Site.Form.init()
             
         </ul>
     </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2024/06/01/concurrency/go_scheduler/" id="article-nav-newer" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">новые</strong>
+        <p class="article-nav-title">
+        
+            Планировщик GO
+        
+        </p>
+        <i class="icon fa fa-chevron-right" id="icon-chevron-right"></i>
+    </a>
+    
+    
+        <a href="/2024/06/01/os/network/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">старые</strong>
+        <p class="article-nav-title">Сеть</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
     
     <div class="widgets-container">
         
