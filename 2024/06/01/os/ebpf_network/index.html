@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+
+    
+
+    
+    <title>Отладка cети с помощью eBPF | GoXpert.ru</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="keywords" content="Golang, Q&amp;A" />
+    
+    <meta name="description" content="Общие вопросы по сети">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Отладка cети с помощью eBPF">
+<meta property="og:url" content="https://goxpert.ru/2024/06/01/os/ebpf_network/index.html">
+<meta property="og:site_name" content="GoXpert.ru">
+<meta property="og:description" content="Общие вопросы по сети">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:image" content="https://goxpert.ru/images/ebpf.png">
+<meta property="article:published_time" content="2024-06-01T09:16:00.000Z">
+<meta property="article:modified_time" content="2024-06-09T06:36:42.454Z">
+<meta property="article:author" content="авторы проекта GoXpert">
+<meta property="article:tag" content="Golang, Q&amp;A">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://goxpert.ru/images/ebpf.png">
+    
+
+    
+        <link rel="alternate" href="/atom.xml" title="GoXpert.ru" type="application/atom+xml" />
+        <link rel="alternate" type="application/rss+xml" title="GoXpert.ru" href="https://goxpert.ru/rss.xml" />
+        <link rel="alternate" type="application/rss+xml" title="GoXpert.ru" href="https://goxpert.ru/rss-feed.xml" />
+     
+
+     
+        <link rel="amphtml" href="https://goxpert.ru/amp2024/06/01/os/ebpf_network/">
+     
+
+
+    
+        <link rel="icon" href="/css/images/favicon.ico" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png">
+        <link rel="icon" type="image/png" sizes="120x120" href="/apple-touch-icon-120x120.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+        <link rel="manifest" href="/site.webmanifest">
+        <meta name="msapplication-TileColor" content="#da532c">
+        <meta name="msapplication-TileImage" content="/mstile-144x144.png">
+        <meta name="theme-color" content="#ffffff">
+    
+
+    
+       <!-- Yandex.RTB -->
+       <script>window.yaContextCb=window.yaContextCb||[]</script>
+       <script src="https://yandex.ru/ads/system/context.js" async></script>
+    
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/libs/titillium-web/styles.css">
+
+    
+<link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+<script src="/libs/jquery/3.5.0/jquery.min.js"></script>
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+
+    
+    
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4PWEJT515P"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-4PWEJT515P');
+</script>
+<!-- End Google Analytics -->
+
+    
+    
+        <!-- Yandex.Metrika counter -->
+<script type="text/javascript" >
+   (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+   m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+   (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+   ym(86613025, "init", {
+        clickmap:true,
+        trackLinks:true,
+        accurateTrackBounce:true,
+        webvisor:true
+   });
+</script>
+<!-- /Yandex.Metrika counter -->
+    
+    
+    
+
+
+</head>
+
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">Главная</a>
+                                </li>
+                            
+                                    <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Golang/">Golang</a><ul class="main-nav-list-child"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/">Старт</a></li></ul></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/">Вопрос-Ответ</a><ul class="main-nav-list-child"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/Defer/">Defer</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/Generics/">Generics</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/Panic/">Panic</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/SOLID/">SOLID</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/SSA/">SSA</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/Select-case/">Select-case</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%93%D0%BE%D0%BD%D0%BA%D0%B0-%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85/">Гонка данных</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%93%D0%BE%D1%80%D1%83%D1%82%D0%B8%D0%BD%D1%8B/">Горутины</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%98%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81%D1%8B/">Интерфейсы</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9A%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82/">Контекст</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9C%D0%B0%D1%81%D1%81%D0%B8%D0%B2%D1%8B-%D0%B8-%D1%81%D0%BB%D0%B0%D0%B9%D1%81%D1%8B/">Массивы и слайсы</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9E%D0%B1%D1%89%D0%B8%D0%B5/">Общие</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9F%D0%B0%D0%BA%D0%B5%D1%82%D1%8B/">Пакеты</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9F%D0%BB%D0%B0%D0%BD%D0%B8%D1%80%D0%BE%D0%B2%D1%89%D0%B8%D0%BA/">Планировщик</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9F%D1%80%D0%B8%D0%BC%D0%B8%D1%82%D0%B8%D0%B2%D1%8B-%D1%81%D0%B8%D0%BD%D1%85%D1%80%D0%BE%D0%BD%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D0%B8/">Примитивы синхронизации</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%A1%D1%82%D1%80%D0%BE%D0%BA%D0%B8/">Строки</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%A1%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D1%8B/">Структуры</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%A2%D0%B8%D0%BF%D1%8B/">Типы</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%A3%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D0%B5%D0%BB%D0%B8/">Указатели</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%A5%D0%B5%D1%88-%D0%BC%D0%B0%D0%BF%D1%8B/">Хеш-мапы</a></li></ul></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%9E%D0%A1/">ОС</a><ul class="main-nav-list-child"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%9E%D0%A1/CPU-cache/">CPU cache</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%9E%D0%A1/C%D0%B5%D1%82%D1%8C/">Cеть</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%9E%D0%A1/%D0%9F%D0%BB%D0%B0%D0%BD%D0%B8%D1%80%D0%BE%D0%B2%D1%89%D0%B8%D0%BA-%D0%9ES/">Планировщик ОS</a></li></ul></li></ul>
+                                
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/2024/06/01/helloworld/index.html">О сайте</a>
+                                </li>
+                            
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
+
+<div class="ya-site-form ya-site-form_inited_no" data-bem="{&quot;action&quot;:&quot;/search.html&quot;,&quot;arrow&quot;:false,&quot;bg&quot;:&quot;transparent&quot;,&quot;fontsize&quot;:12,&quot;fg&quot;:&quot;#000000&quot;,&quot;language&quot;:&quot;ru&quot;,&quot;logo&quot;:&quot;rb&quot;,&quot;publicname&quot;:&quot;����� �� ����� GoXpert&quot;,&quot;suggest&quot;:true,&quot;target&quot;:&quot;_blank&quot;,&quot;tld&quot;:&quot;ru&quot;,&quot;type&quot;:2,&quot;usebigdictionary&quot;:true,&quot;searchid&quot;:2519671,&quot;input_fg&quot;:&quot;#000000&quot;,&quot;input_bg&quot;:&quot;#ffffff&quot;,&quot;input_fontStyle&quot;:&quot;normal&quot;,&quot;input_fontWeight&quot;:&quot;normal&quot;,&quot;input_placeholder&quot;:&quot;&quot;,&quot;input_placeholderColor&quot;:&quot;#000000&quot;,&quot;input_borderColor&quot;:&quot;#7f9db9&quot;}">
+<form action="https://yandex.ru/search/site/" method="get" target="_blank" accept-charset="utf-8">
+<input type="hidden" name="searchid" value="2519671"/>
+<input type="hidden" name="l10n" value="ru"/>
+<input type="hidden" name="reqenc" value=""/>
+<input type="search" name="text" value=""/>
+<input type="submit" value="�����"/>
+</form>
+</div>
+    <style type="text/css">.ya-page_js_yes .ya-site-form_inited_no { display: none; }
+</style>
+<script type="text/javascript">
+(function(w,d,c){var s=d.createElement('script'),h=d.getElementsByTagName('script')[0],e=d.documentElement;
+if((' '+e.className+' ').indexOf(' ya-page_js_yes ')===-1)
+{e.className+=' ya-page_js_yes';}s.type='text/javascript';
+s.async=true;s.charset='utf-8';
+s.src=(d.location.protocol==='https:'?'https:':'http:')+'//site.yandex.net/v2.0/js/all.js';
+h.parentNode.insertBefore(s,h);(w[c]||(w[c]=[])).push(function(){
+
+Ya.Site.Form.init()
+
+})})(window,document,'yandex_site_callbacks');</script>
+
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <a class="page-title-link" href="/categories/%D0%9E%D0%A1/">ОС</a><i class="icon fa fa-angle-right"></i><a class="page-title-link" href="/categories/%D0%9E%D0%A1/C%D0%B5%D1%82%D1%8C/">Cеть</a>
+    </h1>
+</div>
+
+                        <div class="main-body-content">
+                            <article id="post-os/ebpf_network" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        Отладка cети с помощью eBPF
+        </h1>
+    
+
+            </header>
+        
+        
+            <div class="article-meta">
+                
+  <div class="article-date">
+    <i class="fa fa-calendar"></i>
+    <a href="/2024/06/01/os/ebpf_network/" class="article-date">
+       <time datetime="2024-06-01T09:16:00.000Z" itemprop="datePublished">2024-06-01</time>
+    </a>
+  </div>
+
+
+<div class="article-date">
+  <i class="fa fa-calendar-plus-o"></i>
+  <a href="/2024/06/01/os/ebpf_network/" class="article-date">
+     <time datetime="2024-06-09T06:36:42.454Z" itemprop="dateModified">2024-06-09</time>
+  </a>
+</div>
+
+
+                
+
+                
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link-link" href="/tags/Golang-Q-A/" rel="tag">Golang, Q&A</a>
+    </div>
+
+                
+
+                
+
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            
+
+            
+
+            
+
+            <!-- feed_rem_st --><!-- feed_rem_end --><p>Перевод сделан <a href="/2024/06/01/helloworld/index.html">автором сайта goxpert.ru</a></p>
+<h3 id="Краткое-содежание-перевода"><a href="#Краткое-содежание-перевода" class="headerlink" title="Краткое содежание перевода"></a>Краткое содежание <a target="_blank" rel="noopener" href="https://developers.redhat.com/blog/2018/12/03/network-debugging-with-ebpf">перевода</a></h3><ul>
+<li>Сети могут вызывать проблемы, и устранение неполадок требует использования инструментов, таких как сетевые пространства имен, виртуальные машины, tc и netfilter. </li>
+<li>eBPF - это новая технология, которая добавляет улучшения в BPF и позволяет записывать данные в память и редактировать пакеты. </li>
+<li>eBPF используется для устранения сложных сетевых неполадок и может быть подключена через XDP или tc. </li>
+<li>Пример использования eBPF включает изменение флагов TCP и обработку пакетов, покидающих виртуальную машину. </li>
+<li>eBPF становится все более популярным и внедряется непосредственно в сетевые адаптеры оборудования. </li>
+<li>Хотя eBPF не является панацеей, она является мощным инструментом для сетевой отладки и заслуживает внимания.</li>
+</ul>
+<h2 id="Введение-Introduction"><a href="#Введение-Introduction" class="headerlink" title="Введение (Introduction)"></a>Введение (Introduction)</h2><p>Работать с сетями интересно, но часто они также являются источником проблем. Устранение неполадок в сети может быть сложным, а воспроизведение плохого поведения, происходящего в полевых условиях, также может быть болезненным.</p>
+<p>К счастью, есть несколько инструментов, которые приходят на помощь: сетевые пространства имен( <a target="_blank" rel="noopener" href="https://ifeanyi.co/posts/linux-namespaces-part-4/">network namespaces</a> ), виртуальные машины, tcи netfilter. Простые сетевые настройки могут быть воспроизведены с помощью сетевых пространств имен и veth устройств, в то время как более сложные настройки требуют подключения виртуальных машин к программному мосту и использования стандартных сетевых инструментов, таких как iptables или tc, для имитации некорректного поведения. Если у вас возникла проблема с ответами ICMP, генерируемыми из-за сбоя SSH-сервера, iptables -A INPUT -p tcp –dport 22 -j REJECT –reject-with icmp-host-unreachable использование правильного пространства имен или виртуальной машины может помочь.</p>
+<p>В этой статье описывается использование eBPF ( <a target="_blank" rel="noopener" href="https://lwn.net/Articles/740157/">extended BPF</a> ), расширенной версии Berkeley Packet Filter, для устранения сложных сетевых неполадок. eBPF - довольно новая технология, и проект все еще находится на ранней стадии, документация и SDK еще не готовы. Но это должно улучшиться, особенно с учетом того, что XDP (экспресс-путь передачи данных - eXpress Data Path) поставляется в <a target="_blank" rel="noopener" href="https://developers.redhat.com/blog/2018/11/15/red-hat-enterprise-linux-8-beta-is-here/">Red Hat Enterprise Linux 8</a>, который вы можете загрузить и запустить прямо сейчас.</p>
+<p>Хотя eBPF и не является серебряной пулей, я думаю, что это очень мощный инструмент для сетевой отладки, и он заслуживает внимания. Я уверен, что он сыграет действительно важную роль в будущем сетей.</p>
+<h2 id="Проблема-The-problem"><a href="#Проблема-The-problem" class="headerlink" title="Проблема (The problem)"></a>Проблема (The problem)</h2><p>Я отлаживал проблему с сетью <a target="_blank" rel="noopener" href="https://developers.redhat.com/search?t=Open+vSwitch">Open vSwitch</a> (OVS), повлиявшую на очень сложную установку: некоторые TCP-пакеты были скремблированы(разрознены) и доставлялись не по порядку, а пропускная способность между виртуальными машинами падала с устойчивых 6 Гбит / с до колеблющихся 2-4 Гбит / с. После некоторого анализа выяснилось, что первый TCP-пакет каждого соединения с установленным флагом PSH отправлялся не по порядку: только первый и только по одному на каждое соединение.</p>
+<p>Я попытался повторить настройку с двумя виртуальными машинами, и после множества справочных страниц и поисков в Интернете я обнаружил, что оба iptables и nftables не могут изменять флаги TCP, хотя tc могли, но это может только перезаписать флаги, нарушая новые подключения и TCP в целом.</p>
+<p>Вероятно, я мог бы справиться с этим, используя комбинацию iptables mark, conntrack и tc, но потом я подумал: это могло бы быть работой для eBPF.</p>
+<h2 id="Что-такое-eBPF-What-is-eBPF"><a href="#Что-такое-eBPF-What-is-eBPF" class="headerlink" title="Что такое eBPF? (What is eBPF?)"></a>Что такое eBPF? (What is eBPF?)</h2><p>eBPF - это расширенная версия фильтра пакетов Berkeley. Он добавляет множество улучшений в BPF; в первую очередь, он позволяет записывать данные в память, а не просто считывать их, поэтому он также может редактировать пакеты в дополнение к их фильтрации.</p>
+<p>eBPF часто называют BPF, в то время как BPF называется cBPF (классический BPF), поэтому слово BPF может использоваться для обозначения обоих, в зависимости от контекста: здесь я всегда имею в виду расширенную версию.</p>
+<p>Изначально eBPF использует очень простую виртуальную машину с байт-кодом, которая может выполнять небольшие фрагменты байт-кода и редактировать некоторые буферы в памяти. eBPF поставляется с некоторыми ограничениями, предотвращающими его злонамеренное использование:</p>
+<ul>
+<li>Циклы запрещены, поэтому программа завершит работу через определенное время.</li>
+<li>Он не может получить доступ к памяти, кроме стека и резервного буфера.</li>
+<li>Могут вызываться только функции ядра из белого списка.</li>
+</ul>
+<p>Загруженная программа может быть загружена в ядро многими способами, выполняя <a target="_blank" rel="noopener" href="http://www.brendangregg.com/ebpf.html">множество операций отладки и трассировки</a>. В данном случае нас интересует, как eBPF работает с сетевой подсистемой. Есть два способа использования программы eBPF:</p>
+<ul>
+<li>Подключается через XDP к самому раннему пути RX физической или виртуальной сетевой карты</li>
+<li>Подключается через tc к qdisc точно так же, как обычное действие, при входе или выходе</li>
+</ul>
+<p>Чтобы создать программу eBPF для подключения, достаточно написать некоторый код на C и преобразовать его в байт-код. Ниже простой пример использования XDP:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">SEC(<span class="string">&quot;prog&quot;</span>)</span><br><span class="line"><span class="keyword">int</span> xdp_main(<span class="keyword">struct</span> xdp_md *ctx)</span><br><span class="line">&#123;</span><br><span class="line">    void *data_end = (void *)(uintptr_t)ctx-&gt;data_end;</span><br><span class="line">    void *data = (void *)(uintptr_t)ctx-&gt;data;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">struct</span> ethhdr *eth = data;</span><br><span class="line">    <span class="keyword">struct</span> iphdr *iph = (<span class="keyword">struct</span> iphdr *)(eth + <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">struct</span> icmphdr *icmph = (<span class="keyword">struct</span> icmphdr *)(iph + <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* sanity check needed by the eBPF verifier */</span></span><br><span class="line">    <span class="comment">/* верификатору eBPF требуется проверка работоспособности */</span></span><br><span class="line">    <span class="keyword">if</span> (icmph + <span class="number">1</span> &gt; data_end)</span><br><span class="line">        <span class="keyword">return</span> XDP_PASS;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* matched a pong packet */</span></span><br><span class="line">    / * соответствует пакету pong */</span><br><span class="line">    <span class="keyword">if</span> (eth-&gt;h_proto != ntohs(ETH_P_IP) ||</span><br><span class="line">        iph-&gt;protocol != IPPROTO_ICMP ||</span><br><span class="line">        icmph-&gt;<span class="keyword">type</span> != ICMP_ECHOREPLY)</span><br><span class="line">        <span class="keyword">return</span> XDP_PASS;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (iph-&gt;ttl) &#123;</span><br><span class="line">        <span class="comment">/* save the old TTL to recalculate the checksum */</span></span><br><span class="line">        <span class="comment">/* сохраните старый TTL для пересчета контрольной суммы */</span></span><br><span class="line">        uint16_t *ttlproto = (uint16_t *)&amp;iph-&gt;ttl;</span><br><span class="line">        uint16_t old_ttlproto = *ttlproto;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/* set the TTL to a pseudorandom number 1 &lt; x &lt; TTL */</span></span><br><span class="line">        <span class="comment">/* установите для TTL псевдослучайное число 1 &lt; x &lt; TTL */</span></span><br><span class="line">        iph-&gt;ttl = bpf_get_prandom_u32() % iph-&gt;ttl + <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">/* recalculate the checksum; otherwise, the IP stack will drop it */</span></span><br><span class="line">        <span class="comment">/* пересчитайте контрольную сумму; в противном случае стек IP-адресов удалит ее */</span></span><br><span class="line">        csum_replace2(&amp;iph-&gt;check, old_ttlproto, *ttlproto);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> XDP_PASS;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">char _license[] SEC(<span class="string">&quot;license&quot;</span>) = <span class="string">&quot;GPL&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>Приведенный выше фрагмент, лишенный include инструкций, помощников и всего ненужного кода, представляет собой программу XDP, которая изменяет TTL полученных эхо-ответов ICMP, а именно pongs, на случайное число. Основная функция получает struct xdp_md, который содержит два указателя на начало и конец пакета.</p>
+<p>Чтобы скомпилировать наш код в байт-код eBPF, необходим компилятор с его поддержкой. Clang поддерживает его и создает байт-код eBPF, указывая bpf в качестве целевого во время компиляции:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ clang -O2 -target bpf -c xdp_manglepong.c -o xdp_manglepong.o</span><br></pre></td></tr></table></figure>
+
+<p>Приведенная выше команда создает файл, который выглядит как обычный объектный файл, но при проверке вы увидите, что указанный тип компьютера будет Linux eBPF, а не собственный тип операционной системы:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">$ readelf -h xdp_manglepong.o</span><br><span class="line">ELF Header:</span><br><span class="line">  Magic:   <span class="number">7</span>f <span class="number">45</span> <span class="number">4</span>c <span class="number">46</span> <span class="number">02</span> <span class="number">01</span> <span class="number">01</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> <span class="number">00</span> </span><br><span class="line">  Class:                             ELF64</span><br><span class="line">  Data:                              <span class="number">2</span><span class="string">&#x27;s complement, little endian</span></span><br><span class="line"><span class="string">  Version:                           1 (current)</span></span><br><span class="line"><span class="string">  OS/ABI:                            UNIX - System V</span></span><br><span class="line"><span class="string">  ABI Version:                       0</span></span><br><span class="line"><span class="string">  Type:                              REL (Relocatable file)</span></span><br><span class="line"><span class="string">  Machine:                           Linux BPF  &lt;--- HERE (ЗДЕСЬ)</span></span><br><span class="line"><span class="string">  [...]</span></span><br></pre></td></tr></table></figure>
+
+<p>После упаковки в обычный объектный файл, eBPF программа готова к загрузке и подключению к устройству через XDP. Это можно сделать с помощью ip из iproute2 пакета, используя следующий синтаксис:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ip -force link set dev wlan0 xdp object xdp_manglepong.o verbose</span></span><br></pre></td></tr></table></figure>
+
+<p>Эта команда определяет целевой интерфейс wlan0, и с помощью -force опции она перезапишет любой существующий, уже загруженный код eBPF. После загрузки байт-кода eBPF система ведет себя следующим образом:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">$ ping -c10 192.168.85.1</span><br><span class="line">PING 192.168.85.1 (192.168.85.1) 56(84) байт данных.</span><br><span class="line">64 байта из 192.168.85.1: icmp_seq = 1 ttl = 41 time = 0,929 мс</span><br><span class="line">64 байта из 192.168.85.1: icmp_seq = 2 ttl = 7 time = 0,954 мс</span><br><span class="line">64 байта из 192.168.85.1: icmp_seq = 3 ttl = 17 time = 0.944 мс</span><br><span class="line">64 байта из 192.168.85.1: icmp_seq = 4 ttl = 64 time = 0.948 мс</span><br><span class="line">64 байта из 192.168.85.1: icmp_seq = 5 ttl = 9 time = 0.803 мс</span><br><span class="line">64 байта из 192.168.85.1: icmp_seq = 6 ttl = 22 time = 0,780 мс</span><br><span class="line">64 байта из 192.168.85.1: icmp_seq = 7 ttl = 32 time = 0.847 мс</span><br><span class="line">64 байта из 192.168.85.1: icmp_seq = 8 ttl = 50 time = 0,750 мс</span><br><span class="line">64 байта из 192.168.85.1: icmp_seq = 9 ttl = 24 time = 0,744 мс</span><br><span class="line">64 байта из 192.168.85.1: icmp_seq = 10 ttl = 42 time = 0.791 мс</span><br><span class="line"></span><br><span class="line">--- статистика пинга 192.168.85.1 ---</span><br><span class="line">10 переданных пакетов, 10 принятых, потеря пакетов 0%, время 125 мс </span><br><span class="line">rtt min / avg / max / mdev = 0.744/0.849/0.954/0.082 мс</span><br></pre></td></tr></table></figure>
+
+<p>Каждый полученный пакет проходит через eBPF, который в конечном итоге выполняет некоторое преобразование и решает отбросить или пропустить пакет.</p>
+<h2 id="Как-eBPF-может-помочь-How-eBPF-can-help"><a href="#Как-eBPF-может-помочь-How-eBPF-can-help" class="headerlink" title="Как eBPF может помочь (How eBPF can help)"></a>Как eBPF может помочь (How eBPF can help)</h2><p>Возвращаясь к исходной сетевой проблеме, мне нужно было изменить некоторые флаги TCP, только по одному на соединение, и ни iptables ни tc не разрешать это делать. Написать код на C для этого сценария было бы очень просто: настройте две виртуальные машины, соединенные мостом OVS, и просто подключите eBPF к одному из двух виртуальных устройств виртуальной машины.</p>
+<p>Это выглядит как хорошее решение, но вы должны учитывать, что XDP поддерживает только обработку принятых пакетов, и подключение eBPF по rx пути принимающей виртуальной машины никак не повлияет на коммутатор.</p>
+<p>Чтобы должным образом решить эту проблему, eBPF должен быть загружен с помощью tc и подключен по выходному пути внутри виртуальной машины, поскольку tc программы eBPF могут загружаться и подключаться к qdisc точно так же, как любое другое действие. Для обработки пакетов, покидающих хост, необходим выходной qdisc, к которому нужно подключить eBPF.</p>
+<p>При загрузке программы eBPF между XDP и tc API есть небольшие различия: имя раздела по умолчанию отличается, аргумент функции main имеет другой структурный тип, и возвращаемые значения отличаются, но это не является большой проблемой. Ниже приведен фрагмент программы, которая выполняет искажение TCP при подключении к tc действию:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">#define RATIO <span class="number">10</span></span><br><span class="line"></span><br><span class="line">SEC(<span class="string">&quot;action&quot;</span>)</span><br><span class="line"><span class="keyword">int</span> bpf_main(<span class="keyword">struct</span> __sk_buff *skb)</span><br><span class="line">&#123;</span><br><span class="line">    void *data = (void *)(uintptr_t)skb-&gt;data;</span><br><span class="line">    void *data_end = (void *)(uintptr_t)skb-&gt;data_end;</span><br><span class="line">    <span class="keyword">struct</span> ethhdr *eth = data;</span><br><span class="line">    <span class="keyword">struct</span> iphdr *iph = (<span class="keyword">struct</span> iphdr *)(eth + <span class="number">1</span>);</span><br><span class="line">    <span class="keyword">struct</span> tcphdr *tcphdr = (<span class="keyword">struct</span> tcphdr *)(iph + <span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* sanity check needed by the eBPF verifier */</span></span><br><span class="line">    <span class="comment">/* верификатору eBPF требуется проверка работоспособности */</span></span><br><span class="line">    <span class="keyword">if</span> ((void *)(tcphdr + <span class="number">1</span>) &gt; data_end)</span><br><span class="line">        <span class="keyword">return</span> TC_ACT_OK;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* skip non-TCP packets */</span></span><br><span class="line">    <span class="comment">/* пропускает пакеты, отличные от TCP */</span></span><br><span class="line">    <span class="keyword">if</span> (eth-&gt;h_proto != __constant_htons(ETH_P_IP) || iph-&gt;protocol != IPPROTO_TCP)</span><br><span class="line">        <span class="keyword">return</span> TC_ACT_OK;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/* incompatible flags, or PSH already set */</span></span><br><span class="line">    <span class="comment">/* флаги несовместимости или PSH уже установлены */</span></span><br><span class="line">    <span class="keyword">if</span> (tcphdr-&gt;syn || tcphdr-&gt;fin || tcphdr-&gt;rst || tcphdr-&gt;psh)</span><br><span class="line">        <span class="keyword">return</span> TC_ACT_OK;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (bpf_get_prandom_u32() % RATIO == <span class="number">0</span>)</span><br><span class="line">        tcphdr-&gt;psh = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> TC_ACT_OK;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">char _license[] SEC(<span class="string">&quot;license&quot;</span>) = <span class="string">&quot;GPL&quot;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>Компиляция в байт-код выполняется, как в предыдущем примере XDP, следующим образом:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">clang -O2 -целевой bpf -c tcp_psh.c -o tcp_psh.o</span><br></pre></td></tr></table></figure>
+
+<p>Но загрузка отличается:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># tc qdisc add dev eth0 clsact</span></span><br><span class="line"><span class="comment"># tc filter add dev eth0 egress matchall action bpf object-file tcp_psh.o</span></span><br></pre></td></tr></table></figure>
+
+<p>На этом этапе eBPF загружен в нужное место, а пакеты, покидающие виртуальную машину, искажены. Проверив полученные пакеты от второй виртуальной машины, вы можете увидеть следующее:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"># tcpdump -tnni eth0 -Q in</span><br><span class="line">[<span class="number">1579537.890082</span>] device eth0 entered promiscuous mode</span><br><span class="line">tcpdump: verbose output suppressed, use -v or -vv <span class="keyword">for</span> full protocol decode</span><br><span class="line">listening on eth0, link-<span class="keyword">type</span> EN10MB (Ethernet), capture size <span class="number">262144</span> bytes</span><br><span class="line">IP <span class="number">192.168</span><span class="number">.123</span><span class="number">.1</span><span class="number">.39252</span> &gt; <span class="number">192.168</span><span class="number">.123</span><span class="number">.2</span><span class="number">.5201</span>: Flags [.], seq <span class="number">809667041</span>:<span class="number">809681521</span>, ack <span class="number">3046223642</span>, length <span class="number">14480</span></span><br><span class="line">IP <span class="number">192.168</span><span class="number">.123</span><span class="number">.1</span><span class="number">.39252</span> &gt; <span class="number">192.168</span><span class="number">.123</span><span class="number">.2</span><span class="number">.5201</span>: Flags [.], seq <span class="number">14480</span>:<span class="number">43440</span>, ack <span class="number">1</span>, length <span class="number">28960</span></span><br><span class="line">IP <span class="number">192.168</span><span class="number">.123</span><span class="number">.1</span><span class="number">.39252</span> &gt; <span class="number">192.168</span><span class="number">.123</span><span class="number">.2</span><span class="number">.5201</span>: Flags [.], seq <span class="number">43440</span>:<span class="number">101360</span>, ack <span class="number">1</span>, length <span class="number">57920</span></span><br><span class="line">IP <span class="number">192.168</span><span class="number">.123</span><span class="number">.1</span><span class="number">.39252</span> &gt; <span class="number">192.168</span><span class="number">.123</span><span class="number">.2</span><span class="number">.5201</span>: Flags [P.], seq <span class="number">101360</span>:<span class="number">131072</span>, ack <span class="number">1</span>, length <span class="number">29712</span></span><br><span class="line">IP <span class="number">192.168</span><span class="number">.123</span><span class="number">.1</span><span class="number">.39252</span> &gt; <span class="number">192.168</span><span class="number">.123</span><span class="number">.2</span><span class="number">.5201</span>: Flags [.], seq <span class="number">131072</span>:<span class="number">145552</span>, ack <span class="number">1</span>, length <span class="number">14480</span></span><br><span class="line">IP <span class="number">192.168</span><span class="number">.123</span><span class="number">.1</span><span class="number">.39252</span> &gt; <span class="number">192.168</span><span class="number">.123</span><span class="number">.2</span><span class="number">.5201</span>: Flags [.], seq <span class="number">145552</span>:<span class="number">174512</span>, ack <span class="number">1</span>, length <span class="number">28960</span></span><br><span class="line">IP <span class="number">192.168</span><span class="number">.123</span><span class="number">.1</span><span class="number">.39252</span> &gt; <span class="number">192.168</span><span class="number">.123</span><span class="number">.2</span><span class="number">.5201</span>: Flags [.], seq <span class="number">174512</span>:<span class="number">210712</span>, ack <span class="number">1</span>, length <span class="number">36200</span></span><br><span class="line">IP <span class="number">192.168</span><span class="number">.123</span><span class="number">.1</span><span class="number">.39252</span> &gt; <span class="number">192.168</span><span class="number">.123</span><span class="number">.2</span><span class="number">.5201</span>: Flags [.], seq <span class="number">210712</span>:<span class="number">232432</span>, ack <span class="number">1</span>, length <span class="number">21720</span></span><br><span class="line">IP <span class="number">192.168</span><span class="number">.123</span><span class="number">.1</span><span class="number">.39252</span> &gt; <span class="number">192.168</span><span class="number">.123</span><span class="number">.2</span><span class="number">.5201</span>: Flags [.], seq <span class="number">232432</span>:<span class="number">246912</span>, ack <span class="number">1</span>, length <span class="number">14480</span></span><br><span class="line">IP <span class="number">192.168</span><span class="number">.123</span><span class="number">.1</span><span class="number">.39252</span> &gt; <span class="number">192.168</span><span class="number">.123</span><span class="number">.2</span><span class="number">.5201</span>: Flags [P.], seq <span class="number">246912</span>:<span class="number">262144</span>, ack <span class="number">1</span>, length <span class="number">15232</span></span><br><span class="line">IP <span class="number">192.168</span><span class="number">.123</span><span class="number">.1</span><span class="number">.39252</span> &gt; <span class="number">192.168</span><span class="number">.123</span><span class="number">.2</span><span class="number">.5201</span>: Flags [.], seq <span class="number">262144</span>:<span class="number">276624</span>, ack <span class="number">1</span>, length <span class="number">14480</span></span><br><span class="line">IP <span class="number">192.168</span><span class="number">.123</span><span class="number">.1</span><span class="number">.39252</span> &gt; <span class="number">192.168</span><span class="number">.123</span><span class="number">.2</span><span class="number">.5201</span>: Flags [.], seq <span class="number">276624</span>:<span class="number">305584</span>, ack <span class="number">1</span>, length <span class="number">28960</span></span><br><span class="line">IP <span class="number">192.168</span><span class="number">.123</span><span class="number">.1</span><span class="number">.39252</span> &gt; <span class="number">192.168</span><span class="number">.123</span><span class="number">.2</span><span class="number">.5201</span>: Flags [.], seq <span class="number">305584</span>:<span class="number">363504</span>, ack <span class="number">1</span>, length <span class="number">57920</span></span><br><span class="line">IP <span class="number">192.168</span><span class="number">.123</span><span class="number">.1</span><span class="number">.39252</span> &gt; <span class="number">192.168</span><span class="number">.123</span><span class="number">.2</span><span class="number">.5201</span>: Flags [P.], seq <span class="number">363504</span>:<span class="number">393216</span>, ack <span class="number">1</span>, length <span class="number">29712</span></span><br><span class="line">IP <span class="number">192.168</span><span class="number">.123</span><span class="number">.1</span><span class="number">.39252</span> &gt; <span class="number">192.168</span><span class="number">.123</span><span class="number">.2</span><span class="number">.5201</span>: Flags [.], seq <span class="number">393216</span>:<span class="number">407696</span>, ack <span class="number">1</span>, length <span class="number">14480</span></span><br><span class="line">IP <span class="number">192.168</span><span class="number">.123</span><span class="number">.1</span><span class="number">.39252</span> &gt; <span class="number">192.168</span><span class="number">.123</span><span class="number">.2</span><span class="number">.5201</span>: Flags [.], seq <span class="number">407696</span>:<span class="number">436656</span>, ack <span class="number">1</span>, length <span class="number">28960</span></span><br><span class="line">IP <span class="number">192.168</span><span class="number">.123</span><span class="number">.1</span><span class="number">.39252</span> &gt; <span class="number">192.168</span><span class="number">.123</span><span class="number">.2</span><span class="number">.5201</span>: Flags [.], seq <span class="number">436656</span>:<span class="number">494576</span>, ack <span class="number">1</span>, length <span class="number">57920</span></span><br><span class="line">IP <span class="number">192.168</span><span class="number">.123</span><span class="number">.1</span><span class="number">.39252</span> &gt; <span class="number">192.168</span><span class="number">.123</span><span class="number">.2</span><span class="number">.5201</span>: Flags [P.], seq <span class="number">494576</span>:<span class="number">524288</span>, ack <span class="number">1</span>, length <span class="number">29712</span></span><br><span class="line">IP <span class="number">192.168</span><span class="number">.123</span><span class="number">.1</span><span class="number">.39252</span> &gt; <span class="number">192.168</span><span class="number">.123</span><span class="number">.2</span><span class="number">.5201</span>: Flags [.], seq <span class="number">524288</span>:<span class="number">538768</span>, ack <span class="number">1</span>, length <span class="number">14480</span></span><br><span class="line">IP <span class="number">192.168</span><span class="number">.123</span><span class="number">.1</span><span class="number">.39252</span> &gt; <span class="number">192.168</span><span class="number">.123</span><span class="number">.2</span><span class="number">.5201</span>: Flags [.], seq <span class="number">538768</span>:<span class="number">567728</span>, ack <span class="number">1</span>, length <span class="number">28960</span></span><br><span class="line">IP <span class="number">192.168</span><span class="number">.123</span><span class="number">.1</span><span class="number">.39252</span> &gt; <span class="number">192.168</span><span class="number">.123</span><span class="number">.2</span><span class="number">.5201</span>: Flags [.], seq <span class="number">567728</span>:<span class="number">625648</span>, ack <span class="number">1</span>, length <span class="number">57920</span></span><br><span class="line">IP <span class="number">192.168</span><span class="number">.123</span><span class="number">.1</span><span class="number">.39252</span> &gt; <span class="number">192.168</span><span class="number">.123</span><span class="number">.2</span><span class="number">.5201</span>: Flags [.], seq <span class="number">625648</span>:<span class="number">627096</span>, ack <span class="number">1</span>, length <span class="number">1448</span></span><br><span class="line">IP <span class="number">192.168</span><span class="number">.123</span><span class="number">.1</span><span class="number">.39252</span> &gt; <span class="number">192.168</span><span class="number">.123</span><span class="number">.2</span><span class="number">.5201</span>: Flags [P.], seq <span class="number">627096</span>:<span class="number">655360</span>, ack <span class="number">1</span>, length <span class="number">28264</span></span><br></pre></td></tr></table></figure>
+
+<p>tcpdump подтверждает, что новый код eBPF работает, и примерно в 1 из каждых 10 TCP-пакетов установлен флаг PSH. Используя всего 20 строк кода на C, мы выборочно искажали TCP-пакеты, покидающие виртуальную машину, воспроизводя ошибку, возникшую в полевых условиях, и все это без перекомпиляции какого-либо драйвера и даже без перезагрузки! Это значительно упростило проверку <a target="_blank" rel="noopener" href="https://github.com/openvswitch/ovs/commit/9b4f08cdcaf253175edda088683bdd3db9e4c097">исправления Open vSwitch</a> способом, который невозможно было выполнить с помощью других инструментов.</p>
+<h2 id="Заключение"><a href="#Заключение" class="headerlink" title="Заключение"></a>Заключение</h2><p>eBPF - довольно новая технология, и сообщество придерживается твердого мнения по поводу ее внедрения. Также стоит отметить, что проекты на основе eBPF, такие как <a target="_blank" rel="noopener" href="https://lwn.net/Articles/747551/">bpfilter</a>, становятся все более популярными, и, как следствие, различные поставщики оборудования начинают внедрять поддержку eBPF непосредственно в свои сетевые карты(NIC).</p>
+<p>Хотя eBPF не является серебряной пулей, и им не следует злоупотреблять, я думаю, что это очень мощный инструмент для сетевой отладки, и он заслуживает внимания. Я уверен, что он сыграет действительно важную роль в будущем сетей.</p>
+<h2 id="Дополнительные-ресурсы"><a href="#Дополнительные-ресурсы" class="headerlink" title="Дополнительные ресурсы"></a>Дополнительные ресурсы</h2><p><a target="_blank" rel="noopener" href="https://developers.redhat.com/search?t=Open+vSwitch">Статьи об Open vSwitch</a><br><a target="_blank" rel="noopener" href="https://developers.redhat.com/search?t=Open+Virtual+Network">Статьи об открытой виртуальной сети</a><br><a target="_blank" rel="noopener" href="https://developers.redhat.com/blog/2017/12/13/introducing-stapbpf-systemtaps-new-bpf-backend/">Представляем stapbpf - новый серверный модуль BPF от SystemTap</a></p>
+<p>Последнее обновление: 14 января 2022 г.</p>
+<p><img src="/images/ebpf.png" alt="Вот вам и eBPF"></p>
+
+        </div>
+        <footer class="article-footer">
+            
+
+
+
+    <a data-url="https://goxpert.ru/2024/06/01/os/ebpf_network/" data-id="clx73s84u0000eowl5xf98l9h" class="article-share-link"><i class="fa fa-share"></i>Поделиться</a>
+<script>
+    (function ($) {
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+        </footer>
+    </div>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "author": {
+            "@type": "Person",
+            "name": "авторы проекта GoXpert"
+        },
+        "headline": "Отладка cети с помощью eBPF",
+        "image": "https://goxpert.ru/images/ebpf.png",
+        "keywords": "Golang, Q&A",
+        "genre": "ОС Cеть",
+        "datePublished": "2024-06-01",
+        "dateCreated": "2024-06-01",
+        "dateModified": "2024-06-09",
+        "url": "https://goxpert.ru/2024/06/01/os/ebpf_network/",
+        "description": "Перевод сделан автором сайта goxpert.ru
+Краткое содежание перевода
+Сети могут вызывать проблемы, и устранение неполадок требует использования инструментов, таких как сетевые пространства имен, виртуал",
+        "wordCount": 3225
+    }
+</script>
+
+</article>
+
+    <section id="comments">
+    
+        
+    <div id="vk_comments"></div>
+    <script type="text/javascript">
+      window.onload = function () {
+      VK.init({apiId: 51937371, onlyWidgets: true});
+      VK.Widgets.Comments("vk_comments", {limit: 20, attach: "*", autoPublish: 1, pageUrl: "https://goxpert.ru/2024/06/01/os/ebpf_network/"});
+    }
+   </script>
+
+    
+    </section>
+
+
+
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <div class="sidebar-top">
+        <p>Подписаться:</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="vk" href="https://vk.com/goxpert" target="_blank" rel="noopener">
+                        <i class="icon fa fa-vk"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="telegram" href="https://t.me/goxpert_ru" target="_blank" rel="noopener">
+                        <i class="icon fa fa-telegram"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="youtube" href="https://www.youtube.com/c/УчимсянаПять" target="_blank" rel="noopener">
+                        <i class="icon fa fa-youtube"></i>
+                    </a>
+                </li>
+                
+            
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="twitter" href="/" target="_blank" rel="noopener">
+                        <i class="icon fa fa-twitter"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="facebook" href="/" target="_blank" rel="noopener">
+                        <i class="icon fa fa-facebook"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="weibo" href="/" target="_blank" rel="noopener">
+                        <i class="icon fa fa-weibo"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="rss" href="/atom.xml" target="_blank" rel="noopener">
+                        <i class="icon fa fa-rss"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2024/06/01/os/cpu_cache/" id="article-nav-newer" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">новые</strong>
+        <p class="article-nav-title">
+        
+            Когерентность кэша
+        
+        </p>
+        <i class="icon fa fa-chevron-right" id="icon-chevron-right"></i>
+    </a>
+    
+    
+        <a href="/2024/06/01/os/netwokr/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">старые</strong>
+        <p class="article-nav-title">Сеть</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
+    
+    <div class="widgets-container">
+        
+            
+                
+
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">недавние</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2024/06/02/os/os_scheduler/" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/os_sched_1.jpg)" alt="Планировщик ОS" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%D0%9E%D0%A1/">ОС</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%D0%9E%D0%A1/%D0%9F%D0%BB%D0%B0%D0%BD%D0%B8%D1%80%D0%BE%D0%B2%D1%89%D0%B8%D0%BA-%D0%9ES/">Планировщик ОS</a></p>
+                            <p class="item-title"><a href="/2024/06/02/os/os_scheduler/" class="title">Планировщик ОS</a></p>
+                            <p class="item-date"><time datetime="2024-06-02T15:32:20.263Z" itemprop="datePublished">2024-06-02</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2024/06/01/concurrency/go_scheduler/" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/go_sched1.png)" alt="Планировщик GO" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Golang/">Golang</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/">Старт</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/">Вопрос-Ответ</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9F%D0%BB%D0%B0%D0%BD%D0%B8%D1%80%D0%BE%D0%B2%D1%89%D0%B8%D0%BA/">Планировщик</a></p>
+                            <p class="item-title"><a href="/2024/06/01/concurrency/go_scheduler/" class="title">Планировщик GO</a></p>
+                            <p class="item-date"><time datetime="2024-06-01T09:35:00.000Z" itemprop="datePublished">2024-06-01</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2024/06/01/concurrency/go_scheduler_more/" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/golang_scheduler_more1.png)" alt="Планировщик GO другой взгляд" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Golang/">Golang</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/">Старт</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/">Вопрос-Ответ</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9F%D0%BB%D0%B0%D0%BD%D0%B8%D1%80%D0%BE%D0%B2%D1%89%D0%B8%D0%BA/">Планировщик</a></p>
+                            <p class="item-title"><a href="/2024/06/01/concurrency/go_scheduler_more/" class="title">Планировщик GO другой взгляд</a></p>
+                            <p class="item-date"><time datetime="2024-06-01T09:35:00.000Z" itemprop="datePublished">2024-06-01</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2024/06/01/concurrency/go_concurrency/" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/golang_concurrency1.png)" alt="Планировщик GO - Concurrency" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Golang/">Golang</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/">Старт</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/">Вопрос-Ответ</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9F%D0%BB%D0%B0%D0%BD%D0%B8%D1%80%D0%BE%D0%B2%D1%89%D0%B8%D0%BA/">Планировщик</a></p>
+                            <p class="item-title"><a href="/2024/06/01/concurrency/go_concurrency/" class="title">Планировщик GO - Concurrency</a></p>
+                            <p class="item-date"><time datetime="2024-06-01T09:35:00.000Z" itemprop="datePublished">2024-06-01</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2024/06/01/os/cpu_cache/" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/Non_Coherent.gif)" alt="Когерентность кэша" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%D0%9E%D0%A1/">ОС</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%D0%9E%D0%A1/CPU-cache/">CPU cache</a></p>
+                            <p class="item-title"><a href="/2024/06/01/os/cpu_cache/" class="title">Когерентность кэша</a></p>
+                            <p class="item-date"><time datetime="2024-06-01T09:22:00.000Z" itemprop="datePublished">2024-06-01</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">Категории</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/">Golang</a><span class="category-list-count">28</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/">Старт</a><span class="category-list-count">28</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/Defer/">Defer</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/Generics/">Generics</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/Panic/">Panic</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/SOLID/">SOLID</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/SSA/">SSA</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/Select-case/">Select-case</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%93%D0%BE%D0%BD%D0%BA%D0%B0-%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85/">Гонка данных</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%93%D0%BE%D1%80%D1%83%D1%82%D0%B8%D0%BD%D1%8B/">Горутины</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%98%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81%D1%8B/">Интерфейсы</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%9A%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82/">Контекст</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%9C%D0%B0%D1%81%D1%81%D0%B8%D0%B2%D1%8B-%D0%B8-%D1%81%D0%BB%D0%B0%D0%B9%D1%81%D1%8B/">Массивы и слайсы</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%9E%D0%B1%D1%89%D0%B8%D0%B5/">Общие</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%9F%D0%B0%D0%BA%D0%B5%D1%82%D1%8B/">Пакеты</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%9F%D0%BB%D0%B0%D0%BD%D0%B8%D1%80%D0%BE%D0%B2%D1%89%D0%B8%D0%BA/">Планировщик</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%9F%D1%80%D0%B8%D0%BC%D0%B8%D1%82%D0%B8%D0%B2%D1%8B-%D1%81%D0%B8%D0%BD%D1%85%D1%80%D0%BE%D0%BD%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D0%B8/">Примитивы синхронизации</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%A1%D1%82%D1%80%D0%BE%D0%BA%D0%B8/">Строки</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%A1%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D1%8B/">Структуры</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%A2%D0%B8%D0%BF%D1%8B/">Типы</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%A3%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D0%B5%D0%BB%D0%B8/">Указатели</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%A5%D0%B5%D1%88-%D0%BC%D0%B0%D0%BF%D1%8B/">Хеш-мапы</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/">Вопрос-Ответ</a><span class="category-list-count">27</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/Defer/">Defer</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/Generics/">Generics</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/Panic/">Panic</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/SOLID/">SOLID</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/SSA/">SSA</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/Select-case/">Select-case</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%93%D0%BE%D0%BD%D0%BA%D0%B0-%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85/">Гонка данных</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%93%D0%BE%D1%80%D1%83%D1%82%D0%B8%D0%BD%D1%8B/">Горутины</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%98%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81%D1%8B/">Интерфейсы</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9A%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82/">Контекст</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9C%D0%B0%D1%81%D1%81%D0%B8%D0%B2%D1%8B-%D0%B8-%D1%81%D0%BB%D0%B0%D0%B9%D1%81%D1%8B/">Массивы и слайсы</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9E%D0%B1%D1%89%D0%B8%D0%B5/">Общие</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9F%D0%B0%D0%BA%D0%B5%D1%82%D1%8B/">Пакеты</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9F%D0%BB%D0%B0%D0%BD%D0%B8%D1%80%D0%BE%D0%B2%D1%89%D0%B8%D0%BA/">Планировщик</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9F%D1%80%D0%B8%D0%BC%D0%B8%D1%82%D0%B8%D0%B2%D1%8B-%D1%81%D0%B8%D0%BD%D1%85%D1%80%D0%BE%D0%BD%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D0%B8/">Примитивы синхронизации</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%A1%D1%82%D1%80%D0%BE%D0%BA%D0%B8/">Строки</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%A1%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D1%8B/">Структуры</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%A2%D0%B8%D0%BF%D1%8B/">Типы</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%A3%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D0%B5%D0%BB%D0%B8/">Указатели</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%A5%D0%B5%D1%88-%D0%BC%D0%B0%D0%BF%D1%8B/">Хеш-мапы</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%9E%D0%A1/">ОС</a><span class="category-list-count">4</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%9E%D0%A1/CPU-cache/">CPU cache</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%9E%D0%A1/C%D0%B5%D1%82%D1%8C/">Cеть</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%9E%D0%A1/%D0%9F%D0%BB%D0%B0%D0%BD%D0%B8%D1%80%D0%BE%D0%B2%D1%89%D0%B8%D0%BA-%D0%9ES/">Планировщик ОS</a><span class="category-list-count">1</span></li></ul></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">архивы</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/06/">июнь 2024</a><span class="archive-list-count">32</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">Тэги</h3>
+        <div class="widget">
+            <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Golang/" rel="tag">Golang</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Golang-Q-A/" rel="tag">Golang, Q&A</a><span class="tag-list-count">31</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-float">
+        <h3 class="widget-title">Облако тэгов</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/Golang/" style="font-size: 10px;">Golang</a> <a href="/tags/Golang-Q-A/" style="font-size: 20px;">Golang, Q&A</a>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">ссылки</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a target="_blank" rel="noopener" href="https://vk.com/goxpert">мы в vk</a>
+                    </li>
+                
+                    <li>
+                        <a target="_blank" rel="noopener" href="https://www.youtube.com/c/УчимсянаПять">мы в youtube</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+            
+        
+    </div>
+</aside>
+
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <p>&copy; 2024 авторы проекта GoXpert</p>
+                
+                <p>Powered by <a href="https://designest.ru/" target="_blank">DESIGNest Studio Ltd</a></p>
+                
+            </div>
+            <div class="footer-plugins">
+                
+			<!-- Yandex.RTB R-A-1394392-1 -->
+			<div id="yandex_rtb_R-A-1394392-1"></div>
+			<script>window.yaContextCb.push(()=>{Ya.Context.AdvManager.render({renderTo: 'yandex_rtb_R-A-1394392-1',  blockId: 'R-A-1394392-1' }) })</script>
+                
+              
+    
+
+
+            </div>
+        </div>
+    </div>
+</footer>                                                                                            
+
+    </div>
+    
+    
+    <script type="text/javascript">
+    var vk_shortname = 'true';
+    (function() {
+    var vk = document.createElement('script');
+    vk.type = 'text/javascript';
+    vk.async = true;
+    vk.src = '//vk.com/js/api/openapi.js?169'; 
+    vk.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0]
+    || document.getElementsByTagName('body')[0]).appendChild(vk);
+    })();
+    </script>
+
+
+
+
+    
+        
+<script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-share.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-video.min.js"></script>
+
+    
+    
+        
+<script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+    
+    
+
+    
+    
+    
+
+
+
+<!-- Custom Scripts -->
+
+<script src="/js/main.js"></script>
+
+
+</body>
+</html>
