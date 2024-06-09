@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+
+    
+
+    
+    <title>namespaces,часть 3 | GoXpert.ru</title>
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="keywords" content="Golang, Q&amp;A" />
+    
+    <meta name="description" content="Глубокое погружение в пространства имен Linux, часть 3">
+<meta property="og:type" content="article">
+<meta property="og:title" content="namespaces,часть 3">
+<meta property="og:url" content="https://goxpert.ru/2024/06/01/os/namespaces3/index.html">
+<meta property="og:site_name" content="GoXpert.ru">
+<meta property="og:description" content="Глубокое погружение в пространства имен Linux, часть 3">
+<meta property="og:locale" content="ru_RU">
+<meta property="og:image" content="https://goxpert.ru/images/isolate.png">
+<meta property="article:published_time" content="2024-06-01T09:16:00.000Z">
+<meta property="article:modified_time" content="2024-06-09T12:36:26.571Z">
+<meta property="article:author" content="авторы проекта GoXpert">
+<meta property="article:tag" content="Golang, Q&amp;A">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://goxpert.ru/images/isolate.png">
+    
+
+    
+        <link rel="alternate" href="/atom.xml" title="GoXpert.ru" type="application/atom+xml" />
+        <link rel="alternate" type="application/rss+xml" title="GoXpert.ru" href="https://goxpert.ru/rss.xml" />
+        <link rel="alternate" type="application/rss+xml" title="GoXpert.ru" href="https://goxpert.ru/rss-feed.xml" />
+     
+
+     
+        <link rel="amphtml" href="https://goxpert.ru/amp2024/06/01/os/namespaces3/">
+     
+
+
+    
+        <link rel="icon" href="/css/images/favicon.ico" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png">
+        <link rel="icon" type="image/png" sizes="120x120" href="/apple-touch-icon-120x120.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+        <link rel="manifest" href="/site.webmanifest">
+        <meta name="msapplication-TileColor" content="#da532c">
+        <meta name="msapplication-TileImage" content="/mstile-144x144.png">
+        <meta name="theme-color" content="#ffffff">
+    
+
+    
+       <!-- Yandex.RTB -->
+       <script>window.yaContextCb=window.yaContextCb||[]</script>
+       <script src="https://yandex.ru/ads/system/context.js" async></script>
+    
+
+    
+<link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+
+    
+<link rel="stylesheet" href="/libs/titillium-web/styles.css">
+
+    
+<link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+
+    
+<link rel="stylesheet" href="/css/style.css">
+
+
+    
+<script src="/libs/jquery/3.5.0/jquery.min.js"></script>
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+
+    
+    
+        
+<link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+
+    
+    
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4PWEJT515P"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-4PWEJT515P');
+</script>
+<!-- End Google Analytics -->
+
+    
+    
+        <!-- Yandex.Metrika counter -->
+<script type="text/javascript" >
+   (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+   m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+   (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+   ym(86613025, "init", {
+        clickmap:true,
+        trackLinks:true,
+        accurateTrackBounce:true,
+        webvisor:true
+   });
+</script>
+<!-- /Yandex.Metrika counter -->
+    
+    
+    
+
+
+</head>
+
+<body>
+    <div id="wrap">
+        <header id="header">
+    <div id="header-outer" class="outer">
+        <div class="container">
+            <div class="container-inner">
+                <div id="header-title">
+                    <h1 class="logo-wrap">
+                        <a href="/" class="logo"></a>
+                    </h1>
+                    
+                </div>
+                <div id="header-inner" class="nav-container">
+                    <a id="main-nav-toggle" class="nav-icon fa fa-bars"></a>
+                    <div class="nav-container-inner">
+                        <ul id="main-nav">
+                            
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/">Главная</a>
+                                </li>
+                            
+                                    <ul class="main-nav-list"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Golang/">Golang</a><ul class="main-nav-list-child"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/">Старт</a></li></ul></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/">Вопрос-Ответ</a><ul class="main-nav-list-child"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/Defer/">Defer</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/Generics/">Generics</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/Panic/">Panic</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/SOLID/">SOLID</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/SSA/">SSA</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/Select-case/">Select-case</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%93%D0%BE%D0%BD%D0%BA%D0%B0-%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85/">Гонка данных</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%93%D0%BE%D1%80%D1%83%D1%82%D0%B8%D0%BD%D1%8B/">Горутины</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%98%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81%D1%8B/">Интерфейсы</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9A%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82/">Контекст</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9C%D0%B0%D1%81%D1%81%D0%B8%D0%B2%D1%8B-%D0%B8-%D1%81%D0%BB%D0%B0%D0%B9%D1%81%D1%8B/">Массивы и слайсы</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9E%D0%B1%D1%89%D0%B8%D0%B5/">Общие</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9F%D0%B0%D0%BA%D0%B5%D1%82%D1%8B/">Пакеты</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9F%D0%BB%D0%B0%D0%BD%D0%B8%D1%80%D0%BE%D0%B2%D1%89%D0%B8%D0%BA/">Планировщик</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9F%D1%80%D0%B8%D0%BC%D0%B8%D1%82%D0%B8%D0%B2%D1%8B-%D1%81%D0%B8%D0%BD%D1%85%D1%80%D0%BE%D0%BD%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D0%B8/">Примитивы синхронизации</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%A1%D1%82%D1%80%D0%BE%D0%BA%D0%B8/">Строки</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%A1%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D1%8B/">Структуры</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%A2%D0%B8%D0%BF%D1%8B/">Типы</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%A3%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D0%B5%D0%BB%D0%B8/">Указатели</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%A5%D0%B5%D1%88-%D0%BC%D0%B0%D0%BF%D1%8B/">Хеш-мапы</a></li></ul></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%9E%D0%A1/">ОС</a><ul class="main-nav-list-child"><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%9E%D0%A1/CPU-cache/">CPU cache</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%9E%D0%A1/C%D0%B5%D1%82%D1%8C/">Cеть</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%9E%D0%A1/Namespaces/">Namespaces</a></li><li class="main-nav-list-item"><a class="main-nav-list-link" href="/categories/%D0%9E%D0%A1/%D0%9F%D0%BB%D0%B0%D0%BD%D0%B8%D1%80%D0%BE%D0%B2%D1%89%D0%B8%D0%BA-%D0%9ES/">Планировщик ОS</a></li></ul></li></ul>
+                                
+                                <li class="main-nav-list-item" >
+                                    <a class="main-nav-list-link" href="/2024/06/01/helloworld/index.html">О сайте</a>
+                                </li>
+                            
+                        </ul>
+                        <nav id="sub-nav">
+                            <div id="search-form-wrap">
+
+<div class="ya-site-form ya-site-form_inited_no" data-bem="{&quot;action&quot;:&quot;/search.html&quot;,&quot;arrow&quot;:false,&quot;bg&quot;:&quot;transparent&quot;,&quot;fontsize&quot;:12,&quot;fg&quot;:&quot;#000000&quot;,&quot;language&quot;:&quot;ru&quot;,&quot;logo&quot;:&quot;rb&quot;,&quot;publicname&quot;:&quot;����� �� ����� GoXpert&quot;,&quot;suggest&quot;:true,&quot;target&quot;:&quot;_blank&quot;,&quot;tld&quot;:&quot;ru&quot;,&quot;type&quot;:2,&quot;usebigdictionary&quot;:true,&quot;searchid&quot;:2519671,&quot;input_fg&quot;:&quot;#000000&quot;,&quot;input_bg&quot;:&quot;#ffffff&quot;,&quot;input_fontStyle&quot;:&quot;normal&quot;,&quot;input_fontWeight&quot;:&quot;normal&quot;,&quot;input_placeholder&quot;:&quot;&quot;,&quot;input_placeholderColor&quot;:&quot;#000000&quot;,&quot;input_borderColor&quot;:&quot;#7f9db9&quot;}">
+<form action="https://yandex.ru/search/site/" method="get" target="_blank" accept-charset="utf-8">
+<input type="hidden" name="searchid" value="2519671"/>
+<input type="hidden" name="l10n" value="ru"/>
+<input type="hidden" name="reqenc" value=""/>
+<input type="search" name="text" value=""/>
+<input type="submit" value="�����"/>
+</form>
+</div>
+    <style type="text/css">.ya-page_js_yes .ya-site-form_inited_no { display: none; }
+</style>
+<script type="text/javascript">
+(function(w,d,c){var s=d.createElement('script'),h=d.getElementsByTagName('script')[0],e=d.documentElement;
+if((' '+e.className+' ').indexOf(' ya-page_js_yes ')===-1)
+{e.className+=' ya-page_js_yes';}s.type='text/javascript';
+s.async=true;s.charset='utf-8';
+s.src=(d.location.protocol==='https:'?'https:':'http:')+'//site.yandex.net/v2.0/js/all.js';
+h.parentNode.insertBefore(s,h);(w[c]||(w[c]=[])).push(function(){
+
+Ya.Site.Form.init()
+
+})})(window,document,'yandex_site_callbacks');</script>
+
+</div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+        <div class="container">
+            <div class="main-body container-inner">
+                <div class="main-body-inner">
+                    <section id="main">
+                        <div class="main-body-header">
+    <h1 class="header">
+    
+    <a class="page-title-link" href="/categories/%D0%9E%D0%A1/">ОС</a><i class="icon fa fa-angle-right"></i><a class="page-title-link" href="/categories/%D0%9E%D0%A1/Namespaces/">Namespaces</a>
+    </h1>
+</div>
+
+                        <div class="main-body-content">
+                            <article id="post-os/namespaces3" class="article article-single article-type-post" itemscope itemprop="blogPost">
+    <div class="article-inner">
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+        namespaces,часть 3
+        </h1>
+    
+
+            </header>
+        
+        
+            <div class="article-meta">
+                
+  <div class="article-date">
+    <i class="fa fa-calendar"></i>
+    <a href="/2024/06/01/os/namespaces3/" class="article-date">
+       <time datetime="2024-06-01T09:16:00.000Z" itemprop="datePublished">2024-06-01</time>
+    </a>
+  </div>
+
+
+<div class="article-date">
+  <i class="fa fa-calendar-plus-o"></i>
+  <a href="/2024/06/01/os/namespaces3/" class="article-date">
+     <time datetime="2024-06-09T12:36:26.571Z" itemprop="dateModified">2024-06-09</time>
+  </a>
+</div>
+
+
+                
+
+                
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link-link" href="/tags/Golang-Q-A/" rel="tag">Golang, Q&A</a>
+    </div>
+
+                
+
+                
+
+            </div>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+            
+
+            
+
+            
+
+            <!-- feed_rem_st --><!-- feed_rem_end --><p>Перевод сделан <a href="/2024/06/01/helloworld/index.html">автором сайта goxpert.ru</a></p>
+<h3 id="Краткое-содежание-перевода"><a href="#Краткое-содежание-перевода" class="headerlink" title="Краткое содежание перевода"></a>Краткое содежание <a target="_blank" rel="noopener" href="https://ifeanyi.co/posts/linux-namespaces-part-3/">перевода</a></h3><ul>
+<li>Изоляция процессов в Linux может быть достигнута с помощью пространств имен. </li>
+<li>Пространства имен позволяют изолировать процессы от других процессов и файловых систем. </li>
+<li>Изоляция может быть достигнута путем создания нового пространства имен для монтирования и замены корневой файловой системы. </li>
+<li>Проект Alpine Linux предоставляет корневые файловые системы, которые могут быть использованы для изоляции команд. </li>
+<li>Поворотный корень позволяет монтировать системные файлы в новом пространстве имен для монтирования, не нарушая изоляцию. </li>
+<li>Реализация изоляции процессов включает создание командного процесса в новом пространстве имен, настройку пространства имен для монтирования и поворот корня. </li>
+<li>Пространства имен PID изолируют идентификаторы процессов в системе, обеспечивая большую изоляцию для запущенной команды. </li>
+</ul>
+<h2 id="Глубокое-погружение-в-пространства-имен-Linux-часть-3"><a href="#Глубокое-погружение-в-пространства-имен-Linux-часть-3" class="headerlink" title="Глубокое погружение в пространства имен Linux, часть 3"></a>Глубокое погружение в пространства имен Linux, часть 3</h2><p><a target="_blank" rel="noopener" href="http://man7.org/linux/man-pages/man7/mount_namespaces.7.html">Пространства имен монтирования(Mount namespaces) </a>  изолируют  ресурсы файловой системы. Это в значительной степени охватывает все, что связано с файлами в системе. Среди инкапсулированных ресурсов есть файл, содержащий список <a target="_blank" rel="noopener" href="http://www.linfo.org/mount_point.html">точек монтирования</a>, которые видны процессу, и, как мы намекали в <a href="/2024/06/01/os/namespaces/index.html">вступительном посте</a>, изоляция может обеспечить такое поведение, что изменение списка (или любого другого файла) в некотором экземпляре пространства имен монтирования M(mount namespace) не влияло на этот список в другом экземпляре (так что только процессы в M наблюдают изменения).</p>
+<h2 id="Точки-монтирования-Mount-Points"><a href="#Точки-монтирования-Mount-Points" class="headerlink" title="Точки монтирования (Mount Points)"></a>Точки монтирования (Mount Points)</h2><p>Вам может быть интересно, почему мы просто увеличили кажущийся случайным файл, содержащий список - что в нем такого особенного? Список точек монтирования определяет полное представление процесса о доступных <a target="_blank" rel="noopener" href="https://www.tldp.org/LDP/sag/html/filesystems.html">файловых системах</a> в системе, и поскольку мы находимся в стране Linux с мантрой “все - файл”, видимость практически каждого ресурса определяется этим представлением - от реальных файлов и устройств до информации о том, какие другие процессы также запущены в системе. Таким образом, для isolate это огромная победа в области безопасности - иметь возможность точно указывать, о каких частях системы будут в курсе команды, которые мы запускаем. Пространства имен монтирования в сочетании с точками монтирования являются очень мощным инструментом, который позволяет нам достичь этого.</p>
+<p>Мы можем видеть точки монтирования, видимые процессу с идентификатором $pid через /proc/$pid/mounts файл - его содержимое одинаково для всех процессов, принадлежащих к тому же пространству имен монтирования , что и $pid:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ cat /proc/$$/mounts</span><br><span class="line">...</span><br><span class="line">/dev/sda1 / ext4 rw,relatime,errors=remount-ro,data=ordered 0 0</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>Где-то в списке, возвращаемом в моей системе, указано /dev/sda1 устройство, установленное в / (у вас может отличаться). Это дисковое устройство, на котором размещена корневая файловая система, которая содержит все необходимое для запуска системы, поэтому было бы здорово, если бы isolate выполняли команды, не зная о подобных файловых системах.</p>
+<p>Давайте начнем с запуска терминала в его собственном пространстве имен mount:</p>
+<ul>
+<li>Строго говоря, нам не нужен доступ суперпользователя для работы с новыми пространствами имен mount, если мы включаем процедуры настройки пользовательского пространства имен, описанные в предыдущем посте. В результате в этом посте мы будем только предполагать, что unshare команды в терминале выполняются от имени суперпользователя. isolate в этом предположении нет необходимости.</li>
+</ul>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># The -m flag creates a new mount namespace.</span></span><br><span class="line"><span class="comment"># Флаг -m создаёт новый mount namespace.</span></span><br><span class="line">$ unshare -m bash</span><br><span class="line">$ cat /proc/$$/mounts</span><br><span class="line">...</span><br><span class="line">/dev/sda1 / ext4 rw,relatime,errors=remount-ro,data=ordered 0 0</span><br><span class="line">...</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>Хммм, мы по-прежнему видим тот же список, что и в корневом(root) пространстве имен mount. Особенно после того, как в предыдущем посте было показано, что новое пространство имен пользователя начинается с чистого листа, может показаться, что -m флаг, который мы передали unshare, не возымел никакого эффекта.</p>
+<p>Процесс оболочки фактически выполняется в другом пространстве имен mount (мы можем убедиться в этом, сравнив файл с символической ссылкой ls -l /proc/$$/ns/mnt с файлом другой оболочки, запущенным в корневом пространстве имен mount). Причина, по которой мы по-прежнему видим один и тот же список, заключается в том, что всякий раз, когда мы создаем новое пространство имен монтирования (дочернее), в качестве дочернего списка используется копия точек монтирования пространства имен монтирования, где происходило создание (родительское). Теперь любые изменения, которые мы вносим в этот файл (например, монтируя файловую систему), будут невидимы для всех других процессов.</p>
+<p>Однако изменение практически любого другого файла на данном этапе повлияет на другие процессы, потому что мы по-прежнему ссылаемся на те же самые файлы (Linux создает копии только специальных файлов, таких как список точек монтирования). Это означает, что в настоящее время у нас минимальная изоляция. Если мы хотим ограничить то, что будет видеть наш командный процесс, мы должны обновить этот список самостоятельно.</p>
+<p>Теперь, с одной стороны, поскольку мы пытаемся соблюдать безопасность, мы могли бы просто сказать “К черту” и isolate очистить весь список перед выполнением команды, но это сделает команду бесполезной, поскольку каждая программа, по крайней мере, зависит от ресурсов, таких как файлы операционной системы, которые, в свою очередь, поддерживаются некоторой файловой системой. С другой стороны, мы также могли бы просто выполнить команду как есть, совместно используя с ней те же файловые системы, которые содержат необходимые системные файлы, которые ей требуются, но это, очевидно, противоречит цели этой изоляции, которую мы выполняем.</p>
+<p>Самое приятное - предоставить программе ее собственную копию зависимостей и системных файлов, которые ей требуются для запуска, все изолированные, чтобы она могла вносить в них любые изменения, не затрагивая другие программы в системе. В лучшем случае мы заключили бы эти файлы в файловую систему и смонтировали бы ее как корневую файловую систему (в корневом каталоге /) перед выполнением ничего не подозревающей программы. Идея в том, что все, к чему может достичь процесс, должно проходить через корневую файловую систему, и поскольку мы будем точно знать, какие файлы мы туда помещаем для командного процесса, мы будем спокойны, зная, что он должным образом изолирован от остальной системы.</p>
+<p>Хорошо, теоретически это звучит неплохо, и для того, чтобы реализовать это, мы сделаем следующее:</p>
+<ol>
+<li>Создайте копию зависимостей и системных файлов, необходимых команде.</li>
+<li>Создайте новое пространство имен mount.</li>
+<li>Замените корневую файловую систему в новом пространстве имен mount на ту, которая состоит из нашей копии системных файлов.</li>
+<li>Выполните программу внутри нового пространства имен mount.</li>
+</ol>
+<h3 id="Корневые-файловые-системы-Root-Filesystems"><a href="#Корневые-файловые-системы-Root-Filesystems" class="headerlink" title="Корневые файловые системы (Root Filesystems)"></a>Корневые файловые системы (Root Filesystems)</h3><p>Вопрос, который возникает уже на шаге, 1 заключается в том, какие системные файлы вообще необходимы команде, которую мы хотим запустить? Мы могли бы порыться в нашей собственной корневой файловой системе и задавать этот вопрос для каждого файла, с которым сталкиваемся, и включать только те, где ответ да, но это звучит болезненно и ненужно. Кроме того, мы даже не знаем, с какой команды isolate будет выполняться для начала.</p>
+<p>Если бы только люди сталкивались с такой же проблемой и собирали набор системных файлов, достаточно общих, чтобы прямо из коробки служить базой для большинства существующих программ? К счастью, есть много проектов, которые делают это! Одним из которых является <a target="_blank" rel="noopener" href="https://alpinelinux.org/">Alpine Linux project</a> (это его основная функция при запуске FROM alpine:xxx в вашем Dockerfile). Alpine предоставляет <a target="_blank" rel="noopener" href="https://alpinelinux.org/downloads/">корневые файловые системы</a>, которые мы можем использовать для наших целей. Если вы следите за ходом событий, вы можете получить копию их минимальной корневой файловой системы (MINI ROOT FILESYSTEM) для x86_64 <a target="_blank" rel="noopener" href="http://dl-cdn.alpinelinux.org/alpine/v3.10/releases/x86_64/alpine-minirootfs-3.10.1-x86_64.tar.gz">здесь</a>. Последняя версия на момент написания статьи , которую мы будем использовать в этом посте , - это v3.10.1.</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ wget http://dl-cdn.alpinelinux.org/alpine/v3.10/releases/x86_64/alpine-minirootfs-3.10.1-x86_64.tar.gz</span><br><span class="line">$ mkdir rootfs</span><br><span class="line">$ tar -xzf alpine-minirootfs-3.10.1-x86_64.tar.gz -C rootfs</span><br><span class="line">$ ls rootfs</span><br><span class="line">bin  dev  etc  home  lib  media  mnt  opt  proc  root  run  sbin  srv  sys  tmp  usr  var</span><br></pre></td></tr></table></figure>
+
+<p>В rootfs каталоге есть знакомые файлы, такие же, как в нашей корневой файловой системе по адресу /, но проверьте, насколько он минимален - довольно многие из этих каталогов пусты:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ ls rootfs/&#123;mnt,dev,proc,home,sys&#125;</span><br><span class="line"><span class="comment"># empty</span></span><br><span class="line"><span class="comment"># пусто</span></span><br></pre></td></tr></table></figure>
+
+<p>Это здорово! мы можем дать команду запустить копию этого, и это возможно sudo rm -rf / нам все равно, больше никого это не побеспокоит.</p>
+<h3 id="Pivot-root-поворачиваем-root"><a href="#Pivot-root-поворачиваем-root" class="headerlink" title="Pivot root (поворачиваем root)"></a>Pivot root (поворачиваем root)</h3><p>Учитывая наше новое пространство имен mount и копию системных файлов, мы хотели бы смонтировать эти файлы в корневом каталоге нового пространства имен mount, не выбивая почву у нас из-под ног. В Linux мы познакомились с pivot_root системным вызовом (есть соответствующая команда), который позволяет нам управлять тем, что процессы рассматривают как корневую файловую систему.</p>
+<p>Команда pivot_root принимает два аргумента new_root put_old, где new_root это путь к файловой системе, содержащей будущую корневую файловую систему, и put_old это путь к каталогу. Это работает с помощью:</p>
+<ol>
+<li>Монтирование корневой файловой системы вызывающего процесса на put_old.</li>
+<li>Монтируем файловую систему , на которую указывает new_root как на текущую корневую файловую систему в /.</li>
+</ol>
+<p>Давайте посмотрим на это в действии. В нашем новом пространстве имен mount мы начинаем с создания файловой системы на основе наших файлов alpine:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ unshare -m bash</span><br><span class="line">$ mount --<span class="built_in">bind</span> rootfs rootfs</span><br></pre></td></tr></table></figure>
+
+<p>Далее мы поворачиваем root:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">cd</span> rootfs</span><br><span class="line">$ mkdir put_old</span><br><span class="line">$ pivot_root . put_old</span><br><span class="line">$ <span class="built_in">cd</span> /</span><br><span class="line"><span class="comment"># We should now have our new root. e.g if we:</span></span><br><span class="line"><span class="comment"># Теперь у нас должен быть новый корневой каталог. Например, если мы сделаем:</span></span><br><span class="line">$ ls proc</span><br><span class="line"><span class="comment"># proc is empty</span></span><br><span class="line"><span class="comment"># And the old root is now in put_old</span></span><br><span class="line"><span class="comment"># proc пуст</span></span><br><span class="line"><span class="comment"># И старый корневой каталог теперь в put_old</span></span><br><span class="line">$ ls put_old</span><br><span class="line">bin   dev  home        lib    lost+found  mnt  proc  run   srv  tmp  var</span><br><span class="line">boot  etc  initrd.img  lib64  media       opt  root  sbin  sys  usr  vmlinuz</span><br></pre></td></tr></table></figure>
+
+
+<p>Наконец, мы размонтируем старую файловую систему из put_old, чтобы вложенная оболочка не могла получить к ней доступ.</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ umount -l put_old</span><br></pre></td></tr></table></figure>
+
+<p>Благодаря этому мы можем запустить любую команду в нашей оболочке, и они будут выполняться с использованием нашей пользовательской файловой системы alpine root, не подозревая об оркестровке, которая привела к их выполнению. И наши драгоценные файлы в старой файловой системе находятся в безопасности вне пределов их досягаемости.</p>
+<h3 id="Реализация-Implementation"><a href="#Реализация-Implementation" class="headerlink" title="Реализация (Implementation)"></a>Реализация (Implementation)</h3><p>Исходный код этого поста можно найти <a target="_blank" rel="noopener" href="https://github.com/iffyio/isolate/tree/part-3">здесь</a>.</p>
+<p>Мы можем повторить то, что только что сделали, в коде, заменив pivot_root команду на соответствующий системный вызов. Сначала мы создаем наш командный процесс в новом пространстве имен mount , добавляя CLONE_NEWNS флаг в clone.</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> clone_flags = SIGCHLD | CLONE_NEWUTS | CLONE_NEWUSER | CLONE_NEWNS;</span><br></pre></td></tr></table></figure>
+
+<p>Далее мы создаем функцию, prepare_mntns которая, учитывая путь к каталогу, содержащему системные файлы (rootfs), устанавливает текущее пространство имен mount , поворачивая корень текущего процесса в rootfs, как мы делали ранее.</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">prepare_mntns</span><span class="params">(<span class="keyword">char</span> *rootfs)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *mnt = rootfs;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">mount</span>(rootfs, mnt, <span class="string">&quot;ext4&quot;</span>, MS_BIND, <span class="string">&quot;&quot;</span>))</span><br><span class="line">        <span class="built_in">die</span>(<span class="string">&quot;Failed to mount %s at %s: %m\n&quot;</span>, rootfs, mnt);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">chdir</span>(mnt))</span><br><span class="line">        <span class="built_in">die</span>(<span class="string">&quot;Failed to chdir to rootfs mounted at %s: %m\n&quot;</span>, mnt);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> <span class="keyword">char</span> *put_old = <span class="string">&quot;.put_old&quot;</span>;</span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">mkdir</span>(put_old, <span class="number">0777</span>) &amp;&amp; errno != EEXIST)</span><br><span class="line">        <span class="built_in">die</span>(<span class="string">&quot;Failed to mkdir put_old %s: %m\n&quot;</span>, put_old);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">syscall</span>(SYS_pivot_root, <span class="string">&quot;.&quot;</span>, put_old))</span><br><span class="line">        <span class="built_in">die</span>(<span class="string">&quot;Failed to pivot_root from %s to %s: %m\n&quot;</span>, rootfs, put_old);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">chdir</span>(<span class="string">&quot;/&quot;</span>))</span><br><span class="line">        <span class="built_in">die</span>(<span class="string">&quot;Failed to chdir to new root: %m\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">umount2</span>(put_old, MNT_DETACH))</span><br><span class="line">        <span class="built_in">die</span>(<span class="string">&quot;Failed to umount put_old %s: %m\n&quot;</span>, put_old);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Нам нужно вызвать эту функцию из нашего кода, и это должно быть сделано нашим командным процессом в cmd_exec (поскольку он выполняется в новом пространстве имен mount), прежде чем начнется выполнение фактической команды.</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="comment">// Wait for &#x27;setup done&#x27; signal from the main process.</span></span><br><span class="line"><span class="comment">// Ожидание сигнала &#x27;настройка завершена&#x27; от основного процесса.</span></span><br><span class="line"><span class="built_in">await_setup</span>(params-&gt;fd[<span class="number">0</span>]);</span><br><span class="line"></span><br><span class="line"><span class="built_in">prepare_mntns</span>(<span class="string">&quot;rootfs&quot;</span>);</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>Давайте попробуем:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">$ ./isolate sh</span><br><span class="line">===========sh============</span><br><span class="line">$ ls put_old</span><br><span class="line"><span class="comment"># put_old is empty. Hurray!</span></span><br><span class="line"><span class="comment"># What does our new mount list look like?</span></span><br><span class="line"><span class="comment"># put_old пуст. Ура!</span></span><br><span class="line"><span class="comment"># Как выглядит наш новый список монтирования?</span></span><br><span class="line">$ cat /proc/$$/mounts</span><br><span class="line">cat: cant open <span class="string">&#x27;/proc/1431/mounts&#x27;</span>: No such file or directory</span><br><span class="line"><span class="comment"># Hmmm, what other processes are running?</span></span><br><span class="line"><span class="comment"># Хммм, а какие ещё процессы запущены?</span></span><br><span class="line">$ ps aux</span><br><span class="line">PID   USER     TIME  COMMAND</span><br><span class="line"><span class="comment"># Empty! eh?</span></span><br><span class="line"><span class="comment"># Пусто! А?</span></span><br></pre></td></tr></table></figure>
+
+<p>Этот вывод показывает нечто странное - мы не можем проверить список подключений(монтирования), за который мы так упорно боролись, и ps сообщает нам, что в системе не запущено никаких процессов (даже текущего процесса или ps самого себя?). Более вероятно, что мы что-то сломали при настройке пространства имен mount.</p>
+<h3 id="Пространства-имен-PID-PID-Namespaces"><a href="#Пространства-имен-PID-PID-Namespaces" class="headerlink" title="Пространства имен PID (PID Namespaces)"></a>Пространства имен PID (PID Namespaces)</h3><p>Мы уже упоминали /proc каталог несколько раз в этой серии, и если вы были знакомы с ним, то, вероятно, не удивлены, что ps он оказался пустым, поскольку ранее мы видели, что каталог был пуст в этом пространстве имен mount (когда мы получили его из корневой файловой системы alpine).</p>
+<p>/proc Каталог в Linux обычно используется для предоставления доступа к <a target="_blank" rel="noopener" href="https://www.tldp.org/LDP/Linux-Filesystem-Hierarchy/html/proc.html">специальной файловой системе</a> (называемой файловой системой proc), которая управляется самим Linux. Linux использует его для предоставления информации обо всех процессах, запущенных в системе, а также другой системной информации, касающейся устройств, прерываний и т.д. Всякий раз, когда мы запускаем команду типа ps, которая обращается к информации о процессах в системе, она обращается к этой файловой системе для получения информации.</p>
+<p>Другими словами, нам нужно раскрутить proc файловую систему. К счастью, это в основном включает в себя сообщение Linux о том, что нам нужна файловая система, желательно смонтированная в /proc. Но мы пока не можем этого сделать, поскольку наш командный процесс по-прежнему зависит от той же proc файловой системы, что и isolate и любой другой обычный процесс в системе - чтобы устранить эту зависимость, нам нужно запустить его внутри его собственного PID пространства имен.</p>
+<p><a target="_blank" rel="noopener" href="http://man7.org/linux/man-pages/man7/pid_namespaces.7.html">Пространство имен PID</a> изолирует идентификаторы процессов в системе. Одним из результатов является то, что процессы, запущенные в разных пространствах имен PID, могут иметь один и тот же идентификатор процесса, не конфликтуя друг с другом. Конечно, мы изолируем это пространство имен, потому что хотим максимально изолировать нашу запущенную команду, но более интересная причина, по которой мы показываем это здесь, заключается в том, что для монтирования proc файловой системы требуются привилегии root, а текущее пространство имен PID принадлежит пространству имен пользователя root, где у нас нет достаточных разрешений (если вы помните из предыдущего поста, root для командного процесса на самом деле нет root). Итак, мы должны работать в пространстве имен PID, принадлежащем пользовательскому пространству имен, которое распознает наш командный процесс как root.</p>
+<p>Мы можем создать новое пространство имен PID , передав CLONE_NEWPID в clone:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> clone_flags = SIGCHLD | CLONE_NEWUTS | CLONE_NEWUSER | CLONE_NEWNS | CLONE_NEWPID;</span><br></pre></td></tr></table></figure>
+<p>Далее мы добавим функцию prepare_procfs, которая настраивает файловую систему proc путем монтирования ее в текущем пространстве имен mount и pid.</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">static void prepare_procfs()</span><br><span class="line">&#123;</span><br><span class="line">    if (mkdir(&quot;/proc&quot;, 0555) &amp;&amp; errno != EEXIST)</span><br><span class="line">        die(&quot;Failed to mkdir /proc: %m\n&quot;);</span><br><span class="line"></span><br><span class="line">    if (mount(&quot;proc&quot;, &quot;/proc&quot;, &quot;proc&quot;, 0, &quot;&quot;))</span><br><span class="line">        die(&quot;Failed to mount proc: %m\n&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Наконец, мы вызываем функцию непосредственно перед размонтированием put_old в нашей prepare_mntns функции, после того как мы настроили пространство имен mount и изменили его на корневой каталог.</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">void</span> <span class="title">prepare_mntns</span><span class="params">(<span class="keyword">char</span> *rootfs)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  ...</span><br><span class="line"></span><br><span class="line">    <span class="built_in">prepare_procfs</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">umount2</span>(put_old, MNT_DETACH))</span><br><span class="line">        <span class="built_in">die</span>(<span class="string">&quot;Failed to umount put_old %s: %m\n&quot;</span>, put_old);</span><br><span class="line">  ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>Мы можем попробовать isolate еще раз:</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">$ ./isolate sh</span><br><span class="line">===========sh============</span><br><span class="line">$ ps</span><br><span class="line">PID   USER     TIME  COMMAND</span><br><span class="line">    1 root      0:00 sh</span><br><span class="line">    2 root      0:00 ps</span><br></pre></td></tr></table></figure>
+
+<p>Это выглядит намного лучше! Оболочка рассматривает себя как единственный процесс, запущенный в системе и работающий с PID 1 (поскольку это был первый процесс, запущенный в этом новом пространстве имен PID).</p>
+<p>В этом посте были рассмотрены два пространства имен и, как результат, isolate появились две новые функции. В следующем посте мы рассмотрим изоляцию с помощью Network пространств имен. Там нам придется иметь дело с некоторой сложной низкоуровневой сетевой конфигурацией в попытке обеспечить сетевое взаимодействие между процессами в разных сетевых пространствах имен.</p>
+<p><img src="/images/isolate.png" alt="Вот вам и namespaces"></p>
+
+        </div>
+        <footer class="article-footer">
+            
+
+
+
+    <a data-url="https://goxpert.ru/2024/06/01/os/namespaces3/" data-id="clx7gyzb20004sowl8z9h8voc" class="article-share-link"><i class="fa fa-share"></i>Поделиться</a>
+<script>
+    (function ($) {
+        $('body').on('click', function() {
+            $('.article-share-box.on').removeClass('on');
+        }).on('click', '.article-share-link', function(e) {
+            e.stopPropagation();
+
+            var $this = $(this),
+                url = $this.attr('data-url'),
+                encodedUrl = encodeURIComponent(url),
+                id = 'article-share-box-' + $this.attr('data-id'),
+                offset = $this.offset(),
+                box;
+
+            if ($('#' + id).length) {
+                box = $('#' + id);
+
+                if (box.hasClass('on')){
+                    box.removeClass('on');
+                    return;
+                }
+            } else {
+                var html = [
+                    '<div id="' + id + '" class="article-share-box">',
+                        '<input class="article-share-input" value="' + url + '">',
+                        '<div class="article-share-links">',
+                            '<a href="https://twitter.com/intent/tweet?url=' + encodedUrl + '" class="article-share-twitter" target="_blank" title="Twitter"></a>',
+                            '<a href="https://www.facebook.com/sharer.php?u=' + encodedUrl + '" class="article-share-facebook" target="_blank" title="Facebook"></a>',
+                            '<a href="http://pinterest.com/pin/create/button/?url=' + encodedUrl + '" class="article-share-pinterest" target="_blank" title="Pinterest"></a>',
+                            '<a href="https://plus.google.com/share?url=' + encodedUrl + '" class="article-share-google" target="_blank" title="Google+"></a>',
+                        '</div>',
+                    '</div>'
+                ].join('');
+
+              box = $(html);
+
+              $('body').append(box);
+            }
+
+            $('.article-share-box.on').hide();
+
+            box.css({
+                top: offset.top + 25,
+                left: offset.left
+            }).addClass('on');
+
+        }).on('click', '.article-share-box', function (e) {
+            e.stopPropagation();
+        }).on('click', '.article-share-box-input', function () {
+            $(this).select();
+        }).on('click', '.article-share-box-link', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+
+            window.open(this.href, 'article-share-box-window-' + Date.now(), 'width=500,height=450');
+        });
+    })(jQuery);
+</script>
+
+        </footer>
+    </div>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "author": {
+            "@type": "Person",
+            "name": "авторы проекта GoXpert"
+        },
+        "headline": "namespaces,часть 3",
+        "image": "https://goxpert.ru/images/isolate.png",
+        "keywords": "Golang, Q&A",
+        "genre": "ОС Namespaces",
+        "datePublished": "2024-06-01",
+        "dateCreated": "2024-06-01",
+        "dateModified": "2024-06-09",
+        "url": "https://goxpert.ru/2024/06/01/os/namespaces3/",
+        "description": "Перевод сделан автором сайта goxpert.ru
+Краткое содежание перевода
+Изоляция процессов в Linux может быть достигнута с помощью пространств имен. 
+Пространства имен позволяют изолировать процессы от дру",
+        "wordCount": 2880
+    }
+</script>
+
+</article>
+
+    <section id="comments">
+    
+        
+    <div id="vk_comments"></div>
+    <script type="text/javascript">
+      window.onload = function () {
+      VK.init({apiId: 51937371, onlyWidgets: true});
+      VK.Widgets.Comments("vk_comments", {limit: 20, attach: "*", autoPublish: 1, pageUrl: "https://goxpert.ru/2024/06/01/os/namespaces3/"});
+    }
+   </script>
+
+    
+    </section>
+
+
+
+                        </div>
+                    </section>
+                    <aside id="sidebar">
+    <a class="sidebar-toggle" title="Expand Sidebar"><i class="toggle icon"></i></a>
+    <div class="sidebar-top">
+        <p>Подписаться:</p>
+        <ul class="social-links">
+            
+                
+                <li>
+                    <a class="social-tooltip" title="vk" href="https://vk.com/goxpert" target="_blank" rel="noopener">
+                        <i class="icon fa fa-vk"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="telegram" href="https://t.me/goxpert_ru" target="_blank" rel="noopener">
+                        <i class="icon fa fa-telegram"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="youtube" href="https://www.youtube.com/c/УчимсянаПять" target="_blank" rel="noopener">
+                        <i class="icon fa fa-youtube"></i>
+                    </a>
+                </li>
+                
+            
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="twitter" href="/" target="_blank" rel="noopener">
+                        <i class="icon fa fa-twitter"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="facebook" href="/" target="_blank" rel="noopener">
+                        <i class="icon fa fa-facebook"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="weibo" href="/" target="_blank" rel="noopener">
+                        <i class="icon fa fa-weibo"></i>
+                    </a>
+                </li>
+                
+            
+                
+                <li>
+                    <a class="social-tooltip" title="rss" href="/atom.xml" target="_blank" rel="noopener">
+                        <i class="icon fa fa-rss"></i>
+                    </a>
+                </li>
+                
+            
+        </ul>
+    </div>
+    
+        
+<nav id="article-nav">
+    
+        <a href="/2024/06/01/os/namespaces2/" id="article-nav-newer" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">новые</strong>
+        <p class="article-nav-title">
+        
+            namespaces,часть 2
+        
+        </p>
+        <i class="icon fa fa-chevron-right" id="icon-chevron-right"></i>
+    </a>
+    
+    
+        <a href="/2024/06/01/common/ssa/" id="article-nav-older" class="article-nav-link-wrap">
+        <strong class="article-nav-caption">старые</strong>
+        <p class="article-nav-title">SSA правила в GO</p>
+        <i class="icon fa fa-chevron-left" id="icon-chevron-left"></i>
+        </a>
+    
+</nav>
+
+    
+    <div class="widgets-container">
+        
+            
+                
+
+            
+                
+    <div class="widget-wrap">
+        <h3 class="widget-title">недавние</h3>
+        <div class="widget">
+            <ul id="recent-post" class="">
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2024/06/02/os/os_scheduler/" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/os_sched_1.jpg)" alt="Планировщик ОS" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%D0%9E%D0%A1/">ОС</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%D0%9E%D0%A1/%D0%9F%D0%BB%D0%B0%D0%BD%D0%B8%D1%80%D0%BE%D0%B2%D1%89%D0%B8%D0%BA-%D0%9ES/">Планировщик ОS</a></p>
+                            <p class="item-title"><a href="/2024/06/02/os/os_scheduler/" class="title">Планировщик ОS</a></p>
+                            <p class="item-date"><time datetime="2024-06-02T15:32:20.263Z" itemprop="datePublished">2024-06-02</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2024/06/01/concurrency/go_scheduler/" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/go_sched1.png)" alt="Планировщик GO" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Golang/">Golang</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/">Старт</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/">Вопрос-Ответ</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9F%D0%BB%D0%B0%D0%BD%D0%B8%D1%80%D0%BE%D0%B2%D1%89%D0%B8%D0%BA/">Планировщик</a></p>
+                            <p class="item-title"><a href="/2024/06/01/concurrency/go_scheduler/" class="title">Планировщик GO</a></p>
+                            <p class="item-date"><time datetime="2024-06-01T09:35:00.000Z" itemprop="datePublished">2024-06-01</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2024/06/01/concurrency/go_scheduler_more/" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/golang_scheduler_more1.png)" alt="Планировщик GO другой взгляд" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Golang/">Golang</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/">Старт</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/">Вопрос-Ответ</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9F%D0%BB%D0%B0%D0%BD%D0%B8%D1%80%D0%BE%D0%B2%D1%89%D0%B8%D0%BA/">Планировщик</a></p>
+                            <p class="item-title"><a href="/2024/06/01/concurrency/go_scheduler_more/" class="title">Планировщик GO другой взгляд</a></p>
+                            <p class="item-date"><time datetime="2024-06-01T09:35:00.000Z" itemprop="datePublished">2024-06-01</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2024/06/01/concurrency/go_concurrency/" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/golang_concurrency1.png)" alt="Планировщик GO - Concurrency" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/Golang/">Golang</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/">Старт</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/">Вопрос-Ответ</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9F%D0%BB%D0%B0%D0%BD%D0%B8%D1%80%D0%BE%D0%B2%D1%89%D0%B8%D0%BA/">Планировщик</a></p>
+                            <p class="item-title"><a href="/2024/06/01/concurrency/go_concurrency/" class="title">Планировщик GO - Concurrency</a></p>
+                            <p class="item-date"><time datetime="2024-06-01T09:35:00.000Z" itemprop="datePublished">2024-06-01</time></p>
+                        </div>
+                    </li>
+                
+                    <li>
+                        
+                        <div class="item-thumbnail">
+                            <a href="/2024/06/01/os/cpu_cache/" class="thumbnail">
+    
+    
+        <span style="background-image:url(/images/Non_Coherent.gif)" alt="Когерентность кэша" class="thumbnail-image"></span>
+    
+    
+</a>
+
+                        </div>
+                        
+                        <div class="item-inner">
+                            <p class="item-category"><a class="article-category-link" href="/categories/%D0%9E%D0%A1/">ОС</a><i class="icon fa fa-angle-right"></i><a class="article-category-link" href="/categories/%D0%9E%D0%A1/CPU-cache/">CPU cache</a></p>
+                            <p class="item-title"><a href="/2024/06/01/os/cpu_cache/" class="title">Когерентность кэша</a></p>
+                            <p class="item-date"><time datetime="2024-06-01T09:22:00.000Z" itemprop="datePublished">2024-06-01</time></p>
+                        </div>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">Категории</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/">Golang</a><span class="category-list-count">28</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/">Старт</a><span class="category-list-count">28</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/Defer/">Defer</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/Generics/">Generics</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/Panic/">Panic</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/SOLID/">SOLID</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/SSA/">SSA</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/Select-case/">Select-case</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%93%D0%BE%D0%BD%D0%BA%D0%B0-%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85/">Гонка данных</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%93%D0%BE%D1%80%D1%83%D1%82%D0%B8%D0%BD%D1%8B/">Горутины</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%98%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81%D1%8B/">Интерфейсы</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%9A%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82/">Контекст</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%9C%D0%B0%D1%81%D1%81%D0%B8%D0%B2%D1%8B-%D0%B8-%D1%81%D0%BB%D0%B0%D0%B9%D1%81%D1%8B/">Массивы и слайсы</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%9E%D0%B1%D1%89%D0%B8%D0%B5/">Общие</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%9F%D0%B0%D0%BA%D0%B5%D1%82%D1%8B/">Пакеты</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%9F%D0%BB%D0%B0%D0%BD%D0%B8%D1%80%D0%BE%D0%B2%D1%89%D0%B8%D0%BA/">Планировщик</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%9F%D1%80%D0%B8%D0%BC%D0%B8%D1%82%D0%B8%D0%B2%D1%8B-%D1%81%D0%B8%D0%BD%D1%85%D1%80%D0%BE%D0%BD%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D0%B8/">Примитивы синхронизации</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%A1%D1%82%D1%80%D0%BE%D0%BA%D0%B8/">Строки</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%A1%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D1%8B/">Структуры</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%A2%D0%B8%D0%BF%D1%8B/">Типы</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%A3%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D0%B5%D0%BB%D0%B8/">Указатели</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Golang/%D0%A1%D1%82%D0%B0%D1%80%D1%82/%D0%A5%D0%B5%D1%88-%D0%BC%D0%B0%D0%BF%D1%8B/">Хеш-мапы</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/">Вопрос-Ответ</a><span class="category-list-count">27</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/Defer/">Defer</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/Generics/">Generics</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/Panic/">Panic</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/SOLID/">SOLID</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/SSA/">SSA</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/Select-case/">Select-case</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%93%D0%BE%D0%BD%D0%BA%D0%B0-%D0%B4%D0%B0%D0%BD%D0%BD%D1%8B%D1%85/">Гонка данных</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%93%D0%BE%D1%80%D1%83%D1%82%D0%B8%D0%BD%D1%8B/">Горутины</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%98%D0%BD%D1%82%D0%B5%D1%80%D1%84%D0%B5%D0%B9%D1%81%D1%8B/">Интерфейсы</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9A%D0%BE%D0%BD%D1%82%D0%B5%D0%BA%D1%81%D1%82/">Контекст</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9C%D0%B0%D1%81%D1%81%D0%B8%D0%B2%D1%8B-%D0%B8-%D1%81%D0%BB%D0%B0%D0%B9%D1%81%D1%8B/">Массивы и слайсы</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9E%D0%B1%D1%89%D0%B8%D0%B5/">Общие</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9F%D0%B0%D0%BA%D0%B5%D1%82%D1%8B/">Пакеты</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9F%D0%BB%D0%B0%D0%BD%D0%B8%D1%80%D0%BE%D0%B2%D1%89%D0%B8%D0%BA/">Планировщик</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%9F%D1%80%D0%B8%D0%BC%D0%B8%D1%82%D0%B8%D0%B2%D1%8B-%D1%81%D0%B8%D0%BD%D1%85%D1%80%D0%BE%D0%BD%D0%B8%D0%B7%D0%B0%D1%86%D0%B8%D0%B8/">Примитивы синхронизации</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%A1%D1%82%D1%80%D0%BE%D0%BA%D0%B8/">Строки</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%A1%D1%82%D1%80%D1%83%D0%BA%D1%82%D1%83%D1%80%D1%8B/">Структуры</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%A2%D0%B8%D0%BF%D1%8B/">Типы</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%A3%D0%BA%D0%B0%D0%B7%D0%B0%D1%82%D0%B5%D0%BB%D0%B8/">Указатели</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%92%D0%BE%D0%BF%D1%80%D0%BE%D1%81-%D0%9E%D1%82%D0%B2%D0%B5%D1%82/%D0%A5%D0%B5%D1%88-%D0%BC%D0%B0%D0%BF%D1%8B/">Хеш-мапы</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%9E%D0%A1/">ОС</a><span class="category-list-count">7</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%9E%D0%A1/CPU-cache/">CPU cache</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%9E%D0%A1/C%D0%B5%D1%82%D1%8C/">Cеть</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%9E%D0%A1/Namespaces/">Namespaces</a><span class="category-list-count">3</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%D0%9E%D0%A1/%D0%9F%D0%BB%D0%B0%D0%BD%D0%B8%D1%80%D0%BE%D0%B2%D1%89%D0%B8%D0%BA-%D0%9ES/">Планировщик ОS</a><span class="category-list-count">1</span></li></ul></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">архивы</h3>
+        <div class="widget">
+            <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/06/">июнь 2024</a><span class="archive-list-count">35</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">Тэги</h3>
+        <div class="widget">
+            <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Golang/" rel="tag">Golang</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Golang-Q-A/" rel="tag">Golang, Q&A</a><span class="tag-list-count">34</span></li></ul>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-float">
+        <h3 class="widget-title">Облако тэгов</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/Golang/" style="font-size: 10px;">Golang</a> <a href="/tags/Golang-Q-A/" style="font-size: 20px;">Golang, Q&A</a>
+        </div>
+    </div>
+
+
+            
+                
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">ссылки</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a target="_blank" rel="noopener" href="https://vk.com/goxpert">мы в vk</a>
+                    </li>
+                
+                    <li>
+                        <a target="_blank" rel="noopener" href="https://www.youtube.com/c/УчимсянаПять">мы в youtube</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+            
+        
+    </div>
+</aside>
+
+                </div>
+            </div>
+        </div>
+        <footer id="footer">
+    <div class="container">
+        <div class="container-inner">
+            <a id="back-to-top" href="javascript:;"><i class="icon fa fa-angle-up"></i></a>
+            <div class="credit">
+                <h1 class="logo-wrap">
+                    <a href="/" class="logo"></a>
+                </h1>
+                <p>&copy; 2024 авторы проекта GoXpert</p>
+                
+                <p>Powered by <a href="https://designest.ru/" target="_blank">DESIGNest Studio Ltd</a></p>
+                
+            </div>
+            <div class="footer-plugins">
+                
+			<!-- Yandex.RTB R-A-1394392-1 -->
+			<div id="yandex_rtb_R-A-1394392-1"></div>
+			<script>window.yaContextCb.push(()=>{Ya.Context.AdvManager.render({renderTo: 'yandex_rtb_R-A-1394392-1',  blockId: 'R-A-1394392-1' }) })</script>
+                
+              
+    
+
+
+            </div>
+        </div>
+    </div>
+</footer>                                                                                            
+
+    </div>
+    
+    
+    <script type="text/javascript">
+    var vk_shortname = 'true';
+    (function() {
+    var vk = document.createElement('script');
+    vk.type = 'text/javascript';
+    vk.async = true;
+    vk.src = '//vk.com/js/api/openapi.js?169'; 
+    vk.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0]
+    || document.getElementsByTagName('body')[0]).appendChild(vk);
+    })();
+    </script>
+
+
+
+
+    
+        
+<script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-share.min.js"></script>
+
+        
+<script src="/libs/lightgallery/js/lg-video.min.js"></script>
+
+    
+    
+        
+<script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+
+    
+    
+
+    
+    
+    
+
+
+
+<!-- Custom Scripts -->
+
+<script src="/js/main.js"></script>
+
+
+</body>
+</html>
