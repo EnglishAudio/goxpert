@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://goxpert.ru/2024/06/01/os/namespaces/</loc>
+    
+    <lastmod>2024-06-09</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://goxpert.ru/2024/06/01/os/ebpf_network/</loc>
     
     <lastmod>2024-06-09</lastmod>
@@ -647,6 +656,13 @@
   
   <url>
     <loc>https://goxpert.ru/categories/%D0%9E%D0%A1/CPU-cache/</loc>
+    <lastmod>2024-06-09</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://goxpert.ru/categories/%D0%9E%D0%A1/Namespaces/</loc>
     <lastmod>2024-06-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
